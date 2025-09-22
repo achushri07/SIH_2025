@@ -1,7 +1,10 @@
 /* Enhanced CSS for a more attractive Manali tourism site */
 /* --- Global & Base Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libertinus+Serif+Display&family=Manufacturing+Consent&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Smooch+Sans:wght@100..900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
 html {
     scroll-behavior: smooth;
+    
+
 }
 
 :root {
@@ -20,7 +23,8 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
+    font-family: "Bad Script", cursive;
 }
 
 body {
@@ -38,7 +42,7 @@ body {
 h1,
 h2,
 h3 {
-    font-weight: 700;
+    font-weight: 900;
     color: var(--primary-color);
 
 }
@@ -174,6 +178,7 @@ p {
 .hero h1 {
     animation: slideInUp 1.5s ease forwards;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.549);
+    font-weight: 900;
 }
 
 .hero p {
@@ -199,6 +204,9 @@ section {
     margin-top: 50px;
     transition: transform 0.3s ease;
 }
+.history h2{
+    font-weight: bolder;
+}
 
 .history p {
     text-align: center;
@@ -216,7 +224,9 @@ section {
     text-align: center;
     margin-top: 50px;
 }
-
+.distance input{
+    font-family: Arial, Helvetica, sans-serif;
+}
 #distanceResult {
     margin-top: 20px;
     font-size: 1.2rem;
@@ -335,7 +345,7 @@ section {
 
 .card-back p,
 .cuisine-card-back p {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     padding: 0 10px;
 }
 
