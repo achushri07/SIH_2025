@@ -1,8 +1,21 @@
+/* Enhanced CSS for a more attractive Manali tourism site */
+/* --- Global & Base Styles --- */
 html {
     scroll-behavior: smooth;
 }
 
-/* Reset */
+:root {
+    --primary-color: #55a630;
+    --secondary-color: #6a994e;
+    --accent-color: #d4e09b;
+    --dark-text: #2c3e50;
+    --light-text: #ecf0f1;
+    --bg-gradient: linear-gradient(135deg, #f0f4f8, #c1d3e8);
+    --card-bg-gradient: linear-gradient(145deg, #7ca5cd, #ffffff);
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,319 +24,234 @@ html {
 }
 
 body {
-    background: linear-gradient(135deg, #0191a1, #b47c2e, #02bd7f);
-    color: #333;
+    background: var(--bg-gradient);
+    color: var(--dark-text);
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* Hero Section */
-.hero {
-    height: 100vh;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    text-align: center;
+body {
+    background: linear-gradient(45deg, #1a2980, #26d0ce);
 }
 
-.hero .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 2s ease forwards;
+/* --- Typography Enhancements --- */
+h1,
+h2,
+h3 {
+    font-weight: 700;
+    color: var(--primary-color);
+
 }
 
-.hero h1 {
-    font-size: 4rem;
-    margin-bottom: 0.5rem;
-    animation: slideDown 1.5s ease forwards;
-}
-
-.hero p {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    animation: slideUp 1.5s ease forwards;
-}
-
-.hero button {
-    padding: 10px 25px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 25px;
-    background: #ff9800;
-    color: #fff;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.hero button:hover {
-    background: #e68900;
-    transform: scale(1.05);
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Section Titles */
-section {
-    padding: 60px 10%;
+h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    letter-spacing: 2px;
 }
 
 h2 {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    text-align: center;
+    margin-bottom: 2rem;
     position: relative;
     display: inline-block;
+    color: var(--dark-text);
+    text-shadow: 0 0 7px rgb(255, 255, 255);
+}
+
+section h2 {
+    width: 100%;
+    margin-bottom: 3rem;
 }
 
 h2::after {
     content: '';
     display: block;
-    width: 60%;
-    height: 3px;
-    background: #ff6f61;
-    margin-top: 8px;
+    width: 80px;
+    height: 4px;
+    background: var(--primary-color);
+    margin: 10px auto 0;
     border-radius: 2px;
 }
 
-/* History Section */
-.history {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: linear-gradient(45deg, #00e5ff, #ffb347, #00ffaa);
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
+p {
+    font-size: 1rem;
+    line-height: 1.8;
 }
 
-.history:hover {
-    transform: scale(1.02);
+/* --- Buttons & Inputs --- */
+.hero button,
+.distance button {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    background: var(--primary-color);
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px white;
 }
 
-.history h2 {
-    text-align: center;
-    color: #ff9800;
-    margin-bottom: 20px;
-}
-
-.history p {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #333;
-}
-
-/* Distance Checker Section */
-.distance {
-    text-align: center;
-    margin: 50px 0;
-    padding: 50px 20px;
-    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+.hero button:hover,
+.distance button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .distance input {
-    padding: 10px 15px;
+    padding: 12px 20px;
     font-size: 1rem;
-    border: 2px solid #fff;
-    border-radius: 25px;
+    border: 2px solid #ccc;
+    border-radius: 50px;
     outline: none;
-    width: 250px;
-    transition: 0.3s;
+    width: 300px;
+    max-width: 80%;
+    transition: all 0.3s ease;
 }
 
 .distance input:focus {
-    border-color: #ff9800;
-    box-shadow: 0 0 8px #ff9800;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(85, 166, 48, 0.2);
 }
 
-.distance button {
-    padding: 10px 25px;
-    margin-left: 10px;
-    font-size: 1rem;
-    border-radius: 25px;
-    border: none;
-    background: #ff9800;
-    color: #fff;
-    cursor: pointer;
-    transition: 0.3s;
+
+/* --- Hero Section --- */
+/* Keyframes for the continuous zoom effect */
+@keyframes zoom-effect {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
-.distance button:hover {
-    background: #e68900;
-    transform: scale(1.05);
-}
-
-/* Famous Places Section */
-.places {
-    padding: 50px 20px;
-    background: linear-gradient(45deg, #0191a1, #b47c2e, #02bd7f);
-}
-
-.places h2 {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-    color: #00ffaa;
-    text-shadow: 0 0 10px #fdfdfddd;
-    font-weight: 700;
-}
-
-/* Flip Card Grid */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    justify-items: center;
-}
-
-.card {
-    width: 350px;
-    height: 300px;
-    perspective: 1000px;
-}
-
-.card-inner {
+.hero {
+    height: 100vh;
     position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-    border-radius: 15px;
-}
-
-.card:hover .card-inner {
-    transform: rotateY(180deg);
-}
-
-/* Card Faces */
-.card-front,
-.card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    /* This is crucial to prevent scrollbars from the zooming image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
 }
 
-/* Front Face */
-.card-front {
-    background: linear-gradient(45deg, #ffecd2, #fcb69f);
-}
-
-.card-front img {
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    height: 100%;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        /* Add the dark overlay here */
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
+    animation: zoom-effect 10s ease-in-out infinite;
+    animation: zoom-effect 10s ease-in-out infinite;
+    filter: blur(2px);
+    /* Apply a slight blur directly to the background image */
+}
+
+.hero .overlay {
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease forwards;
+}
+
+.hero h1 {
+    animation: slideInUp 1.5s ease forwards;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.549);
+}
+
+.hero p {
+    font-size: 1.25rem;
+    font-weight: 400;
+    animation: slideInUp 1.8s ease forwards;
+    text-shadow: 0 0 20px white;
+}
+
+/* --- Sections --- */
+section {
+    padding: 80px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- History Section --- */
+.history {
+    background: var(--card-bg-gradient);
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    padding: 40px;
+    margin-top: 50px;
     transition: transform 0.3s ease;
 }
 
-.card:hover img {
-    transform: scale(1.1);
-}
-
-.card-front h3 {
-    font-size: 1.3rem;
-    margin: 15px 0;
-    color: #333;
-}
-
-/* Back Face */
-.card-back {
-    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
-    color: #fff;
-    transform: rotateY(180deg);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    gap: 20px;
-}
-
-.card-back h3 {
-    font-size: 1.5rem;
-    color: #085b65;
-    text-shadow: 0 0 5px #00e5ffc1;
-}
-
-/* Cuisine Section */
-.cuisine {
-    padding: 60px 20px;
-    background: linear-gradient(135deg, #0191a1, #b47c2e, #02bd7f);
+.history p {
     text-align: center;
+    padding: 0 20px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.cuisine h2 {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-    color: #00ffaa;
-    text-shadow: 0 0 10px #fdfdfddd;
-    font-weight: 700;
+/* --- Distance Calculator --- */
+.distance {
+    background: var(--card-bg-gradient);
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    padding: 40px;
+    text-align: center;
+    margin-top: 50px;
 }
 
-/* Grid Layout */
+#distanceResult {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* --- Famous Places & Cuisine Grids --- */
+.grid,
 .cuisine-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    align-items: stretch;
 }
 
-/* Card Styles */
+/* --- Card Styles --- */
+.card,
 .cuisine-card {
-    width: 350px;
-    height: 350px;
+    height: 400px;
     perspective: 1000px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
+.card:hover,
+.cuisine-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.card-inner,
 .cuisine-card-inner {
     position: relative;
     width: 100%;
@@ -331,14 +259,15 @@ h2::after {
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-    border-radius: 15px;
 }
 
+.card:hover .card-inner,
 .cuisine-card:hover .cuisine-card-inner {
     transform: rotateY(180deg);
 }
 
-/* Front and Back Face */
+.card-front,
+.card-back,
 .cuisine-card-front,
 .cuisine-card-back {
     position: absolute;
@@ -347,58 +276,87 @@ h2::after {
     backface-visibility: hidden;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
+/* Front Faces */
+.card-front,
 .cuisine-card-front {
-    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+    background: #fff;
 }
 
+.card-front img,
 .cuisine-card-front img {
     width: 100%;
-    height: 290px;
+    height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.6s ease;
 }
 
+.card:hover img,
 .cuisine-card:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .cuisine-info {
-    padding: 0px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--light-text);
+    transition: background 0.3s ease;
 }
 
-.cuisine-info h3 {
-    font-size: 1.5rem;
-    color: #085b65;
-    text-shadow: 0 0 5px #00e5ffc1;
+.cuisine-card:hover .cuisine-info {
+    background: rgba(0, 0, 0, 0.6);
 }
 
-/* Back of Card */
+/* Back Faces */
+.card-back,
 .cuisine-card-back {
-    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+    background: linear-gradient(135deg, #001f44, #007991);
     color: #fff;
     transform: rotateY(180deg);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    font-size: 1rem;
-    line-height: 1.4;
+    text-align: center;
 }
 
-/* Responsive */
+.card-back h3,
+.cuisine-card-back h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.card-back p,
+.cuisine-card-back p {
+    font-size: 0.9rem;
+    padding: 0 10px;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #2c3e50;
+    color: var(--light-text);
+    margin-top: 50px;
+    font-size: 0.9rem;
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-
-    .hero p {
-        font-size: 1rem;
-    }
-
     .distance input {
-        width: 90%;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .distance button {
+        margin-left: 0;
     }
 }
