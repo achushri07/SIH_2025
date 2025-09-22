@@ -1,0 +1,404 @@
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0191a1, #b47c2e, #02bd7f);
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+}
+
+.hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 2s ease forwards;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    animation: slideDown 1.5s ease forwards;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    animation: slideUp 1.5s ease forwards;
+}
+
+.hero button {
+    padding: 10px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    background: #ff9800;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero button:hover {
+    background: #e68900;
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Section Titles */
+section {
+    padding: 60px 10%;
+}
+
+h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 3px;
+    background: #ff6f61;
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+/* History Section */
+.history {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 30px;
+    background: linear-gradient(45deg, #00e5ff, #ffb347, #00ffaa);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.history:hover {
+    transform: scale(1.02);
+}
+
+.history h2 {
+    text-align: center;
+    color: #ff9800;
+    margin-bottom: 20px;
+}
+
+.history p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+/* Distance Checker Section */
+.distance {
+    text-align: center;
+    margin: 50px 0;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.distance input {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 2px solid #fff;
+    border-radius: 25px;
+    outline: none;
+    width: 250px;
+    transition: 0.3s;
+}
+
+.distance input:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 8px #ff9800;
+}
+
+.distance button {
+    padding: 10px 25px;
+    margin-left: 10px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: none;
+    background: #ff9800;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.distance button:hover {
+    background: #e68900;
+    transform: scale(1.05);
+}
+
+/* Famous Places Section */
+.places {
+    padding: 50px 20px;
+    background: linear-gradient(45deg, #0191a1, #b47c2e, #02bd7f);
+}
+
+.places h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #00ffaa;
+    text-shadow: 0 0 10px #fdfdfddd;
+    font-weight: 700;
+}
+
+/* Flip Card Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+.card {
+    width: 350px;
+    height: 300px;
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 15px;
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Card Faces */
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Front Face */
+.card-front {
+    background: linear-gradient(45deg, #ffecd2, #fcb69f);
+}
+
+.card-front img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover img {
+    transform: scale(1.1);
+}
+
+.card-front h3 {
+    font-size: 1.3rem;
+    margin: 15px 0;
+    color: #333;
+}
+
+/* Back Face */
+.card-back {
+    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+    color: #fff;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    gap: 20px;
+}
+
+.card-back h3 {
+    font-size: 1.5rem;
+    color: #085b65;
+    text-shadow: 0 0 5px #00e5ffc1;
+}
+
+/* Cuisine Section */
+.cuisine {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #0191a1, #b47c2e, #02bd7f);
+    text-align: center;
+}
+
+.cuisine h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #00ffaa;
+    text-shadow: 0 0 10px #fdfdfddd;
+    font-weight: 700;
+}
+
+/* Grid Layout */
+.cuisine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    justify-items: center;
+}
+
+/* Card Styles */
+.cuisine-card {
+    width: 350px;
+    height: 350px;
+    perspective: 1000px;
+}
+
+.cuisine-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 15px;
+}
+
+.cuisine-card:hover .cuisine-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Front and Back Face */
+.cuisine-card-front,
+.cuisine-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.cuisine-card-front {
+    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+}
+
+.cuisine-card-front img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.cuisine-card:hover img {
+    transform: scale(1.1);
+}
+
+.cuisine-info {
+    padding: 0px;
+}
+
+.cuisine-info h3 {
+    font-size: 1.5rem;
+    color: #085b65;
+    text-shadow: 0 0 5px #00e5ffc1;
+}
+
+/* Back of Card */
+.cuisine-card-back {
+    background: linear-gradient(135deg, #00e5ff, #ffb347, #00ffaa);
+    color: #fff;
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .distance input {
+        width: 90%;
+    }
+}
