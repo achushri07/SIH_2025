@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Manali</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="overlay">
+      <h1>Explore Manali</h1>
+      <p>The Valley of Gods</p>
+      <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">Discover
+        Now</button>
+    </div>
+
+  </header>
+
+  <!-- Historical Data -->
+  <section class="history">
+    <h2>History of Manali</h2>
+    <p>
+      Manali, a beautiful hill station in Himachal Pradesh, is known as the "Valley of Gods".
+      According to Hindu mythology, Sage Manu recreated life here after the great flood.
+      Over the years, Manali became a cultural hub with temples, monasteries, and breathtaking landscapes.
+    </p>
+  </section>
+
+  <!-- Distance Calculator -->
+  <section class="distance">
+    <h2>Check Your Distance to Manali</h2>
+    <input type="text" id="city" placeholder="Enter your city (e.g., Delhi)">
+    <button onclick="calculateDistance()">Get Distance</button>
+    <p id="distanceResult"></p>
+  </section>
+
+  <!-- Famous Places -->
+  <section class="places">
+    <h2>Famous Places to Visit</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXvpD-xWwwaBpwQ5w4BAXsplCrx3xqq-8GrQ&s"
+              alt="Place Name">
+          </div>
+          <div class="card-back">
+            <h3>Hadimba Temple</h3>
+            <p>The Hadimba Devi Temple in Manali is a unique 16th-century wooden temple with a pagoda-style roof,
+              dedicated to Hidimba Devi from the Mahabharata epic.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFpJCl5OKJbOqO2IaVagXg1tyN44QxtmmCBA&s"
+              alt="Place Name">
+          </div>
+          <div class="card-back">
+            <h3>Rohtang Pass</h3>
+            <p>Rohtang Pass is a high-altitude mountain pass near Manali, famous for its breathtaking views of
+              snow-capped peaks, adventurous activities, and as a gateway to the Lahaul and Spiti valleys.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHHltiXbjgkBCW5jHpWeqDVcjHtyj89XEY4Q&s"
+              alt="Place Name">
+          </div>
+          <div class="card-back">
+            <h3>Solang Valley</h3>
+            <p>Solang Valley, located near Manali, is a picturesque destination known for its stunning landscapes and as
+              a year-round hub for adventure sports like paragliding, zorbing, and skiing.</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <!-- Cuisines -->
+  <section class="cuisine">
+    <h2>Local Cuisine of Manali</h2>
+    <div class="cuisine-grid">
+
+      <!-- Card 1 -->
+      <div class="cuisine-card">
+        <div class="cuisine-card-inner">
+          <div class="cuisine-card-front">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/c8/5a/20/trout-fish-the-most-popular.jpg"
+              alt="Trout Fish">
+            <div class="cuisine-info">
+              <h3>Trout Fish</h3>
+            </div>
+          </div>
+          <div class="cuisine-card-back">
+            <p>Freshly caught and cooked trout fish, a local delicacy of Manali. Served with local spices and herbs.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="cuisine-card">
+        <div class="cuisine-card-inner">
+          <div class="cuisine-card-front">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/77/f9/c6/siddu-local-himachali.jpg" alt="Sidu">
+            <div class="cuisine-info">
+              <h3>Sidu</h3>
+            </div>
+          </div>
+          <div class="cuisine-card-back">
+            <p>Steamed bread made from wheat dough, served with ghee and lentils. Traditional Himachali dish for
+              festivals.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="cuisine-card">
+        <div class="cuisine-card-inner">
+          <div class="cuisine-card-front">
+            <img src="https://images.herzindagi.info/image/2023/Aug/make-babru-at-home-easy-steps.jpg" alt="Babru">
+            <div class="cuisine-info">
+              <h3>Babru</h3>
+            </div>
+          </div>
+          <div class="cuisine-card-back">
+            <p>Fried bread stuffed with black gram paste, a popular Himachali snack. Perfect for tea-time cravings.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <footer>
+    <p>© 2025 Explore Manali | Designed for Tourism</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
