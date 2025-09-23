@@ -50,22 +50,34 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h2 id="hero-quote">Discover Beautiful Destinations</h2>
-      <input type="text" class="search-bar" placeholder="🔍 Search destinations, from mountains to seas...">
+      
+      <div class="search-container">
+        <input type="text" class="search-bar" placeholder="🔍 Search destinations, from mountains to seas...">
+        <button class="btn">✈️ Plan Your Trip</button>
+      </div>
       
       <div class="filter-controls">
-        <div class="control-group duration-group">
-          <label>Duration</label>
-          <input type="date" id="from-date">
-          <span>to</span>
-          <input type="date" id="to-date">
+        <div id="duration-control" class="control-group filter-dropdown">
+          <label>Duration<span class="selected-value"></span></label>
+          <div class="filter-dropdown-menu duration-dropdown">
+            <input type="date" id="from-date">
+            <span>to</span>
+            <input type="date" id="to-date">
+          </div>
         </div>
-        <div class="control-group">
-          <label>Festive Season</label>
-          <select id="festive-season">
-            <option value="any">Any</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+        <div class="control-group filter-dropdown">
+          <label>Festive Season<span class="selected-value"></span></label>
+          <div class="filter-dropdown-menu">
+            <a href="#" class="option-yn" data-value="Yes">Yes</a>
+            <a href="#" class="option-yn" data-value="No">No</a>
+          </div>
+        </div>
+        <div class="control-group filter-dropdown">
+          <label>Holiday<span class="selected-value"></span></label>
+          <div class="filter-dropdown-menu">
+            <a href="#" class="option-yn" data-value="Yes">Yes</a>
+            <a href="#" class="option-yn" data-value="No">No</a>
+          </div>
         </div>
         <div class="control-group">
           <label>Hotel Rating</label>
@@ -75,7 +87,10 @@
         </div>
       </div>
       
-      <button class="btn">✈️ Plan Your Trip</button>
+      <div class="prediction-btn-container">
+        <button class="btn">🔮 Prediction Analysis</button>
+      </div>
+
     </div>
   </section>
 
