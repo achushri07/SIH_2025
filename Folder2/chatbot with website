@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplor Bharat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== PAGE 1: GLOBAL & XPLOR BHARAT STYLES ===== */
+        :root {
+            --glow-cyan: rgba(0, 229, 255, 0.7);
+            --glow-orange: rgba(255, 179, 71, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f7fafc;
+            color: #222;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 85% 40%, rgba(255, 128, 0, 0.06) 0%, transparent 70%);
+            background-repeat: no-repeat;
+        }
+
+        body.dark {
+            background: #0b0d0f;
+            color: #f2f2f2;
+            background-image:
+                radial-gradient(circle at 20% 25%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(255, 179, 71, 0.04) 0%, transparent 60%);
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0rem 1.5rem;
+            background: linear-gradient(135deg, rgba(224, 247, 250, 0.2), rgba(255, 224, 224, 0.15));
+            backdrop-filter: blur(15px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .navbar {
+            background: rgba(11, 13, 15, 0.4);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            box-shadow: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo h1 {
+            text-shadow: 0 0 14px white;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            justify-content: space-between;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            padding: 0.5rem 0.8rem;
+            position: relative;
+            transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
+            font-size: 20px;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-4px) scale(1.05);
+            color: #00e5ff;
+            text-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        body.dark .nav-links a:hover {
+            color: var(--glow-orange);
+            text-shadow: 0 0 8px var(--glow-orange);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            min-width: 160px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(224, 247, 250, 0.8));
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        body.dark .dropdown-menu {
+            background: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.6rem 1rem;
+            color: inherit;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        body.dark .dropdown-menu a:hover {
+            background: rgba(255, 179, 71, 0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        #theme-toggle {
+            border: none;
+            background: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: inherit;
+            transition: transform 0.3s, text-shadow 0.3s;
+        }
+
+        #theme-toggle:hover {
+            transform: rotate(20deg) scale(1.1);
+            text-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        body.dark #theme-toggle:hover {
+            text-shadow: 0 0 8px var(--glow-orange);
+        }
+
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 1.2s ease, transform 10s ease;
+        }
+
+        .hero-bg.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark .hero-overlay {
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+            color: #222;
+            width: 90%;
+            max-width: 850px;
+        }
+
+        body.dark .hero-content {
+            color: #fff;
+        }
+
+        .hero-content h2 {
+            font-size: 2.6rem;
+            margin-bottom: 1.5rem;
+            transition: opacity 0.5s;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        body.dark .hero-content h2 {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content .search-bar {
+            flex-grow: 1;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 30px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            font-size: 1rem;
+        }
+
+        body.dark .hero-content .search-bar {
+            background: rgba(30, 30, 30, 0.5);
+            color: #f2f2f2;
+            border-color: rgba(255, 179, 71, 0.2);
+        }
+
+        .hero-content .search-bar:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--glow-cyan);
+        }
+
+        body.dark .hero-content .search-bar:hover {
+            box-shadow: 0 0 15px var(--glow-orange);
+        }
+
+        .search-container .btn {
+            flex-shrink: 0;
+        }
+
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .control-group:hover {
+            transform: translateY(-5px) translateZ(15px);
+            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+            z-index: 20;
+        }
+
+        body.dark .control-group {
+            background: rgba(30, 30, 30, 0.5);
+            border-color: rgba(255, 179, 71, 0.2);
+        }
+
+        body.dark .control-group:hover {
+            box-shadow: 0 10px 20px rgba(255, 179, 71, 0.15);
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .selected-value {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #008489;
+            margin-top: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.dark .selected-value {
+            color: #ffc107;
+        }
+
+        .filter-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.8rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .filter-dropdown-menu {
+            background: rgba(25, 25, 25, 0.9);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .filter-dropdown:hover .filter-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px) scale(1);
+        }
+
+        .duration-dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .filter-controls input[type="date"] {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 0.2rem;
+            outline: none;
+            color: inherit;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        body.dark .filter-controls input[type="date"] {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark .filter-controls input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .option-yn {
+            display: block;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 4px;
+            transition: transform 0.3s, text-shadow 0.3s, color 0.3s, background 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .option-yn:hover {
+            color: #fff;
+            background: rgba(0, 229, 255, 0.1);
+            transform: translateZ(15px) scale(1.05);
+            text-shadow: 0 0 6px var(--glow-cyan), 0 0 10px var(--glow-cyan);
+        }
+
+        body.dark .option-yn:hover {
+            background: rgba(255, 179, 71, 0.1);
+            text-shadow: 0 0 6px var(--glow-orange), 0 0 10px var(--glow-orange);
+        }
+
+        .star-rating span {
+            cursor: pointer;
+            color: #ccc;
+            transition: transform 0.2s, color 0.2s, text-shadow 0.2s;
+        }
+
+        .star-rating span:hover,
+        .star-rating span.hovered,
+        .star-rating span.selected {
+            transform: scale(1.25);
+            color: #ffc107;
+            text-shadow: 0 0 8px rgba(255, 193, 7, 0.8);
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #00e5ff, #00ffaa, #ffb347);
+            background-size: 200% auto;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transform-style: preserve-3d;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05) translateZ(20px);
+            box-shadow: 0 12px 25px rgba(0, 229, 255, 0.3);
+            background-position: right center;
+        }
+
+        .prediction-btn-container {
+            margin-top: 2rem;
+        }
+
+        .section {
+            padding: 6rem 5% 3rem;
+            background: inherit;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 6px var(--glow-cyan);
+        }
+
+        body.dark .section-title {
+            text-shadow: 0 0 6px var(--glow-orange);
+        }
+
+        .card-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(224, 247, 250, 0.7) 100%);
+            border-radius: 16px;
+            width: 260px;
+            padding: 1rem;
+            color: inherit;
+            backdrop-filter: blur(8px);
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark .card {
+            background: rgba(20, 20, 20, 0.4);
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card:hover {
+            transform: perspective(900px) rotateY(8deg) translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        body.dark .card:hover {
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .food-slider {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .food-card {
+            width: 200px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 224, 224, 0.7) 100%);
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 128, 0, 0.2);
+            transition: transform 0.4s, box-shadow 0.4s;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark .food-card {
+            background: rgba(20, 20, 20, 0.4);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .food-card img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s;
+        }
+
+        .food-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .food-card:hover {
+            transform: translateY(-8px) scale(1.07);
+            box-shadow: 0 20px 25px rgba(255, 128, 0, 0.2);
+        }
+
+        body.dark .food-card:hover {
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 128, 0, 0.05));
+        }
+
+        body.dark footer {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .section,
+        .card,
+        .food-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.6s ease;
+        }
+
+        .section.show,
+        .card.show,
+        .food-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+
+        /* ===== PAGE 2: MANALI PAGE STYLES ===== */
+        #page2 {
+            font-family: "Bad Script", cursive;
+            background: linear-gradient(45deg, #1a2980, #26d0ce);
+            --primary-color: #55a630;
+            --secondary-color: #6a994e;
+            --accent-color: #d4e09b;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --bg-gradient: linear-gradient(135deg, #f0f4f8, #c1d3e8);
+            --card-bg-gradient: linear-gradient(145deg, #7ca5cd, #ffffff);
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        #page2 h1,
+        #page2 h2,
+        #page2 h3 {
+            font-weight: 900;
+            color: var(--primary-color);
+        }
+
+        #page2 h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            letter-spacing: 2px;
+        }
+
+        #page2 h2 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--dark-text);
+            text-shadow: 0 0 7px rgb(255, 255, 255);
+        }
+
+        #page2 section h2 {
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        #page2 h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        #page2 .hero.manali-hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        #page2 .hero.manali-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
+            animation: zoom-effect 10s ease-in-out infinite;
+            filter: blur(2px);
+        }
+
+        @keyframes zoom-effect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #page2 .hero.manali-hero .overlay {
+            position: relative;
+            z-index: 2;
+        }
+
+        #page2 .hero.manali-hero h1 {
+            animation: slideInUp 1.5s ease forwards;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.549);
+            font-weight: 900;
+        }
+
+        #page2 .hero.manali-hero p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            animation: slideInUp 1.8s ease forwards;
+            text-shadow: 0 0 20px white;
+        }
+        
+        @keyframes slideInUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        #page2 .hero.manali-hero button,
+        #page2 .distance button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            background: var(--primary-color);
+            color: var(--light-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px white;
+        }
+
+        #page2 .hero.manali-hero button:hover,
+        #page2 .distance button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #page2 section {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #page2 .history,
+        #page2 .distance {
+            background: var(--card-bg-gradient);
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            padding: 40px;
+            margin-top: 50px;
+        }
+
+        #page2 .history p {
+            text-align: center;
+            padding: 0 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        #page2 .distance {
+            text-align: center;
+        }
+
+        #page2 .distance input {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 50px;
+            outline: none;
+            width: 300px;
+            max-width: 80%;
+            transition: all 0.3s ease;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #page2 .distance input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(85, 166, 48, 0.2);
+        }
+
+        #page2 #distanceResult {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        #page2 .grid,
+        #page2 .cuisine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        #page2 .card,
+        #page2 .cuisine-card {
+            height: 400px;
+            perspective: 1000px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            background: none;
+        }
+
+        #page2 .card:hover,
+        #page2 .cuisine-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        #page2 .card-inner,
+        #page2 .cuisine-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        #page2 .card:hover .card-inner,
+        #page2 .cuisine-card:hover .cuisine-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        #page2 .card-front,
+        #page2 .card-back,
+        #page2 .cuisine-card-front,
+        #page2 .cuisine-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #page2 .card-front,
+        #page2 .cuisine-card-front {
+            background: #fff;
+        }
+
+        #page2 .card-front img,
+        #page2 .cuisine-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #page2 .cuisine-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--light-text);
+        }
+
+        #page2 .card-back,
+        #page2 .cuisine-card-back {
+            background: linear-gradient(135deg, #001f44, #007991);
+            color: #fff;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #page2 .card-back h3,
+        #page2 .cuisine-card-back h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        #page2 .card-back p,
+        #page2 .cuisine-card-back p {
+            font-size: 1.3rem;
+            padding: 0 10px;
+        }
+
+        #page2 footer {
+            background: #2c3e50;
+            color: var(--light-text);
+            margin-top: 50px;
+        }
+
+
+        /* ===== LOADING OVERLAY STYLES ===== */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        #loading-overlay p {
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        
+        /* ===== NEW: YATRA GENIE CHATBOT STYLES ===== */
+        #chatbot-btn {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 1.2rem;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #00e5ff, #ffb347);
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 12px var(--glow-cyan);
+            animation: pulse 2.5s infinite;
+            transition: transform 0.3s;
+            z-index: 1001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #chatbot-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 12px var(--glow-cyan);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--glow-orange);
+            }
+        }
+
+        #chatbot-popup {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 5.5rem; /* Position above the button */
+            width: 320px;
+            max-height: 450px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            display: none; /* Hidden by default */
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            animation: pop-up 0.4s ease;
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        body.dark #chatbot-popup {
+            background: rgba(20, 20, 20, 0.85);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+        }
+        body.dark .chatbot-header {
+            border-bottom: 1px solid rgba(255, 179, 71, 0.2);
+        }
+        .chatbot-header h4 {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        #close-chatbot {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+        }
+
+        #chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-message {
+            padding: 0.6rem 0.9rem;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            background: #00e5ff;
+            color: #111;
+            border-bottom-right-radius: 2px;
+            align-self: flex-end;
+        }
+        body.dark .user-message {
+            background: var(--glow-orange);
+        }
+
+        .bot-message {
+            background: #e9e9eb;
+            color: #333;
+            border-bottom-left-radius: 2px;
+            align-self: flex-start;
+        }
+        body.dark .bot-message {
+            background: #2c2c2e;
+            color: #f2f2f2;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 0.75rem;
+            border-top: 1px solid rgba(0, 229, 255, 0.3);
+        }
+        body.dark .chatbot-input {
+            border-top: 1px solid rgba(255, 179, 71, 0.2);
+        }
+
+        #chatbot-input-field {
+            flex-grow: 1;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background: transparent;
+            color: inherit;
+            outline: none;
+            margin-right: 0.5rem;
+        }
+
+        #chatbot-send-btn {
+            border: none;
+            background: #00e5ff;
+            color: #111;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        body.dark #chatbot-send-btn {
+            background: var(--glow-orange);
+        }
+        #chatbot-send-btn:hover {
+            transform: scale(1.1);
+        }
+
+
+        @keyframes pop-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* ===== RESPONSIVE STYLES ===== */
+        @media(max-width:768px) {
+            .nav-links { display: none; }
+            .search-container { flex-direction: column; }
+            .hero-content .search-bar { width: 100%; }
+            .card-container, .food-slider { flex-direction: column; align-items: center; }
+            .hero-content h2 { font-size: 1.8rem; }
+            .filter-controls { flex-direction: column; align-items: stretch; }
+            #chatbot-popup {
+                width: calc(100vw - 2.4rem);
+                max-height: 60vh;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Taking you to Manali...</p>
+    </div>
+
+    <div id="page1">
+        <nav class="navbar">
+            <div class="logo"><img src="remove.png" alt="logo">
+                <h1>Xplor Bharat</h1>
+            </div>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#hero">Home</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="#">Latest Updates</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Features</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">AI Planner</a></li>
+                        <li><a href="#">Travel Blog</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#destinations">Destinations</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#destinations">Top Picks</a></li>
+                        <li><a href="#cuisine">Cuisine</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Filter</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">By Budget</a></li>
+                        <li><a href="#">By Adventure</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+
+        <section class="hero" id="hero">
+            <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=80');"></div>
+            <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1500&q=80');"></div>
+            <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1500&q=80');"></div>
+            <div class="hero-bg" style="background-image:url('https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg');"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h2 id="hero-quote">Discover Beautiful Destinations</h2>
+                <div class="search-container">
+                    <input type="text" id="search-bar-input" class="search-bar" placeholder="🔍 Search for 'Manali' to continue...">
+                    <button class="btn" id="plan-trip-btn">✈️ Plan Your Trip</button>
+                </div>
+                <div class="filter-controls">
+                    <div id="duration-control" class="control-group filter-dropdown">
+                        <label>Duration<span class="selected-value"></span></label>
+                        <div class="filter-dropdown-menu duration-dropdown">
+                            <input type="date" id="from-date">
+                            <span>to</span>
+                            <input type="date" id="to-date">
+                        </div>
+                    </div>
+                    <div class="control-group filter-dropdown">
+                        <label>Festive Season<span class="selected-value"></span></label>
+                        <div class="filter-dropdown-menu">
+                            <a href="#" class="option-yn" data-value="Yes">Yes</a>
+                            <a href="#" class="option-yn" data-value="No">No</a>
+                        </div>
+                    </div>
+                    <div class="control-group filter-dropdown">
+                        <label>Holiday<span class="selected-value"></span></label>
+                        <div class="filter-dropdown-menu">
+                            <a href="#" class="option-yn" data-value="Yes">Yes</a>
+                            <a href="#" class="option-yn" data-value="No">No</a>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label>Hotel Rating</label>
+                        <div class="star-rating">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="prediction-btn-container">
+                    <button class="btn">🔮 Prediction Analysis</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="destinations" class="section">
+            <h3 class="section-title">Top Destinations</h3>
+            <div class="card-container">
+                <div class="card"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Goa">
+                    <h4>Goa Beaches</h4>
+                    <p>Golden sands & nightlife.</p>
+                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="Himalayas">
+                    <h4>Himalayan Peaks</h4>
+                    <p>Snow-clad adventures.</p>
+                </div>
+                <div class="card"><img src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg" alt="Jaipur">
+                    <h4>Jaipur Palaces</h4>
+                    <p>Royal heritage.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cuisine" class="section cuisine">
+            <h3 class="section-title">Local Cuisine</h3>
+            <div class="food-slider">
+                <div class="food-card"><img src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp" alt="Biryani">
+                    <h4>Biryani</h4>
+                </div>
+                <div class="food-card"><img src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg" alt="Butter Chicken">
+                    <h4>Butter Chicken</h4>
+                </div>
+                <div class="food-card"><img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="Dosa">
+                    <h4>Dosa</h4>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 Xplor Bharat. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+
+    <div id="page2" style="display: none;">
+        <header class="hero manali-hero">
+            <div class="overlay">
+                <h1>Explore Manali</h1>
+                <p>The Valley of Gods</p>
+                <button onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">Discover Now</button>
+            </div>
+        </header>
+        <section class="history">
+            <h2>History of Manali</h2>
+            <p>
+                Manali, a beautiful hill station in Himachal Pradesh, is known as the "Valley of Gods".
+                According to Hindu mythology, Sage Manu recreated life here after the great flood.
+                Over the years, Manali became a cultural hub with temples, monasteries, and breathtaking landscapes.
+            </p>
+        </section>
+        <section class="distance">
+            <h2>Check Your Distance to Manali</h2>
+            <input type="text" id="city" placeholder="Enter your city (e.g., Delhi)">
+            <button onclick="calculateDistance()">Get Distance</button>
+            <p id="distanceResult"></p>
+        </section>
+        <section class="places">
+            <h2>Famous Places to Visit</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXvpD-xWwwaBpwQ5w4BAXsplCrx3xqq-8GrQ&s" alt="Hadimba Temple">
+                        </div>
+                        <div class="card-back">
+                            <h3>Hadimba Temple</h3>
+                            <p>A unique 16th-century wooden temple with a pagoda-style roof, dedicated to Hidimba Devi from the Mahabharata epic.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFpJCl5OKJbOqO2IaVagXg1tyN44QxtmmCBA&s" alt="Rohtang Pass">
+                        </div>
+                        <div class="card-back">
+                            <h3>Rohtang Pass</h3>
+                            <p>A high-altitude pass famous for breathtaking views of snow-capped peaks and as a gateway to Lahaul and Spiti valleys.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHHltiXbjgkBCW5jHpWeqDVcjHtyj89XEY4Q&s" alt="Solang Valley">
+                        </div>
+                        <div class="card-back">
+                            <h3>Solang Valley</h3>
+                            <p>A picturesque destination known for its stunning landscapes and as a year-round hub for adventure sports like paragliding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="cuisine">
+            <h2>Local Cuisine of Manali</h2>
+            <div class="cuisine-grid">
+                <div class="cuisine-card">
+                    <div class="cuisine-card-inner">
+                        <div class="cuisine-card-front">
+                            <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/c8/5a/20/trout-fish-the-most-popular.jpg" alt="Trout Fish">
+                            <div class="cuisine-info">
+                                <h3>Trout Fish</h3>
+                            </div>
+                        </div>
+                        <div class="cuisine-card-back">
+                            <p>Freshly caught and cooked trout fish, a local delicacy of Manali. Served with local spices and herbs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cuisine-card">
+                    <div class="cuisine-card-inner">
+                        <div class="cuisine-card-front">
+                            <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/77/f9/c6/siddu-local-himachali.jpg" alt="Sidu">
+                            <div class="cuisine-info">
+                                <h3>Sidu</h3>
+                            </div>
+                        </div>
+                        <div class="cuisine-card-back">
+                            <p>Steamed bread made from wheat dough, served with ghee and lentils. A traditional Himachali dish.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cuisine-card">
+                    <div class="cuisine-card-inner">
+                        <div class="cuisine-card-front">
+                            <img src="https://images.herzindagi.info/image/2023/Aug/make-babru-at-home-easy-steps.jpg" alt="Babru">
+                            <div class="cuisine-info">
+                                <h3>Babru</h3>
+                            </div>
+                        </div>
+                        <div class="cuisine-card-back">
+                            <p>Fried bread stuffed with black gram paste, a popular Himachali snack. Perfect for tea-time cravings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <p>© 2025 Explore Manali | Designed for Tourism</p>
+        </footer>
+    </div>
+    
+    <button id="chatbot-btn">💬</button>
+    <div id="chatbot-popup">
+        <div class="chatbot-header">
+            <h4>YatraGenie ✨</h4>
+            <button id="close-chatbot">&times;</button>
+        </div>
+        <div id="chatbot-messages">
+             <div class="chat-message bot-message">
+                Hello! I'm YatraGenie. Ask me about destinations, trip planning, or budgets!
+             </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input-field" placeholder="Ask YatraGenie...">
+            <button id="chatbot-send-btn">➤</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // ===================================
+            // SCRIPT FOR PAGE 1 (Xplor Bharat)
+            // ===================================
+            const themeToggle = document.getElementById("theme-toggle");
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark");
+                themeToggle.textContent = "☀️";
+            }
+            themeToggle.addEventListener("click", () => {
+                document.body.classList.toggle("dark");
+                const dark = document.body.classList.contains("dark");
+                themeToggle.textContent = dark ? "☀️" : "🌙";
+                localStorage.setItem("theme", dark ? "dark" : "light");
+            });
+
+            const heroBgs = document.querySelectorAll("#page1 .hero-bg");
+            const heroQuote = document.getElementById("hero-quote");
+            const quotes = [
+                "Discover Beautiful Destinations",
+                "Explore the Wonders of India",
+                "Adventure Awaits You",
+                "Taste Local Cuisines"
+            ];
+            let index = 0;
+            function nextHero() {
+                if (heroBgs.length === 0) return;
+                heroBgs.forEach(bg => bg.classList.remove("active"));
+                heroBgs[index].classList.add("active");
+                heroQuote.style.opacity = 0;
+                setTimeout(() => {
+                    heroQuote.textContent = quotes[index];
+                    heroQuote.style.opacity = 1;
+                }, 500);
+                index = (index + 1) % heroBgs.length;
+            }
+            nextHero();
+            setInterval(nextHero, 4000);
+
+            const revealEls = document.querySelectorAll("#page1 .section, #page1 .card, #page1 .food-card");
+            function reveal() {
+                const trig = window.innerHeight * 0.85;
+                revealEls.forEach(el => {
+                    if (el.getBoundingClientRect().top < trig) {
+                        el.classList.add("show");
+                    }
+                });
+            }
+            window.addEventListener("scroll", reveal);
+            reveal();
+
+            const stars = document.querySelectorAll(".star-rating span");
+            const ratingContainer = document.querySelector(".star-rating");
+            let currentRating = 0;
+            stars.forEach((star, index) => {
+                star.addEventListener("mouseover", () => {
+                    stars.forEach((s, i) => s.classList.toggle("hovered", i <= index));
+                });
+                star.addEventListener("click", () => {
+                    currentRating = index + 1;
+                    stars.forEach((s, i) => {
+                        s.classList.remove("hovered");
+                        s.classList.toggle("selected", i < currentRating);
+                    });
+                });
+            });
+            ratingContainer.addEventListener("mouseout", () => {
+                stars.forEach(s => s.classList.remove("hovered"));
+                stars.forEach((s, i) => {
+                    s.classList.toggle("selected", i < currentRating);
+                });
+            });
+
+            const optionDropdowns = document.querySelectorAll('.filter-dropdown');
+            optionDropdowns.forEach(dropdown => {
+                const valueSpan = dropdown.querySelector('.selected-value');
+                if (!valueSpan) return;
+                dropdown.querySelectorAll('.option-yn').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const selectedValue = option.getAttribute('data-value');
+                        valueSpan.textContent = `: ${selectedValue}`;
+                    });
+                });
+            });
+
+            const durationControl = document.getElementById('duration-control');
+            const fromDateInput = document.getElementById('from-date');
+            const toDateInput = document.getElementById('to-date');
+            const durationValueSpan = durationControl.querySelector('.selected-value');
+            function updateDurationText() {
+                const fromDate = fromDateInput.value;
+                const toDate = toDateInput.value;
+                if (fromDate && toDate) {
+                    durationValueSpan.textContent = `${fromDate} to ${toDate}`;
+                } else if (fromDate) {
+                    durationValueSpan.textContent = `From ${fromDate}`;
+                } else if (toDate) {
+                    durationValueSpan.textContent = `To ${toDate}`;
+                } else {
+                    durationValueSpan.textContent = '';
+                }
+            }
+            fromDateInput.addEventListener('change', updateDurationText);
+            toDateInput.addEventListener('change', updateDurationText);
+
+            // ==========================================================
+            // SCRIPT FOR PAGE REDIRECTION WITH DELAY
+            // ==========================================================
+            const planTripButton = document.getElementById('plan-trip-btn');
+            const searchBar = document.getElementById('search-bar-input');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+
+            planTripButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                const searchTerm = searchBar.value.trim().toLowerCase();
+
+                if (searchTerm === 'manali') {
+                    loadingOverlay.style.display = 'flex';
+                    setTimeout(function() {
+                        page1.style.display = 'none';
+                        page2.style.display = 'block';
+                        loadingOverlay.style.display = 'none';
+                        window.scrollTo(0, 0);
+                    }, 2500);
+
+                } else {
+                    alert("Please type 'Manali' in the search bar to explore that page.");
+                }
+            });
+
+            // ===============================================
+            // NEW: SCRIPT FOR YATRAGENIE CHATBOT
+            // ===============================================
+            const chatBtn = document.getElementById("chatbot-btn");
+            const chatPop = document.getElementById("chatbot-popup");
+            const closeChatbotBtn = document.getElementById("close-chatbot");
+            const sendChatBtn = document.getElementById("chatbot-send-btn");
+            const chatInputField = document.getElementById("chatbot-input-field");
+            const chatMessages = document.getElementById("chatbot-messages");
+
+            const toggleChatbot = () => {
+                const isVisible = chatPop.style.display === "flex";
+                chatPop.style.display = isVisible ? "none" : "flex";
+            };
+            
+            chatBtn.addEventListener("click", toggleChatbot);
+            closeChatbotBtn.addEventListener("click", toggleChatbot);
+            
+            const appendMessage = (text, sender) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', `${sender}-message`);
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                // Scroll to the bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            const handleSendMessage = () => {
+                const userText = chatInputField.value.trim();
+                if (userText === '') return;
+
+                appendMessage(userText, 'user');
+                chatInputField.value = '';
+
+                // Simulate bot thinking and get response
+                setTimeout(() => {
+                    const botResponse = getYatraGenieResponse(userText);
+                    appendMessage(botResponse, 'bot');
+                }, 600);
+            };
+
+            sendChatBtn.addEventListener("click", handleSendMessage);
+            chatInputField.addEventListener("keypress", (e) => {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
+            const getYatraGenieResponse = (userInput) => {
+                const input = userInput.toLowerCase();
+
+                if (input.includes('hello') || input.includes('hi')) {
+                    return "Hello there! I am YatraGenie. How can I assist with your travel plans today?";
+                } else if (input.includes('plan') && input.includes('trip')) {
+                    return "Of course! Where are you thinking of going? I can help with destinations like Goa, Manali, and Jaipur.";
+                } else if (input.includes('goa')) {
+                    return "Goa is a fantastic choice! It's known for beautiful beaches, vibrant nightlife, and Portuguese architecture. Are you looking for a relaxed or an adventurous trip?";
+                } else if (input.includes('budget') || input.includes('cheap')) {
+                    return "I can definitely help with budget travel. To give you the best advice, could you tell me your approximate budget per person and the number of days?";
+                } else if (input.includes('help')) {
+                    return "You can ask me to help plan a trip, suggest destinations, or give you tips on budget travel. Just type your query!";
+                } else if (input.includes('bye') || input.includes('thank')) {
+                    return "You're welcome! Have a great day and happy travels!";
+                } else {
+                    return "I'm sorry, I'm still learning. Can you try asking me something else? You can ask about planning a trip or specific destinations.";
+                }
+            };
+        });
+
+        // ===============================================
+        // SCRIPT FOR PAGE 2 (Manali Page) - Distance Calculator
+        // ===============================================
+        function calculateDistance() {
+            const city = document.getElementById("city").value.trim().toLowerCase();
+            const distanceResult = document.getElementById("distanceResult");
+            const distances = {
+                "delhi": 540, "chandigarh": 310, "shimla": 250,
+                "mumbai": 1950, "kolkata": 2100, "bangalore": 2700
+            };
+            if (distances[city]) {
+                distanceResult.textContent = `Distance from ${city.charAt(0).toUpperCase() + city.slice(1)} to Manali is approximately ${distances[city]} km.`;
+            } else {
+                distanceResult.textContent = "Distance not available. Try Delhi, Chandigarh, Shimla, Mumbai, Kolkata, or Bangalore.";
+            }
+        }
+    </script>
+</body>
+
+</html>
