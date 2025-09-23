@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     star.addEventListener("click", () => {
       currentRating = index + 1;
       stars.forEach((s, i) => {
-        s.classList.remove("hovered"); // Remove hover class on click
+        s.classList.remove("hovered");
         s.classList.toggle("selected", i < currentRating);
       });
     });
@@ -77,9 +77,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
   ratingContainer.addEventListener("mouseout", () => {
     stars.forEach(s => s.classList.remove("hovered"));
-    // Re-apply only the selected state
     stars.forEach((s, i) => {
       s.classList.toggle("selected", i < currentRating);
     });
   });
+
+  // NEW: Logic to update filter buttons with selected values
+  
+  // Handle Yes/No dropdowns
+  const optionDropdowns = document.querySelectorAll('.filter-dropdown');
+  optionDropdowns.forEach(dropdown => {
+    const valueSpan = dropdown.querySelector('.selected-value');
+    if (!valueSpan) return;
+
+    dropdown.querySelectorAll('.option-yn').forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedValue = option.getAttribute('data-value');
+        valueSpan.textContent = `: ${selectedValue}`;
+      });
+    });
+  });
+
+  // Handle Duration dropdown
+  const durationControl = document.getElementById('duration-control');
+  const fromDateInput = document.getElementById('from-date');
+  const toDateInput = document.getElementById('to-date');
+  const durationValueSpan = durationControl.querySelector('.selected-value');
+
+  function updateDurationText() {
+    const fromDate = fromDateInput.value;
+    const toDate = toDateInput.value;
+    if (fromDate && toDate) {
+      durationValueSpan.textContent = `${fromDate} to ${toDate}`;
+    } else if (fromDate) {
+      durationValueSpan.textContent = `From ${fromDate}`;
+    } else if (toDate) {
+      durationValueSpan.textContent = `To ${toDate}`;
+    } else {
+      durationValueSpan.textContent = '';
+    }
+  }
+
+  fromDateInput.addEventListener('change', updateDurationText);
+  toDateInput.addEventListener('change', updateDurationText);
 });
