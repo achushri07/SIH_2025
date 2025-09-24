@@ -7,10 +7,26 @@
   <title>Explore Manali</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
-<body>
-  <header class="hero">
+<body id="body">
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#home" class="brand">Explore Manali</a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#famous-places">Places</a></li>
+        <li><a href="#cuisine">Cuisine</a></li>
+        <li><a href="#calculator">Calculator</a></li>
+      </ul>
+      <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </nav>
+  <header class="hero" id="home">
     <div class="overlay">
       <h1>Explore Manali</h1>
       <p>The Valley of Gods</p>
@@ -19,7 +35,7 @@
     </div>
   </header>
 
-  <section class="history">
+  <section class="history" id="history">
     <h2>History of Manali</h2>
     <p>
       Manali, a beautiful hill station in Himachal Pradesh, is known as the "Valley of Gods". According to Hindu
@@ -41,8 +57,12 @@
       <div class="card card-throw-left">
         <div class="card-inner">
           <div class="card-front">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXvpD-xWwwaBpwQ5w4BAXsplCrx3xqq-8GrQ&s"
-              alt="Place Name">
+            <video autoplay muted playsinline loop object-fit="contain">
+              <source
+                src="https://www.shutterstock.com/shutterstock/videos/3568629615/preview/stock-footage-manali-india-january-hidimba-devi-locally-known-as-dhungari-temple-also-known.webm"
+                type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
           <div class="card-back">
             <h3>Hadimba Temple</h3>
@@ -54,8 +74,12 @@
       <div class="card card-throw-right">
         <div class="card-inner">
           <div class="card-front">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFpJCl5OKJbOqO2IaVagXg1tyN44QxtmmCBA&s"
-              alt="Place Name">
+            <video autoplay muted playsinline loop>
+              <source
+                src="https://www.shutterstock.com/shutterstock/videos/3812071353/preview/stock-footage-kullu-himachal-pradesh-india-april-th-delhi-to-manali-highway-all-major-tunnels-with.webm"
+                type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
           <div class="card-back">
             <h3>Rohtang Pass</h3>
@@ -67,8 +91,12 @@
       <div class="card card-throw-left">
         <div class="card-inner">
           <div class="card-front">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHHltiXbjgkBCW5jHpWeqDVcjHtyj89XEY4Q&s"
-              alt="Place Name">
+            <video autoplay muted playsinline loop>
+              <source
+                src="https://www.shutterstock.com/shutterstock/videos/1111404157/preview/stock-footage-solang-valley-india-november-th-drone-shot-of-mountain-view-with-several-hotels-in.webm"
+                type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
           <div class="card-back">
             <h3>Solang Valley</h3>
@@ -80,7 +108,7 @@
     </div>
   </section>
 
-  <section class="cuisine">
+  <section class="cuisine" id="cuisine">
     <h2>Local Cuisine of Manali</h2>
     <div class="cuisine-grid">
       <div class="cuisine-card card-throw-right">
@@ -127,7 +155,7 @@
     </div>
   </section>
 
-  <section class="calculator">
+  <section class="calculator" id="calculator">
     <h2>Trip Budget Calculator</h2>
     <div class="calculator-inputs">
       <input type="text" id="city" placeholder="Enter your city (e.g., Delhi)">
