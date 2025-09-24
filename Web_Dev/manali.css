@@ -1,10 +1,9 @@
 /* Enhanced CSS for a more attractive Manali tourism site */
 /* --- Global & Base Styles --- */
 @import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libertinus+Serif+Display&family=Manufacturing+Consent&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Smooch+Sans:wght@100..900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+
 html {
     scroll-behavior: smooth;
-    
-
 }
 
 :root {
@@ -13,29 +12,22 @@ html {
     --accent-color: #d4e09b;
     --dark-text: #2c3e50;
     --light-text: #ecf0f1;
-    --bg-gradient: linear-gradient(135deg, #f0f4f8, #c1d3e8);
-    --card-bg-gradient: linear-gradient(145deg, #7ca5cd, #ffffff);
+    --bg-gradient: #081426;
     --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
-    --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 8px 30px rgb(77, 83, 134);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Bad Script", cursive;
 }
 
 body {
-    background: var(--bg-gradient);
-    color: var(--dark-text);
+    background: #071024;
+    color: var(--light-text);
     line-height: 1.6;
     overflow-x: hidden;
-}
-
-body {
-    background: linear-gradient(45deg, #1a2980, #26d0ce);
 }
 
 /* --- Typography Enhancements --- */
@@ -44,7 +36,6 @@ h2,
 h3 {
     font-weight: 900;
     color: var(--primary-color);
-
 }
 
 h1 {
@@ -58,7 +49,7 @@ h2 {
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
-    color: var(--dark-text);
+    color: var(--light-text);
     text-shadow: 0 0 7px rgb(255, 255, 255);
 }
 
@@ -84,7 +75,7 @@ p {
 
 /* --- Buttons & Inputs --- */
 .hero button,
-.distance button {
+.calculator button {
     padding: 12px 30px;
     font-size: 1rem;
     font-weight: 600;
@@ -101,31 +92,41 @@ p {
 }
 
 .hero button:hover,
-.distance button:hover {
+.calculator button:hover {
     background: var(--secondary-color);
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.distance input {
+.calculator-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.calculator input,
+.calculator select {
     padding: 12px 20px;
     font-size: 1rem;
-    border: 2px solid #ccc;
+    border: none;
     border-radius: 50px;
     outline: none;
-    width: 300px;
-    max-width: 80%;
+    width: 100%;
+    max-width: 100%;
     transition: all 0.3s ease;
+    background: rgba(14, 23, 41, 0.7);
+    color: var(--light-text);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(5px);
 }
 
-.distance input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(85, 166, 48, 0.2);
+.calculator input:focus,
+.calculator select:focus {
+    box-shadow: 0 0 0 2px var(--primary-color), 0 0 10px var(--primary-color);
 }
-
 
 /* --- Hero Section --- */
-/* Keyframes for the continuous zoom effect */
 @keyframes zoom-effect {
     0% {
         transform: scale(1);
@@ -144,7 +145,6 @@ p {
     height: 100vh;
     position: relative;
     overflow: hidden;
-    /* This is crucial to prevent scrollbars from the zooming image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,14 +159,9 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    background:
-        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        /* Add the dark overlay here */
-        url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
-    animation: zoom-effect 10s ease-in-out infinite;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Manali_City.jpg/1200px-Manali_City.jpg') center/cover no-repeat;
     animation: zoom-effect 10s ease-in-out infinite;
     filter: blur(2px);
-    /* Apply a slight blur directly to the background image */
 }
 
 .hero .overlay {
@@ -197,41 +192,119 @@ section {
 
 /* --- History Section --- */
 .history {
-    background: var(--card-bg-gradient);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    box-shadow: var(--shadow-light);
+    box-shadow: var(--shadow-heavy);
     padding: 40px;
     margin-top: 50px;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
-.history h2{
+
+.history:hover {
+    transform: translateY(-15px) scale(1.02) rotate(2.2deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 60px var(--dark-text);
+}
+
+.history h2 {
     font-weight: bolder;
+    color: var(--light-text);
 }
 
 .history p {
     text-align: center;
     padding: 0 20px;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--light-text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Distance Calculator --- */
-.distance {
-    background: var(--card-bg-gradient);
+/* --- Trip Budget Calculator --- */
+.calculator {
+    background: rgba(14, 23, 41, 0.5);
     border-radius: 20px;
-    box-shadow: var(--shadow-light);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     padding: 40px;
     text-align: center;
     margin-top: 50px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.distance input{
-    font-family: Arial, Helvetica, sans-serif;
+
+.calculator h2,
+.calculator p {
+    color: var(--light-text);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
-#distanceResult {
+
+@keyframes tilt {
+
+    0%,
+    100% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+
+    25% {
+        transform: rotateX(2deg) rotateY(3deg);
+    }
+
+    50% {
+        transform: rotateX(-2deg) rotateY(-3deg);
+    }
+
+    75% {
+        transform: rotateX(2deg) rotateY(-3deg);
+    }
+}
+
+.calculator::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    z-index: -1;
+    transform: translateZ(-20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.calculator-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 1;
+}
+
+#result-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.8s ease-in-out;
+}
+
+#result-container.visible {
+    max-height: 300px;
+}
+
+#result-content {
     margin-top: 20px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--primary-color);
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--light-text);
+    text-shadow: none;
 }
 
 /* --- Famous Places & Cuisine Grids --- */
@@ -244,21 +317,42 @@ section {
     align-items: stretch;
 }
 
-/* --- Card Styles --- */
+/* The base style for cards, all cards start in a hidden state */
 .card,
 .cuisine-card {
     height: 400px;
     perspective: 1000px;
     border-radius: 15px;
-    box-shadow: var(--shadow-light);
-    transition: transform 0.3s ease;
+    box-shadow: var(--shadow-heavy);
     cursor: pointer;
+    /* Add a universal transition for all properties here */
+    transition: all 0.75s ease-in-out;
+    opacity: 0;
 }
 
+/* Initial off-screen positions for the cards */
+.card-throw-left {
+    transform: translateX(-150%) rotate(-30deg);
+}
+
+.card-throw-right {
+    transform: translateX(150%) rotate(30deg);
+}
+
+/* This is the class added by JavaScript to trigger the animation */
+.card.in-view,
+.cuisine-card.in-view {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+}
+
+
+/* --- Card Hover Effects --- */
 .card:hover,
 .cuisine-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-heavy);
+    transform: translateY(-10px) scale(1.05);
+    /* Remove rotateY for cleaner effect */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
 .card-inner,
@@ -361,12 +455,16 @@ footer {
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
-    .distance input {
-        width: 100%;
-        margin-bottom: 10px;
+    .calculator-inputs {
+        flex-direction: column;
     }
 
-    .distance button {
-        margin-left: 0;
+    .calculator input,
+    .calculator select {
+        width: 100%;
+    }
+
+    .calculator button {
+        margin-top: 10px;
     }
 }
