@@ -1,27 +1,3 @@
-// Intersection Observer setup for card animations
-const observerOptions = {
-  root: null, // use the viewport
-  rootMargin: '0px',
-  threshold: 0.2 // trigger when 20% of the element is visible
-};
-
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Add the 'in-view' class to trigger the animation
-      entry.target.classList.add('in-view');
-      // Stop observing once the element is animated
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
-// Select all elements that should animate on scroll
-const animatedCards = document.querySelectorAll('.card, .cuisine-card');
-animatedCards.forEach(card => {
-  observer.observe(card);
-});
-
 // Existing budget calculator function
 function calculateBudget() {
   const cityInput = document.getElementById("city").value.trim().toLowerCase();
@@ -90,3 +66,44 @@ function calculateBudget() {
   resultContent.innerHTML = resultHTML;
   resultContainer.classList.add('visible');
 }
+
+// Function to toggle between light and dark themes
+function toggleTheme() {
+  const body = document.getElementById('body');
+  const themeIcon = document.querySelector('.theme-btn i');
+
+  if (body.classList.contains('light-theme')) {
+    body.classList.remove('light-theme');
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+  } else {
+    body.classList.add('light-theme');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Intersection Observer setup for card animations
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -100px 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const animatedCards = document.querySelectorAll('.card, .cuisine-card');
+  animatedCards.forEach((card, index) => {
+    setTimeout(() => {
+      observer.observe(card);
+    }, index * 200);
+  });
+});
