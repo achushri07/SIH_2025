@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplor Bharat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo"><img src="remove.png" alt="logo">
+            <h1>Xplor Bharat</h1>
+        </div>
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="#hero">Home</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Overview</a></li>
+                    <li><a href="#">Latest Updates</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Features</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">AI Planner</a></li>
+                    <li><a href="#">Travel Blog</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#destinations">Destinations</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#destinations">Top Picks</a></li>
+                    <li><a href="#cuisine">Cuisine</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Filter</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">By Budget</a></li>
+                    <li><a href="#">By Adventure</a></li>
+                </ul>
+            </li>
+        </ul>
+        <button id="theme-toggle">🌙</button>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-bg"
+            style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=80');">
+        </div>
+        <div class="hero-bg"
+            style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1500&q=80');">
+        </div>
+        <div class="hero-bg"
+            style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1500&q=80');">
+        </div>
+        <div class="hero-bg"
+            style="background-image:url('https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg');">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h2 id="hero-quote">Discover Beautiful Destinations</h2>
+
+            <div class="search-container">
+                <input type="text" id="destination-input" class="search-bar" placeholder="🔍 Enter destination city...">
+                <button class="btn" id="plan-trip-btn">✈️ Plan Your Trip</button>
+            </div>
+
+            <div class="filter-controls">
+                <div id="duration-control" class="control-group filter-dropdown">
+                    <label>Duration<span class="selected-value"></span></label>
+                    <div class="filter-dropdown-menu duration-dropdown">
+                        <input type="date" id="from-date">
+                        <span>to</span>
+                        <input type="date" id="to-date">
+                    </div>
+                </div>
+                <div class="control-group filter-dropdown">
+                    <label>Festive Season<span class="selected-value"></span></label>
+                    <div class="filter-dropdown-menu">
+                        <a href="#" class="option-yn" data-value="Yes" data-type="festival">Yes</a>
+                        <a href="#" class="option-yn" data-value="No" data-type="festival">No</a>
+                    </div>
+                </div>
+                <div class="control-group filter-dropdown">
+                    <label>Holiday<span class="selected-value"></span></label>
+                    <div class="filter-dropdown-menu">
+                        <a href="#" class="option-yn" data-value="Yes" data-type="holiday">Yes</a>
+                        <a href="#" class="option-yn" data-value="No" data-type="holiday">No</a>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Hotel Rating</label>
+                    <div class="star-rating">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-btn-container">
+                <button class="btn" id="prediction-btn">🔮 Get Predictions</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="section" style="display: none;">
+        <h3 class="section-title">Travel Predictions</h3>
+        <div class="results-container">
+            <div class="result-card">
+                <h4>🌤️ Weather Conditions</h4>
+                <div id="weather-info">
+                    <p>Condition: <span id="weather-condition"></span></p>
+                    <p>Temperature: <span id="weather-temp"></span>°C</p>
+                    <p>Wind Speed: <span id="weather-wind"></span> km/h</p>
+                </div>
+            </div>
+            <div class="result-card">
+                <h4>🛡️ Safety Analysis</h4>
+                <div id="safety-result" class="result-value"></div>
+            </div>
+            <div class="result-card">
+                <h4>💰 Hotel Price Estimate</h4>
+                <div id="price-result" class="result-value"></div>
+            </div>
+            <div class="result-card">
+                <h4>📊 Popularity Index</h4>
+                <div id="popularity-result" class="result-value"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="destinations" class="section">
+        <h3 class="section-title">Top Destinations</h3>
+        <div class="card-container">
+            <div class="card"><img
+                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+                    alt="Goa">
+                <h4>Goa Beaches</h4>
+                <p>Golden sands & nightlife.</p>
+            </div>
+            <div class="card"><img
+                    src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80"
+                    alt="Himalayas">
+                <h4>Himalayan Peaks</h4>
+                <p>Snow-clad adventures.</p>
+            </div>
+            <div class="card"><img
+                    src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg"
+                    alt="Jaipur">
+                <h4>Jaipur Palaces</h4>
+                <p>Royal heritage.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cuisine" class="section cuisine">
+        <h3 class="section-title">Local Cuisine</h3>
+        <div class="food-slider">
+            <div class="food-card"><img
+                    src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp"
+                    alt="Biryani">
+                <h4>Biryani</h4>
+            </div>
+            <div class="food-card"><img
+                    src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg"
+                    alt="Butter Chicken">
+                <h4>Butter Chicken</h4>
+            </div>
+            <div class="food-card"><img
+                    src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg"
+                    alt="Dosa">
+                <h4>Dosa</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <p>Getting predictions...</p>
+        </div>
+    </div>
+
+    <button id="chatbot-btn">💬</button>
+    <div id="chatbot-popup" style="display: none;">
+        <h4>YatraGenie✨</h4>
+        <input type="text" placeholder="Type your message...">
+    </div>
+
+    <footer>
+        <p>© 2025 Xplor Bharat. All Rights Reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        /* Additional styles for results section */
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .result-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(224, 247, 250, 0.7) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark .result-card {
+            background: rgba(20, 20, 20, 0.4);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 255, 255, 0.15);
+        }
+
+        .result-card h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: #008489;
+        }
+
+        body.dark .result-card h4 {
+            color: #ffc107;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00e5ff;
+        }
+
+        body.dark .result-value {
+            color: #ffb347;
+        }
+
+        #weather-info p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        body.dark .modal-content {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00e5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .safety-safe {
+            color: #4CAF50 !important;
+        }
+
+        .safety-moderate {
+            color: #FF9800 !important;
+        }
+
+        .safety-unsafe {
+            color: #F44336 !important;
+        }
+    </style>
+</body>
+
+</html>
