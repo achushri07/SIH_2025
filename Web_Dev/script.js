@@ -17,13 +17,68 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", dark ? "dark" : "light");
   });
 
-  // Chatbot Toggle
+  // Enhanced Chatbot Toggle and Functionality
   const chatBtn = document.getElementById("chatbot-btn");
   const chatPop = document.getElementById("chatbot-popup");
+  const chatInput = chatPop.querySelector('input');
+  const chatMessages = document.createElement('div');
+
+  // Add chat messages container to popup
+  chatMessages.className = 'chat-messages';
+  chatPop.insertBefore(chatMessages, chatInput);
+
   chatBtn.addEventListener("click", () => {
     const isVisible = chatPop.style.display === "block";
     chatPop.style.display = isVisible ? "none" : "block";
   });
+
+  // Handle chat input
+  chatInput.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter' && chatInput.value.trim()) {
+      await sendMessage(chatInput.value.trim());
+      chatInput.value = '';
+    }
+  });
+
+  async function sendMessage(message) {
+    // Add user message to chat
+    addMessageToChat('user', message);
+
+    // Show loading
+    addMessageToChat('bot', 'Thinking...');
+
+    try {
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await response.json();
+
+      // Remove loading message and add bot response
+      chatMessages.removeChild(chatMessages.lastChild);
+
+      if (data.status === 'success') {
+        addMessageToChat('bot', data.response);
+      } else {
+        addMessageToChat('bot', 'Sorry, I encountered an error.');
+      }
+    } catch (error) {
+      chatMessages.removeChild(chatMessages.lastChild);
+      addMessageToChat('bot', 'Sorry, I could not connect to the server.');
+    }
+  }
+
+  function addMessageToChat(sender, message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}-message`;
+    messageDiv.textContent = message;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 
   // Hero Background + Quotes
   const heroBgs = document.querySelectorAll(".hero-bg");
@@ -97,9 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const selectedValue = option.getAttribute('data-value');
         const dataType = option.getAttribute('data-type');
-        
+
         valueSpan.textContent = `: ${selectedValue}`;
-        
+
         // Store the selected values
         if (dataType === 'festival') {
           selectedFestival = selectedValue;
@@ -116,23 +171,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function getPredictions() {
     const destination = document.getElementById('destination-input').value.trim();
-    
+
     // Validation
     if (!destination) {
       alert('Please enter a destination!');
       return;
     }
-    
+
     if (!selectedFestival) {
       alert('Please select Festive Season (Yes/No)!');
       return;
     }
-    
+
     if (!selectedHoliday) {
       alert('Please select Holiday (Yes/No)!');
       return;
     }
-    
+
     if (selectedRating === 0) {
       alert('Please select Hotel Rating!');
       return;
@@ -156,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await response.json();
-      
+
       // Hide loading modal
       document.getElementById('loading-modal').style.display = 'none';
 
@@ -180,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update predictions
     const safetyResult = document.getElementById('safety-result');
     safetyResult.textContent = data.predictions.safety;
-    
+
     // Add safety color coding
     safetyResult.className = 'result-value safety-' + data.predictions.safety.toLowerCase();
 
@@ -189,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Show results section
     document.getElementById('results').style.display = 'block';
-    
+
     // Scroll to results
     document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 
@@ -222,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const destinationInput = document.getElementById('destination-input');
-  
+
   // Create datalist for autocomplete
   const datalist = document.createElement('datalist');
   datalist.id = 'destinations';
@@ -285,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ${canRetry ? '<button onclick="this.parentElement.parentElement.remove()">Try Again</button>' : ''}
       </div>
     `;
-    
+
     // Style the error message
     errorDiv.style.cssText = `
       position: fixed;
@@ -301,9 +356,9 @@ document.addEventListener("DOMContentLoaded", () => {
       max-width: 400px;
       text-align: center;
     `;
-    
+
     document.body.appendChild(errorDiv);
-    
+
     // Auto-remove after 5 seconds
     setTimeout(() => {
       if (errorDiv.parentElement) {
@@ -320,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
         card.style.transition = 'all 0.5s ease';
-        
+
         setTimeout(() => {
           card.style.opacity = '1';
           card.style.transform = 'translateY(0)';
@@ -331,10 +386,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Enhanced displayResults function
   const originalDisplayResults = displayResults;
-  displayResults = function(data) {
+  displayResults = function (data) {
     originalDisplayResults(data);
     animateResults();
-    
+
     // Add confetti effect for good predictions
     if (data.predictions.safety === 'Safe' && data.predictions.popularity > 60) {
       // Simple confetti effect (you can enhance this)
@@ -348,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       getPredictions();
     }
-    
+
     // Escape to close modals
     if (e.key === 'Escape') {
       document.getElementById('loading-modal').style.display = 'none';
