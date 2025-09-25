@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplor Bharat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* ===== RESET & GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glow-cyan: rgba(0, 229, 255, 0.7);
+            --glow-orange: rgba(255, 179, 71, 0.7);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f7fafc;
+            color: #222;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 85% 40%, rgba(255, 128, 0, 0.06) 0%, transparent 70%);
+            background-repeat: no-repeat;
+        }
+
+        body.dark {
+            background: #0b0d0f;
+            color: #f2f2f2;
+            background-image:
+                radial-gradient(circle at 20% 25%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(255, 179, 71, 0.04) 0%, transparent 60%);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0rem 1.5rem;
+            background: linear-gradient(135deg, rgba(224, 247, 250, 0.2), rgba(255, 224, 224, 0.15));
+            backdrop-filter: blur(15px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .navbar {
+            background: rgba(11, 13, 15, 0.4);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            box-shadow: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo h1 {
+            text-shadow: 0 0 14px white;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            justify-content: space-between;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+            padding: 0.5rem 0.8rem;
+            position: relative;
+            transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-links a .fa-solid {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-4px) scale(1.1);
+            color: #00e5ff;
+            text-shadow: 0 0 8px var(--glow-cyan);
+        }
+        
+        body.dark .nav-links a:hover {
+            color: var(--glow-orange);
+            text-shadow: 0 0 8px var(--glow-orange);
+        }
+
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            min-width: 160px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(224, 247, 250, 0.8));
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        body.dark .dropdown-menu {
+            background: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.6rem 1rem;
+            color: inherit;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        body.dark .dropdown-menu a:hover {
+            background: rgba(255, 179, 71, 0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        #theme-toggle {
+            border: none;
+            background: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: inherit;
+            transition: transform 0.3s, text-shadow 0.3s;
+        }
+
+        #theme-toggle:hover {
+            transform: rotate(20deg) scale(1.1);
+            text-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        body.dark #theme-toggle:hover {
+            text-shadow: 0 0 8px var(--glow-orange);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 1.2s ease, transform 10s ease;
+        }
+
+        .hero-bg.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark .hero-overlay {
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+            color: #222;
+            width: 90%;
+            max-width: 850px;
+        }
+
+        body.dark .hero-content {
+            color: #fff;
+        }
+
+        .hero-content h2 {
+            font-size: 2.6rem;
+            margin-bottom: 1.5rem;
+            transition: opacity 0.5s;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        body.dark .hero-content h2 {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content .search-bar {
+            flex-grow: 1;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 30px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            font-size: 1rem;
+        }
+
+        body.dark .hero-content .search-bar {
+            background: rgba(30, 30, 30, 0.5);
+            color: #f2f2f2;
+            border-color: rgba(255, 179, 71, 0.2);
+        }
+
+        .hero-content .search-bar:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--glow-cyan);
+        }
+
+        body.dark .hero-content .search-bar:hover {
+            box-shadow: 0 0 15px var(--glow-orange);
+        }
+
+        .search-container .btn {
+            flex-shrink: 0;
+        }
+
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .control-group:hover {
+            transform: translateY(-5px) translateZ(15px);
+            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+            z-index: 20;
+        }
+
+        body.dark .control-group {
+            background: rgba(30, 30, 30, 0.5);
+            border-color: rgba(255, 179, 71, 0.2);
+        }
+
+        body.dark .control-group:hover {
+            box-shadow: 0 10px 20px rgba(255, 179, 71, 0.15);
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .selected-value {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #008489;
+            margin-top: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.dark .selected-value {
+            color: #ffc107;
+        }
+
+        .filter-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.8rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        body.dark .filter-dropdown-menu {
+            background: rgba(25, 25, 25, 0.9);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .filter-dropdown:hover .filter-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px) scale(1);
+        }
+
+        .duration-dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .filter-controls input[type="date"] {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 0.2rem;
+            outline: none;
+            color: inherit;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        body.dark .filter-controls input[type="date"] {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark .filter-controls input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .option-yn {
+            display: block;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 4px;
+            transition: transform 0.3s, text-shadow 0.3s, color 0.3s, background 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .option-yn:hover {
+            color: #fff;
+            background: rgba(0, 229, 255, 0.1);
+            transform: translateZ(15px) scale(1.05);
+            text-shadow: 0 0 6px var(--glow-cyan), 0 0 10px var(--glow-cyan);
+        }
+
+        body.dark .option-yn:hover {
+            background: rgba(255, 179, 71, 0.1);
+            text-shadow: 0 0 6px var(--glow-orange), 0 0 10px var(--glow-orange);
+        }
+
+        .star-rating span {
+            cursor: pointer;
+            color: #ccc;
+            transition: transform 0.2s, color 0.2s, text-shadow 0.2s;
+        }
+
+        .star-rating span:hover,
+        .star-rating span.hovered,
+        .star-rating span.selected {
+            transform: scale(1.25);
+            color: #ffc107;
+            text-shadow: 0 0 8px rgba(255, 193, 7, 0.8);
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #00e5ff, #00ffaa, #ffb347);
+            background-size: 200% auto;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transform-style: preserve-3d;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05) translateZ(20px);
+            box-shadow: 0 12px 25px rgba(0, 229, 255, 0.3);
+            background-position: right center;
+        }
+
+        .prediction-btn-container {
+            margin-top: 2rem;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 6rem 5% 3rem;
+            background: inherit;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 6px var(--glow-cyan);
+        }
+
+        body.dark .section-title {
+            text-shadow: 0 0 6px var(--glow-orange);
+        }
+
+        .card-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(224, 247, 250, 0.7) 100%);
+            border-radius: 16px;
+            width: 260px;
+            padding: 1rem;
+            color: inherit;
+            backdrop-filter: blur(8px);
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark .card {
+            background: rgba(20, 20, 20, 0.4);
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card:hover {
+            transform: perspective(900px) rotateY(8deg) translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        body.dark .card:hover {
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-cyan);
+        }
+
+        .food-slider {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .food-card {
+            width: 200px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 224, 224, 0.7) 100%);
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 128, 0, 0.2);
+            transition: transform 0.4s, box-shadow 0.4s;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark .food-card {
+            background: rgba(20, 20, 20, 0.4);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .food-card img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s;
+        }
+
+        .food-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .food-card:hover {
+            transform: translateY(-8px) scale(1.07);
+            box-shadow: 0 20px 25px rgba(255, 128, 0, 0.2);
+        }
+
+        body.dark .food-card:hover {
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-orange);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 128, 0, 0.05));
+        }
+
+        body.dark footer {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== ANIMATION ON SCROLL ===== */
+        .section,
+        .card,
+        .food-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.6s ease;
+        }
+
+        .section.show,
+        .card.show,
+        .food-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ===== YATRA GENIE CHATBOT STYLES ===== */
+        #chatbot-btn {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 1.2rem;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #00e5ff, #ffb347);
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 12px var(--glow-cyan);
+            animation: pulse 2.5s infinite;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #chatbot-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 15px var(--glow-cyan), 0 0 25px var(--glow-cyan);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 12px var(--glow-cyan);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--glow-orange);
+            }
+        }
+
+        #chatbot-popup {
+            position: fixed;
+            left: 1.2rem;
+            bottom: 5.5rem;
+            width: 320px;
+            max-height: 450px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            display: none;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            animation: pop-up-3d 0.5s ease-out forwards;
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+            transform-origin: bottom left;
+        }
+
+        body.dark #chatbot-popup {
+            background: rgba(20, 20, 20, 0.85);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes pop-up-3d {
+            from {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px) rotateX(-20deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotateX(0deg);
+            }
+        }
+
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        body.dark .chatbot-header {
+            border-bottom: 1px solid rgba(255, 179, 71, 0.2);
+        }
+
+        .chatbot-header h4 {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        #close-chatbot {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        #close-chatbot:hover {
+            opacity: 1;
+        }
+
+        #chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-message {
+            padding: 0.6rem 0.9rem;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #00e5ff;
+            color: #111;
+            border-bottom-right-radius: 2px;
+            align-self: flex-end;
+        }
+
+        body.dark .user-message {
+            background: var(--glow-orange);
+        }
+
+        .bot-message {
+            background: #e9e9eb;
+            color: #333;
+            border-bottom-left-radius: 2px;
+            align-self: flex-start;
+        }
+
+        body.dark .bot-message {
+            background: #2c2c2e;
+            color: #f2f2f2;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 0.75rem;
+            border-top: 1px solid rgba(0, 229, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        body.dark .chatbot-input {
+            border-top: 1px solid rgba(255, 179, 71, 0.2);
+        }
+
+        #chatbot-input-field {
+            flex-grow: 1;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background: transparent;
+            color: inherit;
+            outline: none;
+            margin-right: 0.5rem;
+        }
+
+        #chatbot-send-btn {
+            border: none;
+            background: #00e5ff;
+            color: #111;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        body.dark #chatbot-send-btn {
+            background: var(--glow-orange);
+        }
+
+        #chatbot-send-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Modal and Results Styles */
+        .modal {
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: rgba(0, 0, 0, 0.5);
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             z-index: 2000;
+        }
+        .modal-content {
+             background: white;
+             padding: 2rem;
+             border-radius: 12px;
+             text-align: center;
+             max-width: 300px;
+        }
+        body.dark .modal-content {
+             background: #1a1a1a;
+             color: white;
+        }
+        .loading-spinner {
+             width: 40px;
+             height: 40px;
+             border: 4px solid #f3f3f3;
+             border-top: 4px solid #00e5ff;
+             border-radius: 50%;
+             animation: spin 1s linear infinite;
+             margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+             0% { transform: rotate(0deg); }
+             100% { transform: rotate(360deg); }
+        }
+        .results-container {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+             gap: 2rem;
+             margin-top: 2rem;
+        }
+        .result-card {
+             background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(224, 247, 250, 0.7) 100%);
+             border-radius: 16px;
+             padding: 2rem;
+             text-align: center;
+             backdrop-filter: blur(8px);
+             border: 1px solid rgba(0, 255, 255, 0.2);
+             box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+             transition: transform 0.3s, box-shadow 0.3s;
+        }
+        body.dark .result-card {
+             background: rgba(20, 20, 20, 0.4);
+             border-color: rgba(255, 255, 255, 0.08);
+        }
+        .result-card:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 15px 25px rgba(0, 255, 255, 0.15);
+        }
+        .result-card h4 {
+             margin-bottom: 1rem;
+             font-size: 1.2rem;
+             color: #008489;
+        }
+        body.dark .result-card h4 {
+             color: #ffc107;
+        }
+        .result-value {
+             font-size: 1.5rem;
+             font-weight: bold;
+             color: #00e5ff;
+        }
+        body.dark .result-value {
+             color: #ffb347;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .hero-content .search-bar {
+                width: 100%;
+            }
+
+            .card-container,
+            .food-slider {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-content h2 {
+                font-size: 1.8rem;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #chatbot-popup {
+                width: calc(100vw - 2.4rem);
+                max-height: 60vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><img src="remove.png" alt="logo">
+            <h1 data-key="site_title">Xplor Bharat</h1>
+        </div>
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="#hero" data-key="nav_home"><i class="fa-solid fa-house"></i>Home</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-key="nav_overview">Overview</a></li>
+                    <li><a href="#" data-key="nav_updates">Latest Updates</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" data-key="nav_features"><i class="fa-solid fa-star"></i>Features</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-key="nav_ai_planner">AI Planner</a></li>
+                    <li><a href="#" data-key="nav_blog">Travel Blog</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#destinations" data-key="nav_explore"><i class="fa-solid fa-compass"></i>Explore</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#destinations" data-key="nav_top_destinations">Top destinations</a></li>
+                    <li><a href="#cuisine" data-key="nav_indian_delicacy">Indian Delicacy</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" data-key="nav_filter"><i class="fa-solid fa-filter"></i>Filter</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-key="nav_by_budget">By Budget</a></li>
+                    <li><a href="#" data-key="nav_by_adventure">By Adventure</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="lang-switcher">
+            <button data-lang="en">EN</button>
+            <button data-lang="hi">HI</button>
+        </div>
+        <button id="theme-toggle">🌙</button>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=80');"></div>
+        <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1500&q=80');"></div>
+        <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1500&q=80');"></div>
+        <div class="hero-bg" style="background-image:url('https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg');"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h2 id="hero-quote" data-key="hero_quote_1">Discover Beautiful Destinations</h2>
+
+            <div class="search-container">
+                <input type="text" id="destination-input" class="search-bar" placeholder="🔍 Enter destination city..." data-key="search_placeholder">
+                <button class="btn" id="plan-trip-btn" data-key="plan_trip_btn">✈️ Plan Your Trip</button>
+            </div>
+
+            <div class="filter-controls">
+                <div id="duration-control" class="control-group filter-dropdown">
+                    <label data-key="filter_duration">Duration</label><span class="selected-value"></span>
+                    <div class="filter-dropdown-menu duration-dropdown">
+                        <input type="date" id="from-date">
+                        <span data-key="filter_to">to</span>
+                        <input type="date" id="to-date">
+                    </div>
+                </div>
+                <div class="control-group filter-dropdown">
+                    <label data-key="filter_festive">Festive Season</label><span class="selected-value"></span>
+                    <div class="filter-dropdown-menu">
+                        <a href="#" class="option-yn" data-value="Yes" data-type="festival" data-key="filter_yes">Yes</a>
+                        <a href="#" class="option-yn" data-value="No" data-type="festival" data-key="filter_no">No</a>
+                    </div>
+                </div>
+                <div class="control-group filter-dropdown">
+                    <label data-key="filter_holiday">Holiday</label><span class="selected-value"></span>
+                    <div class="filter-dropdown-menu">
+                        <a href="#" class="option-yn" data-value="Yes" data-type="holiday" data-key="filter_yes">Yes</a>
+                        <a href="#" class="option-yn" data-value="No" data-type="holiday" data-key="filter_no">No</a>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label data-key="filter_rating">Hotel Rating</label>
+                    <div class="star-rating">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-btn-container">
+                <button class="btn" id="prediction-btn" data-key="get_predictions_btn">🔮 Get Predictions</button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="results" class="section" style="display: none;">
+        <h3 class="section-title" data-key="results_title">Travel Predictions</h3>
+        <div class="results-container">
+            <div class="result-card">
+                <h4 data-key="results_weather">🌤️ Weather Conditions</h4>
+                <div id="weather-info">
+                    <p><span data-key="results_condition">Condition</span>: <span id="weather-condition"></span></p>
+                    <p><span data-key="results_temp">Temperature</span>: <span id="weather-temp"></span>°C</p>
+                    <p><span data-key="results_wind">Wind Speed</span>: <span id="weather-wind"></span> km/h</p>
+                </div>
+            </div>
+            <div class="result-card">
+                <h4 data-key="results_safety">🛡️ Safety Analysis</h4>
+                <div id="safety-result" class="result-value"></div>
+            </div>
+            <div class="result-card">
+                <h4 data-key="results_price">💰 Hotel Price Estimate</h4>
+                <div id="price-result" class="result-value"></div>
+            </div>
+            <div class="result-card">
+                <h4 data-key="results_crowd">📊 Crowd Index</h4>
+                <div id="popularity-result" class="result-value"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="destinations" class="section">
+        <h3 class="section-title" data-key="destinations_title">Top Destinations</h3>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Goa">
+                <h4 data-key="dest_goa_title">Goa Beaches</h4>
+                <p data-key="dest_goa_desc">Golden sands & nightlife.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="Himalayas">
+                <h4 data-key="dest_himalayas_title">Himalayan Peaks</h4>
+                <p data-key="dest_himalayas_desc">Snow-clad adventures.</p>
+            </div>
+            <div class="card">
+                <img src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg" alt="Jaipur">
+                <h4 data-key="dest_jaipur_title">Jaipur Palaces</h4>
+                <p data-key="dest_jaipur_desc">Royal heritage.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1633931698758-f59cdaf042a2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kodaikanal">
+                <h4 data-key="dest_kodaikanal_title">Kodaikanal</h4>
+                <p data-key="dest_kodaikanal_desc">Serene lakes.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1702409038727-7c5dac6764aa?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ziro">
+                <h4 data-key="dest_ziro_title">Ziro</h4>
+                <p data-key="dest_ziro_desc">Verdant Valley.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cuisine" class="section cuisine">
+        <h3 class="section-title" data-key="cuisine_title">Indian Delicacies</h3>
+        <div class="food-slider">
+            <div class="food-card">
+                <img src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp" alt="Biryani">
+                <h4 data-key="cuisine_biryani">Biryani</h4>
+            </div>
+            <div class="food-card">
+                <img src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg" alt="Butter Chicken">
+                <h4 data-key="cuisine_butter_chicken">Butter Chicken</h4>
+            </div>
+            <div class="food-card">
+                <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="Dosa">
+                <h4 data-key="cuisine_dosa">Dosa</h4>
+            </div>
+            <div class="food-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.1HYn9SMsyxDC9StfwwaU1gHaHa?pid=ImgDet&w=183&h=183&c=7&dpr=1.3&o=7&rm=3" alt="Mysore Pak">
+                <h4 data-key="cuisine_mysore_pak">Mysore Pak</h4>
+            </div>
+            <div class="food-card">
+                <img src="https://th.bing.com/th/id/OIP.bDa8t2z2LMLyb90VeAq70AHaHa?w=195&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Gulab Jamun">
+                <h4 data-key="cuisine_gulab_jamun">Gulab Jamun</h4>
+            </div>
+        </div>
+    </section>
+
+    <div id="loading-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <p data-key="loading_text">Getting predictions...</p>
+        </div>
+    </div>
+    
+    <button id="chatbot-btn">💬</button>
+    <div id="chatbot-popup">
+        <div class="chatbot-header">
+            <h4>YatraGenie ✨</h4>
+            <button id="close-chatbot">&times;</button>
+        </div>
+        <div id="chatbot-messages">
+            <div class="chat-message bot-message" data-key="chatbot_greeting">
+                Hi, I am YatraGenie, your personalised trip planner.
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input-field" placeholder="Type your message..." data-key="chatbot_placeholder">
+            <button id="chatbot-send-btn">➤</button>
+        </div>
+    </div>
+
+    <footer>
+        <p data-key="footer_text">© 2025 Xplor Bharat. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- 0. MULTILINGUAL FEATURE ---
+
+            const translations = {
+                "en": {
+                    // Navbar
+                    "site_title": "Xplor Bharat",
+                    "nav_home": "Home",
+                    "nav_overview": "Overview",
+                    "nav_updates": "Latest Updates",
+                    "nav_features": "Features",
+                    "nav_ai_planner": "AI Planner",
+                    "nav_blog": "Travel Blog",
+                    "nav_explore": "Explore",
+                    "nav_top_destinations": "Top Destinations",
+                    "nav_indian_delicacy": "Indian Delicacy",
+                    "nav_filter": "Filter",
+                    "nav_by_budget": "By Budget",
+                    "nav_by_adventure": "By Adventure",
+                    // Hero Section
+                    "hero_quote_1": "Discover Beautiful Destinations",
+                    "hero_quote_2": "Explore the Wonders of India",
+                    "hero_quote_3": "Adventure Awaits You",
+                    "hero_quote_4": "Taste Local Cuisines",
+                    "search_placeholder": "🔍 Enter destination city...",
+                    "plan_trip_btn": "✈️ Plan Your Trip",
+                    // Filters
+                    "filter_duration": "Duration",
+                    "filter_to": "to",
+                    "filter_festive": "Festive Season",
+                    "filter_holiday": "Holiday",
+                    "filter_rating": "Hotel Rating",
+                    "filter_yes": "Yes",
+                    "filter_no": "No",
+                    "get_predictions_btn": "🔮 Get Predictions",
+                    // Results Section
+                    "results_title": "Travel Predictions",
+                    "results_weather": "🌤️ Weather Conditions",
+                    "results_condition": "Condition",
+                    "results_temp": "Temperature",
+                    "results_wind": "Wind Speed",
+                    "results_safety": "🛡️ Safety Analysis",
+                    "results_price": "💰 Hotel Price Estimate",
+                    "results_crowd": "📊 Crowd Index",
+                    // Destinations
+                    "destinations_title": "Top Destinations",
+                    "dest_goa_title": "Goa Beaches",
+                    "dest_goa_desc": "Golden sands & nightlife.",
+                    "dest_himalayas_title": "Himalayan Peaks",
+                    "dest_himalayas_desc": "Snow-clad adventures.",
+                    "dest_jaipur_title": "Jaipur Palaces",
+                    "dest_jaipur_desc": "Royal heritage.",
+                    "dest_kodaikanal_title": "Kodaikanal",
+                    "dest_kodaikanal_desc": "Serene lakes.",
+                    "dest_ziro_title": "Ziro",
+                    "dest_ziro_desc": "Verdant Valley.",
+                    // Cuisine
+                    "cuisine_title": "Indian Delicacies",
+                    "cuisine_biryani": "Biryani",
+                    "cuisine_butter_chicken": "Butter Chicken",
+                    "cuisine_dosa": "Dosa",
+                    "cuisine_mysore_pak": "Mysore Pak",
+                    "cuisine_gulab_jamun": "Gulab Jamun",
+                    // Modals & Chatbot
+                    "loading_text": "Getting predictions...",
+                    "chatbot_greeting": "Hi, I am YatraGenie, your personalised trip planner.",
+                    "chatbot_placeholder": "Type your message...",
+                    "footer_text": "© 2025 Xplor Bharat. All Rights Reserved."
+                },
+                "hi": {
+                    // Navbar
+                    "site_title": "एक्सप्लोर भारत",
+                    "nav_home": "होम",
+                    "nav_overview": "अवलोकन",
+                    "nav_updates": "नवीनतम अपडेट",
+                    "nav_features": "विशेषताएँ",
+                    "nav_ai_planner": "एआई प्लानर",
+                    "nav_blog": "यात्रा ब्लॉग",
+                    "nav_explore": "अन्वेषण करें",
+                    "nav_top_destinations": "शीर्ष गंतव्य",
+                    "nav_indian_delicacy": "भारतीय व्यंजन",
+                    "nav_filter": "फ़िल्टर",
+                    "nav_by_budget": "बजट के अनुसार",
+                    "nav_by_adventure": "साहसिक कार्य के अनुसार",
+                    // Hero Section
+                    "hero_quote_1": "सुंदर स्थलों की खोज करें",
+                    "hero_quote_2": "भारत के आश्चर्यों का अन्वेषण करें",
+                    "hero_quote_3": "साहसिक कार्य आपका इंतजार कर रहा है",
+                    "hero_quote_4": "स्थानीय व्यंजनों का स्वाद लें",
+                    "search_placeholder": "🔍 गंतव्य शहर दर्ज करें...",
+                    "plan_trip_btn": "✈️ अपनी यात्रा की योजना बनाएं",
+                    // Filters
+                    "filter_duration": "अवधि",
+                    "filter_to": "तक",
+                    "filter_festive": "उत्सव का मौसम",
+                    "filter_holiday": "छुट्टी",
+                    "filter_rating": "होटल रेटिंग",
+                    "filter_yes": "हाँ",
+                    "filter_no": "नहीं",
+                    "get_predictions_btn": "🔮 भविष्यवाणियाँ प्राप्त करें",
+                    // Results Section
+                    "results_title": "यात्रा भविष्यवाणियाँ",
+                    "results_weather": "🌤️ मौसम की स्थिति",
+                    "results_condition": "स्थिति",
+                    "results_temp": "तापमान",
+                    "results_wind": "हवा की गति",
+                    "results_safety": "🛡️ सुरक्षा विश्लेषण",
+                    "results_price": "💰 होटल मूल्य अनुमान",
+                    "results_crowd": "📊 भीड़ सूचकांक",
+                    // Destinations
+                    "destinations_title": "शीर्ष गंतव्य",
+                    "dest_goa_title": "गोवा के समुद्र तट",
+                    "dest_goa_desc": "सुनहरी रेत और नाइटलाइफ़।",
+                    "dest_himalayas_title": "हिमालय की चोटियाँ",
+                    "dest_himalayas_desc": "बर्फ से ढके रोमांच।",
+                    "dest_jaipur_title": "जयपुर के महल",
+                    "dest_jaipur_desc": "शाही विरासत।",
+                    "dest_kodaikanal_title": "कोडैकनाल",
+                    "dest_kodaikanal_desc": "शांत झीलें।",
+                    "dest_ziro_title": "ज़ीरो",
+                    "dest_ziro_desc": "हरी-भरी घाटी।",
+                    // Cuisine
+                    "cuisine_title": "भारतीय व्यंजन",
+                    "cuisine_biryani": "बिरयानी",
+                    "cuisine_butter_chicken": "बटर चिकन",
+                    "cuisine_dosa": "डोसा",
+                    "cuisine_mysore_pak": "मैसूर पाक",
+                    "cuisine_gulab_jamun": "गुलाब जामुन",
+                    // Modals & Chatbot
+                    "loading_text": "भविष्यवाणियाँ प्राप्त हो रही हैं...",
+                    "chatbot_greeting": "नमस्ते, मैं यात्राजिनी हूँ, आपका व्यक्तिगत यात्रा योजनाकार।",
+                    "chatbot_placeholder": "अपना संदेश टाइप करें...",
+                    "footer_text": "© 2025 एक्सप्लोर भारत। सर्वाधिकार सुरक्षित।"
+                }
+            };
+
+            const setLanguage = (language) => {
+                document.querySelectorAll('[data-key]').forEach(element => {
+                    const key = element.getAttribute('data-key');
+                    if (translations[language] && translations[language][key]) {
+                        if (element.placeholder) {
+                            element.placeholder = translations[language][key];
+                        } else {
+                            element.textContent = translations[language][key];
+                        }
+                    }
+                });
+                document.documentElement.lang = language;
+            };
+
+            document.querySelectorAll('.lang-switcher button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const lang = button.getAttribute('data-lang');
+                    localStorage.setItem('language', lang);
+                    setLanguage(lang);
+                });
+            });
+
+            // --- 1. GLOBAL VARIABLES & INITIALIZATION ---
+            let selectedFestival = null;
+            let selectedHoliday = null;
+            let selectedRating = 0;
+
+            const savedLanguage = localStorage.getItem('language') || 'en';
+            setLanguage(savedLanguage);
+            
+            // --- 2. THEME TOGGLE ---
+            const themeToggle = document.getElementById("theme-toggle");
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark");
+                themeToggle.textContent = "☀️";
+            }
+            themeToggle.addEventListener("click", () => {
+                document.body.classList.toggle("dark");
+                const isDark = document.body.classList.contains("dark");
+                themeToggle.textContent = isDark ? "☀️" : "🌙";
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+            });
+
+            // --- 3. CHATBOT FUNCTIONALITY ---
+            const chatBtn = document.getElementById("chatbot-btn");
+            const chatPop = document.getElementById("chatbot-popup");
+            const closeChatbotBtn = document.getElementById("close-chatbot");
+            const sendChatBtn = document.getElementById("chatbot-send-btn");
+            const chatInputField = document.getElementById("chatbot-input-field");
+            const chatMessages = document.getElementById("chatbot-messages");
+
+            const toggleChatbot = () => {
+                const isVisible = window.getComputedStyle(chatPop).display === "flex";
+                chatPop.style.display = isVisible ? "none" : "flex";
+            };
+
+            chatBtn.addEventListener("click", toggleChatbot);
+            closeChatbotBtn.addEventListener("click", toggleChatbot);
+
+            const appendMessage = (text, sender) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', `${sender}-message`);
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            const handleSendMessage = () => {
+                const userText = chatInputField.value.trim();
+                if (userText === '') return;
+                appendMessage(userText, 'user');
+                chatInputField.value = '';
+                setTimeout(() => {
+                    const botResponse = "This is a simulated response. Full functionality requires a backend.";
+                    appendMessage(botResponse, 'bot');
+                }, 600);
+            };
+
+            sendChatBtn.addEventListener("click", handleSendMessage);
+            chatInputField.addEventListener("keypress", (e) => {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
+            // --- 4. HERO BACKGROUND SLIDER ---
+            const heroBgs = document.querySelectorAll(".hero-bg");
+            const heroQuote = document.getElementById("hero-quote");
+            const quoteKeys = ["hero_quote_1", "hero_quote_2", "hero_quote_3", "hero_quote_4"];
+            let quoteIndex = 0;
+            function nextHero() {
+                if (heroBgs.length === 0) return;
+                heroBgs.forEach(bg => bg.classList.remove("active"));
+                heroBgs[quoteIndex].classList.add("active");
+                
+                const currentLang = localStorage.getItem('language') || 'en';
+                const newQuote = translations[currentLang][quoteKeys[quoteIndex]];
+                
+                heroQuote.style.opacity = 0;
+                setTimeout(() => {
+                    heroQuote.textContent = newQuote;
+                    heroQuote.setAttribute('data-key', quoteKeys[quoteIndex]);
+                    heroQuote.style.opacity = 1;
+                }, 500);
+                
+                quoteIndex = (quoteIndex + 1) % heroBgs.length;
+            }
+            nextHero();
+            setInterval(nextHero, 4000);
+
+            // --- 5. SCROLL REVEAL ANIMATION ---
+            const revealEls = document.querySelectorAll(".section,.card,.food-card");
+            function reveal() {
+                const trig = window.innerHeight * 0.85;
+                revealEls.forEach(el => {
+                    if (el.getBoundingClientRect().top < trig) {
+                        el.classList.add("show");
+                    }
+                });
+            }
+            window.addEventListener("scroll", reveal);
+            reveal();
+
+            // --- 6. STAR RATING LOGIC ---
+            const stars = document.querySelectorAll(".star-rating span");
+            stars.forEach((star, index) => {
+                star.addEventListener("mouseover", () => {
+                    stars.forEach((s, i) => s.classList.toggle("hovered", i <= index));
+                });
+                star.addEventListener("click", () => {
+                    selectedRating = index + 1;
+                    stars.forEach((s, i) => {
+                        s.classList.remove("hovered");
+                        s.classList.toggle("selected", i < selectedRating);
+                    });
+                });
+            });
+            document.querySelector(".star-rating").addEventListener("mouseout", () => {
+                stars.forEach(s => s.classList.remove("hovered"));
+            });
+
+            // --- 7. FILTER DROPDOWN LOGIC ---
+            document.querySelectorAll('.filter-dropdown .option-yn').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const controlGroup = option.closest('.control-group');
+                    const valueSpan = controlGroup.querySelector('.selected-value');
+                    const selectedValue = option.getAttribute('data-value');
+                    const dataType = option.getAttribute('data-type');
+                    
+                    valueSpan.textContent = `: ${selectedValue}`;
+                    if (dataType === 'festival') selectedFestival = selectedValue;
+                    if (dataType === 'holiday') selectedHoliday = selectedValue;
+                });
+            });
+
+            // --- 8. PREDICTION & NAVIGATION LOGIC ---
+            const getPredictions = () => {
+                const destination = document.getElementById('destination-input').value.trim();
+                if (!destination || !selectedFestival || !selectedHoliday || selectedRating === 0) {
+                    alert('Please fill in all fields: Destination, Festive Season, Holiday, and Hotel Rating.');
+                    return;
+                }
+                alert(`Getting predictions for ${destination}...\nThis is a front-end demonstration. A backend is needed for real predictions.`);
+            };
+
+            document.getElementById('prediction-btn').addEventListener('click', getPredictions);
+            document.getElementById('plan-trip-btn').addEventListener('click', getPredictions);
+
+        });
+    </script>
+</body>
+
+</html>
