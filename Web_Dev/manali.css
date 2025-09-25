@@ -26,13 +26,13 @@ html {
 /* Light Theme Variables */
 body.light-theme {
     --bg-color: #e9eff6;
-    --text-color: #2c3e50;
+    --text-color: #354656;
     --card-bg: rgba(198, 218, 230, 0.659);
     --card-shadow: rgba(0, 0, 0, 0.1);
     --card-hover-shadow: rgba(0, 0, 0, 0.3);
     --input-bg: rgba(255, 255, 255, 0.9);
     --input-color: #2c3e50;
-    --header-text: #2c3e50;
+    --header-text: #ffffff;
     --navbar-bg: rgba(255, 255, 255, 0.7);
     --footer-bg: #e0e6ec;
 }
@@ -175,7 +175,7 @@ p {
     border: none;
     border-radius: 50px;
     background: var(--primary-color);
-    color: var(--light-text);
+    color: var(--text-color);
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-light);
@@ -537,11 +537,13 @@ section {
 .cuisine-card-back h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: var(--accent-color); /* MODIFIED: Changed from --primary-color */
+    color: var(--accent-color);
+    /* MODIFIED: Changed from --primary-color */
 }
 
 .cuisine-info h3 {
-    color: var(--light-text); /* Ensures cuisine title on front is always light */
+    color: var(--light-text);
+    /* Ensures cuisine title on front is always light */
 }
 
 .card-back p,
