@@ -305,7 +305,7 @@ section {
 }
 
 .history:hover {
-    transform: translateY(-15px) scale(1.02);
+    transform: translateY(-15px) scale(1.02) rotate(2.2deg);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 60px var(--primary-color);
 }
 
@@ -448,10 +448,11 @@ section {
     transform: translateX(0) rotate(0deg);
 }
 
+
 /* --- Card Hover Effects --- */
 .card:hover,
 .cuisine-card:hover {
-    transform: translateY(-10px) rotateY(5deg) scale(1.05);
+    transform: translateY(-10px) scale(1.05);
     box-shadow: 0 15px 40px var(--card-hover-shadow);
 }
 
@@ -488,17 +489,18 @@ section {
     background: #fff;
 }
 
-/* Updated styling for 16:9 aspect ratio */
-.card-front video {
+.card-front video,
+.card-front img,
+.cuisine-card-front img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
-    aspect-ratio: 16/9;
 }
 
 .card:hover video,
-.cuisine-card:hover video {
+.card:hover img,
+.cuisine-card:hover img {
     transform: scale(1.05);
 }
 
@@ -535,7 +537,11 @@ section {
 .cuisine-card-back h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: var(--primary-color);
+    color: var(--accent-color); /* MODIFIED: Changed from --primary-color */
+}
+
+.cuisine-info h3 {
+    color: var(--light-text); /* Ensures cuisine title on front is always light */
 }
 
 .card-back p,
@@ -557,6 +563,10 @@ footer {
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
     .calculator-inputs {
         flex-direction: column;
     }
