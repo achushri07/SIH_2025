@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Itinerary Generator</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom styles to mimic specific UI component behaviors */
+        .select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem; /* md */
+            background-color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+        
+        /* Custom spinner animation */
+        .spinner {
+            width: 1rem;
+            height: 1rem;
+            border-width: 2px;
+            border-style: solid;
+            border-color: white transparent white white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-emerald-50 to-green-50">
+
+    <div class="min-h-screen py-8 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12">
+                <h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get personalized travel plans tailored to your interests, duration, and travel style
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-xl border-0">
+                    <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-t-lg p-6">
+                        <h2 class="flex items-center text-xl font-semibold">
+                            <i data-lucide="sparkles" class="mr-2 h-5 w-5"></i>
+                            Plan Your Journey
+                        </h2>
+                        <p class="text-emerald-100 mt-1">
+                            Tell us your preferences and let AI create the perfect itinerary
+                        </p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="space-y-2">
+                            <label for="duration" class="block text-sm font-medium text-gray-700">Trip Duration</label>
+                            <select id="duration" class="select">
+                                <option value="" disabled selected>Select duration</option>
+                                <option value="1-2">1-2 Days</option>
+                                <option value="2-3">2-3 Days</option>
+                                <option value="4-5">4-5 Days</option>
+                                <option value="1-week">1 Week</option>
+                                <option value="2-weeks">2+ Weeks</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="block text-sm font-medium text-gray-700">Your Interests</label>
+                            <div id="interest-buttons-container" class="grid grid-cols-2 gap-3">
+                                </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="travelType" class="block text-sm font-medium text-gray-700">Travel Type</label>
+                            <select id="travelType" class="select">
+                                <option value="" disabled selected>Select travel type</option>
+                                <option value="solo">Solo Adventure</option>
+                                <option value="couple">Romantic Getaway</option>
+                                <option value="family">Family Trip</option>
+                                <option value="group">Group Adventure</option>
+                                <option value="backpacking">Backpacking</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="budget" class="block text-sm font-medium text-gray-700">Budget Range</label>
+                            <select id="budget" class="select">
+                                <option value="" disabled selected>Select budget</option>
+                                <option value="budget">Budget (₹2000-5000)</option>
+                                <option value="moderate">Moderate (₹5000-10000)</option>
+                                <option value="luxury">Luxury (₹10000+)</option>
+                            </select>
+                        </div>
+
+                        <button id="generate-btn" class="w-full justify-center p-3 font-medium text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 rounded-md flex items-center">
+                            </button>
+                    </div>
+                </div>
+
+                <div id="itinerary-container">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE AND DATA ---
+            const state = {
+                formData: {
+                    duration: '',
+                    interests: [],
+                    travelType: '',
+                    budget: ''
+                },
+                generatedItinerary: null,
+                isGenerating: false,
+            };
+
+            const interests = [
+                { id: 'waterfalls', label: 'Waterfalls', icon: 'waves' },
+                { id: 'wildlife', label: 'Wildlife', icon: 'trees' },
+                { id: 'culture', label: 'Tribal Culture', icon: 'users' },
+                { id: 'adventure', label: 'Adventure Sports', icon: 'mountain' },
+                { id: 'photography', label: 'Photography', icon: 'camera' },
+                { id: 'nature', label: 'Nature Walks', icon: 'leaf' }
+            ];
+
+            const mockItineraries = {
+                '2-3': { title: "Weekend Waterfall Escape", days: [ { day: 1, title: "Arrival & Dassam Falls", activities: [ { time: "9:00 AM", title: "Arrive in Ranchi", description: "Check into eco-friendly homestay near Dassam Falls", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "11:00 AM", title: "Dassam Falls Exploration", description: "Trek to the spectacular 44-feet waterfall, enjoy photography and natural pools", location: "Dassam Falls", type: "attraction", ecoFriendly: true }, { time: "2:00 PM", title: "Local Tribal Lunch", description: "Traditional Santali cuisine at local homestay with cultural performance", location: "Tribal Village", type: "food", ecoFriendly: true }, { time: "6:00 PM", title: "Sunset at Tagore Hill", description: "Panoramic views of Ranchi city and surrounding forests", location: "Tagore Hill", type: "viewpoint", ecoFriendly: false } ] }, { day: 2, title: "Hundru Falls & Tribal Culture", activities: [ { time: "7:00 AM", title: "Journey to Hundru Falls", description: "Early morning drive to Jharkhand's highest waterfall (322 feet)", location: "Hundru Falls", type: "transport", ecoFriendly: true }, { time: "9:00 AM", title: "Hundru Falls Trek", description: "Challenging trek with breathtaking views and natural swimming spots", location: "Hundru Falls", type: "attraction", ecoFriendly: true }, { time: "1:00 PM", title: "Tribal Craft Workshop", description: "Learn Dokra metal craft techniques from local artisans", location: "Craft Village", type: "cultural", ecoFriendly: true }, { time: "4:00 PM", title: "Departure", description: "Return journey with memories and handcrafted souvenirs", location: "Ranchi", type: "transport", ecoFriendly: false } ] } ] },
+                '4-5': { title: "Complete Jharkhand Explorer", days: [ { day: 1, title: "Ranchi Arrival & Local Sights", activities: [ { time: "10:00 AM", title: "Arrive & City Tour", description: "Check-in and explore Ranchi's historical sites and markets", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "2:00 PM", title: "Dassam Falls", description: "First waterfall experience with local guide stories", location: "Dassam Falls", type: "attraction", ecoFriendly: true } ] }, { day: 2, title: "Netarhat Hill Station", activities: [ { time: "6:00 AM", title: "Journey to Netarhat", description: "Scenic drive to the 'Queen of Chotanagpur' hill station", location: "Netarhat", type: "transport", ecoFriendly: true }, { time: "8:00 AM", title: "Sunrise Point", description: "Witness spectacular sunrise views over the Chotanagpur plateau", location: "Netarhat Sunrise Point", type: "viewpoint", ecoFriendly: true } ] }, { day: 3, title: "Betla National Park Safari", activities: [ { time: "5:00 AM", title: "Wildlife Safari", description: "Early morning safari to spot tigers, elephants, and diverse birdlife", location: "Betla National Park", type: "wildlife", ecoFriendly: true } ] }, { day: 4, title: "Cultural Immersion Day", activities: [ { time: "9:00 AM", title: "Tribal Village Visit", description: "Experience authentic Santali and Munda tribal lifestyle", location: "Traditional Village", type: "cultural", ecoFriendly: true } ] } ] }
+            };
+
+            const getActivityIconName = (type) => {
+                switch (type) {
+                    case 'transport': return 'car';
+                    case 'attraction': return 'map-pin';
+                    case 'food': return 'home';
+                    case 'cultural': return 'users';
+                    case 'wildlife': return 'trees';
+                    case 'viewpoint': return 'mountain';
+                    default: return 'map-pin';
+                }
+            };
+            
+            // --- DOM ELEMENTS ---
+            const durationSelect = document.getElementById('duration');
+            const travelTypeSelect = document.getElementById('travelType');
+            const budgetSelect = document.getElementById('budget');
+            const generateBtn = document.getElementById('generate-btn');
+            const interestContainer = document.getElementById('interest-buttons-container');
+            const itineraryContainer = document.getElementById('itinerary-container');
+
+            // --- RENDER FUNCTIONS (Replaces React's render) ---
+
+            function renderInterestButtons() {
+                interestContainer.innerHTML = interests.map(interest => {
+                    const isSelected = state.formData.interests.includes(interest.id);
+                    const selectedClass = isSelected ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'hover:bg-emerald-50 hover:border-emerald-200';
+                    const baseClass = 'justify-start h-auto p-3 text-left w-full flex items-center border rounded-md transition-colors';
+                    return `
+                        <button data-interest-id="${interest.id}" class="${baseClass} ${isSelected ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-white border-gray-300 hover:bg-emerald-50'}">
+                            <i data-lucide="${interest.icon}" class="mr-2 h-4 w-4"></i>
+                            <span class="text-sm">${interest.label}</span>
+                        </button>
+                    `;
+                }).join('');
+                lucide.createIcons(); // Re-render icons after updating HTML
+            }
+
+            function renderGenerateButton() {
+                if (state.isGenerating) {
+                    generateBtn.innerHTML = `
+                        <div class="spinner mr-2"></div>
+                        Generating Your Perfect Trip...
+                    `;
+                    generateBtn.disabled = true;
+                } else {
+                    generateBtn.innerHTML = `
+                        <i data-lucide="sparkles" class="mr-2 h-4 w-4"></i>
+                        Generate AI Itinerary
+                    `;
+                    generateBtn.disabled = !state.formData.duration;
+                }
+                lucide.createIcons();
+            }
+
+            function renderItinerary() {
+                if (state.generatedItinerary) {
+                    const itinerary = state.generatedItinerary;
+                    const daysHTML = itinerary.days.map(day => {
+                        const activitiesHTML = day.activities.map(activity => {
+                            const ecoFriendlyBadge = activity.ecoFriendly ? `
+                                <div class="flex items-center text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                                    <i data-lucide="leaf" class="mr-1 h-3 w-3"></i>
+                                    Eco-Friendly
+                                </div>
+                            ` : '';
+                            return `
+                                <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-emerald-50 transition-colors">
+                                    <div class="flex-shrink-0 mt-1">
+                                        <div class="bg-white p-2 rounded-lg shadow-sm">
+                                            <i data-lucide="${getActivityIconName(activity.type)}" class="h-4 w-4 text-emerald-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-medium text-gray-900">${activity.title}</h4>
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <i data-lucide="clock" class="mr-1 h-3 w-3"></i>
+                                                ${activity.time}
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-2">${activity.description}</p>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center text-xs text-gray-500">
+                                                <i data-lucide="map-pin" class="mr-1 h-3 w-3"></i>
+                                                ${activity.location}
+                                            </div>
+                                            ${ecoFriendlyBadge}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        return `
+                            <div class="p-6 border-b border-gray-100 last:border-b-0">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">
+                                        ${day.day}
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-emerald-800">${day.title}</h3>
+                                        <p class="text-sm text-gray-600">Day ${day.day}</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">${activitiesHTML}</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    itineraryContainer.innerHTML = `
+                        <div class="bg-white shadow-xl border-0 rounded-lg">
+                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg p-6">
+                                <h2 class="flex items-center text-xl font-semibold">
+                                    <i data-lucide="check-circle" class="mr-2 h-5 w-5"></i>
+                                    ${itinerary.title}
+                                </h2>
+                                <p class="text-green-100 mt-1">Your personalized itinerary is ready!</p>
+                            </div>
+                            <div class="max-h-[600px] overflow-y-auto">
+                                ${daysHTML}
+                                <div class="p-6 bg-gray-50 rounded-b-lg">
+                                    <div class="flex flex-col sm:flex-row gap-3">
+                                        <button class="flex-1 justify-center p-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-md flex items-center">
+                                            <i data-lucide="calendar" class="mr-2 h-4 w-4"></i>
+                                            Save Itinerary
+                                        </button>
+                                        <button class="flex-1 justify-center p-3 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-md flex items-center">
+                                            Share with Friends
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    itineraryContainer.innerHTML = `
+                        <div class="bg-white shadow-xl border-0 border-dashed border-emerald-300 rounded-lg">
+                            <div class="p-12 text-center">
+                                <div class="bg-emerald-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="sparkles" class="h-8 w-8 text-emerald-600"></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-emerald-800 mb-2">Your AI Itinerary</h3>
+                                <p class="text-gray-600">Fill out the form to generate your personalized travel plan for Jharkhand</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                lucide.createIcons(); // Important: Render all new icons
+            }
+
+            // --- EVENT LISTENERS ---
+            durationSelect.addEventListener('change', (e) => {
+                state.formData.duration = e.target.value;
+                renderGenerateButton();
+            });
+            travelTypeSelect.addEventListener('change', (e) => { state.formData.travelType = e.target.value; });
+            budgetSelect.addEventListener('change', (e) => { state.formData.budget = e.target.value; });
+            
+            interestContainer.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (button && button.dataset.interestId) {
+                    const interestId = button.dataset.interestId;
+                    const interests = state.formData.interests;
+                    if (interests.includes(interestId)) {
+                        state.formData.interests = interests.filter(id => id !== interestId);
+                    } else {
+                        interests.push(interestId);
+                    }
+                    renderInterestButtons(); // Re-render to show selection
+                }
+            });
+
+            generateBtn.addEventListener('click', () => {
+                state.isGenerating = true;
+                renderGenerateButton();
+
+                setTimeout(() => {
+                    const key = state.formData.duration;
+                    state.generatedItinerary = mockItineraries[key] || mockItineraries['2-3'];
+                    state.isGenerating = false;
+                    renderGenerateButton();
+                    renderItinerary();
+                }, 2000);
+            });
+            
+            // --- INITIAL RENDER ---
+            renderInterestButtons();
+            renderGenerateButton();
+            renderItinerary();
+        });
+    </script>
+</body>
+</html>
