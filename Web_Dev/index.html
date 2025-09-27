@@ -12,13 +12,11 @@
 
 <body>
     <nav class="navbar">
-        <div class="logo"><img src="remove.png" alt="logo">
+        <div class="logo"><img src="remove (1).png" alt="logo">
             <h1>Xplor Bharat</h1>
         </div>
         <ul class="nav-links">
-            <li>
-                <a href="#hero"><i class="fa-solid fa-house"></i><span data-translate="nav_home">Home</span></a>
-            </li>
+            <li><a href="#hero"><i class="fa-solid fa-house"></i><span data-translate="nav_home">Home</span></a></li>
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-star"></i><span data-translate="nav_features">Features</span></a>
                 <ul class="dropdown-menu">
@@ -33,9 +31,7 @@
                     <li><a href="#cuisine"><span data-translate="nav_indian_delicacy">Indian Delicacy</span></a></li>
                 </ul>
             </li>
-            <li>
-                <a href="#"><i class="fa-solid fa-filter"></i><span data-translate="nav_filter">Filter</span></a>
-            </li>
+            <li><a href="#"><i class="fa-solid fa-filter"></i><span data-translate="nav_filter">Filter</span></a></li>
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-language"></i><span data-translate="nav_language">Language</span></a>
                 <ul class="dropdown-menu">
@@ -57,12 +53,10 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h2 id="hero-quote" data-translate="hero_quote">Discover Beautiful Destinations</h2>
-
             <div class="search-container">
                 <input type="text" id="destination-input" class="search-bar" placeholder="🔍 Enter destination city..." data-translate="search_placeholder">
                 <button class="btn" id="plan-trip-btn" data-translate="plan_trip_btn">✈️ Plan Your Trip</button>
             </div>
-
             <div class="filter-controls">
                 <div id="duration-control" class="control-group filter-dropdown">
                     <label data-translate="filter_duration">Duration</label><span class="selected-value"></span>
@@ -93,36 +87,8 @@
                     </div>
                 </div>
             </div>
-
             <div class="prediction-btn-container">
                 <button class="btn" id="prediction-btn" data-translate="get_predictions_btn">🔮 Get Predictions</button>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="results" class="section" style="display: none;">
-        <h3 class="section-title" data-translate="results_title">Travel Predictions</h3>
-        <div class="results-container">
-            <div class="result-card">
-                <h4 data-translate="results_weather">🌤️ Weather Conditions</h4>
-                <div id="weather-info">
-                    <p><span data-translate="results_condition">Condition</span>: <span id="weather-condition"></span></p>
-                    <p><span data-translate="results_temp">Temperature</span>: <span id="weather-temp"></span>°C</p>
-                    <p><span data-translate="results_wind">Wind Speed</span>: <span id="weather-wind"></span> km/h</p>
-                </div>
-            </div>
-            <div class="result-card">
-                <h4 data-translate="results_safety">🛡️ Safety Analysis</h4>
-                <div id="safety-result" class="result-value"></div>
-            </div>
-            <div class="result-card">
-                <h4 data-translate="results_price">💰 Hotel Price Estimate</h4>
-                <div id="price-result" class="result-value"></div>
-            </div>
-            <div class="result-card">
-                <h4 data-translate="results_crowd">📊 Crowd Index</h4>
-                <div id="popularity-result" class="result-value"></div>
             </div>
         </div>
     </section>
@@ -130,23 +96,23 @@
     <section id="destinations" class="section">
         <h3 class="section-title" data-translate="destinations_title">Top Destinations</h3>
         <div class="card-container">
-            <div class="card"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Goa">
+            <div class="card scroll-animate"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Goa">
                 <h4 data-translate="dest_goa_title">Goa Beaches</h4>
                 <p data-translate="dest_goa_desc">Golden sands & nightlife.</p>
             </div>
-            <div class="card"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="Himalayas">
+            <div class="card scroll-animate"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="Himalayas">
                 <h4 data-translate="dest_himalayas_title">Himalayan Peaks</h4>
                 <p data-translate="dest_himalayas_desc">Snow-clad adventures.</p>
             </div>
-            <div class="card"><img src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg" alt="Jaipur">
+            <div class="card scroll-animate"><img src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg" alt="Jaipur">
                 <h4 data-translate="dest_jaipur_title">Jaipur Palaces</h4>
                 <p data-translate="dest_jaipur_desc">Royal heritage.</p>
             </div>
-            <div class="card"><img src="https://images.unsplash.com/photo-1633931698758-f59cdaf042a2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kodaikanal">
+            <div class="card scroll-animate"><img src="https://images.unsplash.com/photo-1633931698758-f59cdaf042a2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kodaikanal">
                 <h4 data-translate="dest_kodaikanal_title">Kodaikanal</h4>
                 <p data-translate="dest_kodaikanal_desc">Serene lakes.</p>
             </div>
-            <div class="card"><img src="https://images.unsplash.com/photo-1702409038727-7c5dac6764aa?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ziro">
+            <div class="card scroll-animate"><img src="https://images.unsplash.com/photo-1702409038727-7c5dac6764aa?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ziro">
                 <h4 data-translate="dest_ziro_title">Ziro</h4>
                 <p data-translate="dest_ziro_desc">Verdant Valley.</p>
             </div>
@@ -156,30 +122,23 @@
     <section id="cuisine" class="section cuisine">
         <h3 class="section-title" data-translate="cuisine_title">Indian Delicacies</h3>
         <div class="food-slider">
-            <div class="food-card"><img src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp" alt="Biryani">
+            <div class="food-card scroll-animate"><img src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp" alt="Biryani">
                 <h4 data-translate="cuisine_biryani">Biryani</h4>
             </div>
-            <div class="food-card"><img src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg" alt="Butter Chicken">
+            <div class="food-card scroll-animate"><img src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg" alt="Butter Chicken">
                 <h4 data-translate="cuisine_butter_chicken">Butter Chicken</h4>
             </div>
-            <div class="food-card"><img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="Dosa">
+            <div class="food-card scroll-animate"><img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="Dosa">
                 <h4 data-translate="cuisine_dosa">Dosa</h4>
             </div>
-            <div class="food-card"><img src="https://tse1.mm.bing.net/th/id/OIP.1HYn9SMsyxDC9StfwwaU1gHaHa?pid=ImgDet&w=183&h=183&c=7&dpr=1.3&o=7&rm=3" alt="Mysore Pak">
+            <div class="food-card scroll-animate"><img src="https://tse1.mm.bing.net/th/id/OIP.1HYn9SMsyxDC9StfwwaU1gHaHa?pid=ImgDet&w=183&h=183&c=7&dpr=1.3&o=7&rm=3" alt="Mysore Pak">
                 <h4 data-translate="cuisine_mysore_pak">Mysore Pak</h4>
             </div>
-            <div class="food-card"><img src="https://th.bing.com/th/id/OIP.bDa8t2z2LMLyb90VeAq70AHaHa?w=195&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Gulab Jamun">
+            <div class="food-card scroll-animate"><img src="https://th.bing.com/th/id/OIP.bDa8t2z2LMLyb90VeAq70AHaHa?w=195&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Gulab Jamun">
                 <h4 data-translate="cuisine_gulab_jamun">Gulab Jamun</h4>
             </div>
         </div>
     </section>
-
-    <div id="loading-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="loading-spinner"></div>
-            <p data-translate="loading_text">Getting predictions...</p>
-        </div>
-    </div>
 
     <button id="chatbot-btn">💬</button>
     <div id="chatbot-popup">
@@ -188,9 +147,7 @@
             <button id="close-chatbot">&times;</button>
         </div>
         <div id="chatbot-messages">
-            <div class="chat-message bot-message" data-translate="chatbot_welcome">
-                Hi, I am YatraGenie, your personalised trip planner.
-            </div>
+            <div class="chat-message bot-message" data-translate="chatbot_welcome">Hi, I am YatraGenie, your personalised trip planner.</div>
         </div>
         <div class="chatbot-input">
             <input type="text" id="chatbot-input-field" placeholder="Type your message..." data-translate="chatbot_placeholder">
