@@ -52,15 +52,15 @@ function calculateBudget() {
 
   // Dynamically generate the content
   const resultHTML = `
-        <h3>Trip Details:</h3>
-        <p><strong>City:</strong> ${cityInput.charAt(0).toUpperCase() + cityInput.slice(1)}</p>
-        <p><strong>Trip Type:</strong> ${tripText}</p>
-        <p><strong>Fuel Type:</strong> ${fuelType.charAt(0).toUpperCase() + fuelType.slice(1)}</p>
-        <p><strong>Mileage:</strong> ${mileage} km/L or kg</p>
-        <p><strong>Total Distance:</strong> ${totalDistance} km</p>
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
-        <p style="font-size: 1.5rem; font-weight: bold;">Estimated Budget: ₹${estimatedBudget.toFixed(2)}</p>
-    `;
+        <h3>Trip Details:</h3>
+        <p><strong>City:</strong> ${cityInput.charAt(0).toUpperCase() + cityInput.slice(1)}</p>
+        <p><strong>Trip Type:</strong> ${tripText}</p>
+        <p><strong>Fuel Type:</strong> ${fuelType.charAt(0).toUpperCase() + fuelType.slice(1)}</p>
+        <p><strong>Mileage:</strong> ${mileage} km/L or kg</p>
+        <p><strong>Total Distance:</strong> ${totalDistance} km</p>
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+        <p style="font-size: 1.5rem; font-weight: bold;">Estimated Budget: ₹${estimatedBudget.toFixed(2)}</p>
+    `;
 
   // Display the result
   resultContent.innerHTML = resultHTML;
@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, observerOptions);
 
-  // Select ALL cards for animation, including the new restaurant cards
   const animatedCards = document.querySelectorAll('.card, .cuisine-card');
   animatedCards.forEach((card, index) => {
     setTimeout(() => {
