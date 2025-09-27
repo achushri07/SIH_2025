@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplor Bharat & AI Itinerary Planner</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ===== GLOBAL STYLES & VARIABLES ===== */
+        :root {
+            --glow-cyan: rgba(0, 229, 255, 0.7);
+            --glow-orange: rgba(255, 179, 71, 0.7);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f7fafc; color: #222; overflow-x: hidden; transition: background 0.5s, color 0.5s; }
+        body.dark { background: #0b0d0f; color: #f2f2f2; }
+
+        /* ===== PRELOADER STYLES ===== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 13, 15, 0.95);
+            backdrop-filter: blur(5px);
+            display: none; /* Initially hidden, toggled by JS */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            gap: 20px;
+        }
+        .preloader-logo {
+            width: 100px;
+            height: 100px;
+        }
+        .preloader-logo .logo-circle {
+            stroke: var(--glow-cyan);
+            stroke-width: 4;
+            fill: transparent;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: draw-circle 2s ease-in-out forwards;
+        }
+        .preloader-logo .logo-mountain {
+            stroke: white;
+            stroke-width: 4;
+            fill: transparent;
+            stroke-dasharray: 150;
+            stroke-dashoffset: 150;
+            animation: draw-mountain 2s 0.5s ease-in-out forwards;
+        }
+        @keyframes draw-circle {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes draw-mountain {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* ===== ITINERARY PAGE ANIMATION ===== */
+        @keyframes fadeInFromTop3D {
+            from {
+                opacity: 0;
+                transform: perspective(1000px) translateY(-40px) rotateX(-15deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(1000px) translateY(0) rotateX(0);
+            }
+        }
+        .animate-fade-in {
+            animation: fadeInFromTop3D 0.8s ease-out forwards;
+            opacity: 0; /* Start hidden to prevent flash */
+        }
+        
+        /* ===== BACK TO HOME BUTTON ===== */
+        #back-to-home-btn {
+            position: fixed;
+            top: 90px; /* Adjusted position to be below the navbar */
+            left: 25px;
+            z-index: 1001;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        body.dark #back-to-home-btn {
+             background: rgba(20, 20, 20, 0.85);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #back-to-home-btn:hover {
+            transform: scale(1.15) translateZ(20px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4), 0 0 20px var(--glow-cyan);
+        }
+        
+        /* ===== XPLOR BHARAT & ITINERARY CONTENT WRAPPER STYLES ===== */
+         #xplor-bharat-content, #itinerary-generator-content {
+            padding-top: 70px; /* Offset for fixed navbar */
+        }
+        #xplor-bharat-content {
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 85% 40%, rgba(255, 128, 0, 0.06) 0%, transparent 70%);
+            background-repeat: no-repeat;
+        }
+        body.dark #xplor-bharat-content {
+             background-image:
+                radial-gradient(circle at 20% 25%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 30%, rgba(255, 179, 71, 0.04) 0%, transparent 60%);
+        }
+        
+        /* ===== NAVBAR ===== */
+        .navbar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 1.5rem; background: linear-gradient(135deg, rgba(224, 247, 250, 0.2), rgba(255, 224, 224, 0.15)); backdrop-filter: blur(15px); position: fixed; top: 0; z-index: 1002; border-bottom: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
+        body.dark .navbar { background: rgba(11, 13, 15, 0.4); border-bottom: 1px solid rgba(0, 229, 255, 0.1); box-shadow: none; }
+        .logo { display: flex; align-items: center; gap: 0.6rem; }
+        .logo h1 { 
+            font-size: 1.8rem; /* Increased size */
+            font-weight: 700;
+            text-shadow: 0 0 8px var(--glow-cyan), 0 0 12px var(--glow-cyan); /* Added glow */
+        }
+        body.dark .logo h1 {
+            text-shadow: 0 0 8px var(--glow-orange), 0 0 12px var(--glow-orange);
+        }
+        .logo img { width: 120px; height: auto; }
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; justify-content: space-between; align-items: center; }
+        .nav-links a { text-decoration: none; color: inherit; padding: 0.5rem 0.8rem; position: relative; transition: transform 0.3s, color 0.3s, text-shadow 0.3s; font-size: 20px; display: flex; align-items: center; gap: 0.6rem; }
+        .nav-links a .fa-solid { font-size: 18px; transition: transform 0.3s; }
+        .nav-links a:hover { transform: translateY(-4px) scale(1.1); color: #00e5ff; text-shadow: 0 0 8px var(--glow-cyan); }
+        body.dark .nav-links a:hover { color: var(--glow-orange); text-shadow: 0 0 8px var(--glow-orange); }
+        .dropdown { position: relative; }
+        .dropdown-menu { position: absolute; top: 110%; left: 0; min-width: 160px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(224, 247, 250, 0.8)); backdrop-filter: blur(10px); border-radius: 8px; padding: 0.5rem 0; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: all 0.3s ease; z-index: 10; }
+        body.dark .dropdown-menu { background: rgba(20, 20, 20, 0.8); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); }
+        .dropdown-menu a { display: block; padding: 0.6rem 1rem; color: inherit; transition: background 0.3s, transform 0.3s; }
+        .dropdown-menu a:hover { background: rgba(0, 255, 255, 0.1); transform: translateX(4px); }
+        body.dark .dropdown-menu a:hover { background: rgba(255, 179, 71, 0.1); }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        #theme-toggle { border: none; background: none; font-size: 1.4rem; cursor: pointer; color: inherit; transition: transform 0.3s, text-shadow 0.3s; }
+        #theme-toggle:hover { transform: rotate(20deg) scale(1.1); text-shadow: 0 0 8px var(--glow-cyan); }
+        body.dark #theme-toggle:hover { text-shadow: 0 0 8px var(--glow-orange); }
+        
+        /* ===== HERO SECTION ===== */
+        .hero { min-height: calc(100vh - 70px); position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; perspective: 1000px; }
+        .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transform: scale(1.1); transition: opacity 1.2s ease, transform 10s ease; }
+        .hero-bg.active { opacity: 1; transform: scale(1); }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.1); }
+        body.dark .hero-overlay { background: rgba(0, 0, 0, 0.45); }
+        .hero-content { position: relative; text-align: center; z-index: 2; color: #222; width: 90%; max-width: 850px; }
+        body.dark .hero-content { color: #fff; }
+        .hero-content h2 { font-size: 2.8rem; font-weight: 700; margin-bottom: 1.5rem; transition: opacity 0.5s; text-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+        body.dark .hero-content h2 { text-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        .search-container { display: flex; align-items: center; gap: 1rem; width: 100%; margin-bottom: 1.5rem; }
+        .hero-content .search-bar { flex-grow: 1; padding: 0.8rem 1.2rem; border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 30px; outline: none; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; font-size: 1rem; }
+        body.dark .hero-content .search-bar { background: rgba(30, 30, 30, 0.5); color: #f2f2f2; border-color: rgba(255, 179, 71, 0.2); }
+        .hero-content .search-bar:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--glow-cyan); }
+        body.dark .hero-content .search-bar:hover { box-shadow: 0 0 15px var(--glow-orange); }
+        .search-container .btn { flex-shrink: 0; }
+        .filter-controls { display: flex; justify-content: center; align-items: stretch; gap: 1rem; flex-wrap: wrap; }
+        .control-group { flex: 1; min-width: 150px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); border-radius: 12px; padding: 0.6rem 1rem; border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; transform-style: preserve-3d; position: relative; cursor: pointer; text-align: left; }
+        .control-group:hover { transform: translateY(-5px) translateZ(15px); box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2); z-index: 20; }
+        body.dark .control-group { background: rgba(30, 30, 30, 0.5); border-color: rgba(255, 179, 71, 0.2); }
+        body.dark .control-group:hover { box-shadow: 0 10px 20px rgba(255, 179, 71, 0.15); }
+        .control-group label { display: block; font-size: 0.8rem; opacity: 0.7; pointer-events: none; }
+        .selected-value { display: block; font-size: 1rem; font-weight: 500; color: #008489; margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        body.dark .selected-value { color: #ffc107; }
+        .filter-dropdown-menu { position: absolute; top: 100%; left: 0; width: 100%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9)); backdrop-filter: blur(10px); border-radius: 8px; padding: 0.8rem; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: all 0.3s ease; }
+        body.dark .filter-dropdown-menu { background: rgba(25, 25, 25, 0.9); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); }
+        .filter-dropdown:hover .filter-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(5px) scale(1); }
+        .duration-dropdown { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        .filter-controls input[type="date"] { background: transparent; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; padding: 0.2rem; outline: none; color: inherit; font-size: 0.9rem; width: 100%; }
+        body.dark .filter-controls input[type="date"] { border-color: rgba(255, 255, 255, 0.2); }
+        body.dark .filter-controls input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .option-yn { display: block; padding: 0.5rem; text-decoration: none; color: inherit; border-radius: 4px; transition: transform 0.3s, text-shadow 0.3s, color 0.3s, background 0.3s; transform-style: preserve-3d; }
+        .option-yn:hover { color: #fff; background: rgba(0, 229, 255, 0.1); transform: translateZ(15px) scale(1.05); text-shadow: 0 0 6px var(--glow-cyan), 0 0 10px var(--glow-cyan); }
+        body.dark .option-yn:hover { background: rgba(255, 179, 71, 0.1); text-shadow: 0 0 6px var(--glow-orange), 0 0 10px var(--glow-orange); }
+        .star-rating span { cursor: pointer; color: #ccc; transition: transform 0.2s, color 0.2s, text-shadow 0.2s; }
+        .star-rating span:hover, .star-rating span.hovered, .star-rating span.selected { transform: scale(1.25); color: #ffc107; text-shadow: 0 0 8px rgba(255, 193, 7, 0.8); }
+        .btn { padding: 0.8rem 2rem; border: none; border-radius: 30px; background: linear-gradient(135deg, #00e5ff, #00ffaa, #ffb347); background-size: 200% auto; color: #000; font-weight: bold; cursor: pointer; transition: all 0.4s ease; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); transform-style: preserve-3d; }
+        .btn:hover { transform: translateY(-5px) scale(1.05) translateZ(20px); box-shadow: 0 12px 25px rgba(0, 229, 255, 0.3); background-position: right center; }
+        .prediction-btn-container { margin-top: 2rem; }
+        .section { padding: 6rem 5% 3rem; background: inherit; text-align: center; }
+        .section-title { font-size: 2rem; margin-bottom: 2rem; text-shadow: 0 0 6px var(--glow-cyan); }
+        body.dark .section-title { text-shadow: 0 0 6px var(--glow-orange); }
+        .card-container { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .card { background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(224, 247, 250, 0.7) 100%); border-radius: 16px; width: 260px; padding: 1rem; color: inherit; backdrop-filter: blur(8px); transition: transform 0.4s, box-shadow 0.4s; border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05); }
+        body.dark .card { background: rgba(20, 20, 20, 0.4); box-shadow: none; border-color: rgba(255, 255, 255, 0.08); }
+        .card img { width: 100%; border-radius: 12px; margin-bottom: 0.8rem; box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); transition: transform 0.4s; }
+        .card:hover img { transform: scale(1.05); }
+        .card:hover { transform: perspective(900px) rotateY(8deg) translateY(-8px) scale(1.02); box-shadow: 0 20px 30px rgba(0, 255, 255, 0.2); }
+        body.dark .card:hover { box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-cyan); }
+        .food-slider { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .food-card { width: 200px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 224, 224, 0.7) 100%); padding: 1rem; border-radius: 16px; border: 1px solid rgba(255, 128, 0, 0.2); transition: transform 0.4s, box-shadow 0.4s; box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05); }
+        body.dark .food-card { background: rgba(20, 20, 20, 0.4); border-color: rgba(255, 255, 255, 0.08); }
+        .food-card img { width: 100%; border-radius: 10px; box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); transition: transform 0.4s; }
+        .food-card:hover img { transform: scale(1.08); }
+        .food-card:hover { transform: translateY(-8px) scale(1.07); box-shadow: 0 20px 25px rgba(255, 128, 0, 0.2); }
+        body.dark .food-card:hover { box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-orange); }
+        footer { text-align: center; padding: 1rem; border-top: 1px solid rgba(0, 255, 255, 0.2); background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 128, 0, 0.05)); }
+        body.dark footer { border-top-color: rgba(255, 255, 255, 0.1); }
+        .section, .card, .food-card { opacity: 0; transform: translateY(40px) scale(0.95); transition: all 0.6s ease; }
+        .section.show, .card.show, .food-card.show { opacity: 1; transform: translateY(0) scale(1); }
+        #chatbot-btn { position: fixed; left: 1.2rem; bottom: 1.2rem; font-size: 1.6rem; background: linear-gradient(135deg, #00e5ff, #ffb347); border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; box-shadow: 0 0 12px var(--glow-cyan); animation: pulse 2.5s infinite; transition: transform 0.3s, box-shadow 0.3s; z-index: 1001; display: flex; justify-content: center; align-items: center; }
+        #chatbot-btn:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 0 15px var(--glow-cyan), 0 0 25px var(--glow-cyan); }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 12px var(--glow-cyan); } 50% { box-shadow: 0 0 20px var(--glow-orange); } }
+        #chatbot-popup { position: fixed; left: 1.2rem; bottom: 5.5rem; width: 320px; max-height: 450px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(224, 247, 250, 0.9)); backdrop-filter: blur(10px); border-radius: 15px; display: none; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15); animation: pop-up-3d 0.5s ease-out forwards; z-index: 1001; flex-direction: column; overflow: hidden; transform-origin: bottom left; }
+        body.dark #chatbot-popup { background: rgba(20, 20, 20, 0.85); box-shadow: 0 0 25px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); }
+        @keyframes pop-up-3d { from { opacity: 0; transform: scale(0.5) translateY(20px) rotateX(-20deg); } to { opacity: 1; transform: scale(1) translateY(0) rotateX(0deg); } }
+        .chatbot-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(0, 229, 255, 0.3); flex-shrink: 0; }
+        body.dark .chatbot-header { border-bottom: 1px solid rgba(255, 179, 71, 0.2); }
+        .chatbot-header h4 { font-weight: 600; font-size: 1.1rem; }
+        #close-chatbot { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: inherit; opacity: 0.7; transition: opacity 0.2s; }
+        #close-chatbot:hover { opacity: 1; }
+        #chatbot-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; }
+        .chat-message { padding: 0.6rem 0.9rem; border-radius: 12px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+        .user-message { background: #00e5ff; color: #111; border-bottom-right-radius: 2px; align-self: flex-end; }
+        body.dark .user-message { background: var(--glow-orange); }
+        .bot-message { background: #e9e9eb; color: #333; border-bottom-left-radius: 2px; align-self: flex-start; }
+        body.dark .bot-message { background: #2c2c2e; color: #f2f2f2; }
+        .chatbot-input { display: flex; padding: 0.75rem; border-top: 1px solid rgba(0, 229, 255, 0.3); flex-shrink: 0; }
+        body.dark .chatbot-input { border-top: 1px solid rgba(255, 179, 71, 0.2); }
+        #chatbot-input-field { flex-grow: 1; padding: 0.6rem; border: 1px solid #ccc; border-radius: 20px; background: transparent; color: inherit; outline: none; margin-right: 0.5rem; }
+        #chatbot-send-btn { border: none; background: #00e5ff; color: #111; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; }
+        body.dark #chatbot-send-btn { background: var(--glow-orange); }
+        #chatbot-send-btn:hover { transform: scale(1.1); }
+        @media(max-width:768px) { .nav-links { display: none; } .search-container { flex-direction: column; } .hero-content .search-bar { width: 100%; } .card-container, .food-slider { flex-direction: column; align-items: center; } .hero-content h2 { font-size: 1.8rem; } .filter-controls { flex-direction: column; align-items: stretch; } #chatbot-popup { width: calc(100vw - 2.4rem); max-height: 60vh; } }
+        #itinerary-generator-content { background-color: #f9fafb; }
+        .select { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: white; appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
+        .spinner { width: 1rem; height: 1rem; border-width: 2px; border-style: solid; border-color: white transparent white white; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body>
+
+    <div id="preloader">
+        <svg class="preloader-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle class="logo-circle" cx="50" cy="50" r="45"/>
+            <path class="logo-mountain" d="M25 65 L40 45 L50 55 L65 35 L75 65 Z" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <p>Loading AI Itinerary Planner...</p>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo"><img src="remove.png" alt="logo"><h1>Xplor Bharat</h1></div>
+        <ul class="nav-links">
+            <li><a href="#hero" id="home-link"><i class="fa-solid fa-house"></i><span data-translate="nav_home">Home</span></a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fa-solid fa-star"></i><span data-translate="nav_features">Features</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="ai-planner-btn"><span data-translate="nav_ai_planner">AI Planner</span></a></li>
+                    <li><a href="#" id="text-to-speech-btn"><i class="fa-solid fa-volume-high"></i><span data-translate="nav_tts">Text to Speech</span></a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#destinations"><i class="fa-solid fa-compass"></i><span data-translate="nav_explore">Explore</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#destinations"><span data-translate="nav_top_destinations">Top destinations</span></a></li>
+                    <li><a href="#cuisine"><span data-translate="nav_indian_delicacy">Indian Delicacy</span></a></li>
+                </ul>
+            </li>
+            <li><a href="#" id="filter-redirect-btn"><i class="fa-solid fa-filter"></i><span data-translate="nav_filter">Filter</span></a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fa-solid fa-language"></i><span data-translate="nav_language">Language</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="lang-switcher" data-lang="en">English</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="hi">हिंदी (Hindi)</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="mr">मराठी (Marathi)</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="es">Español (Spanish)</a></li>
+                </ul>
+            </li>
+        </ul>
+        <button id="theme-toggle">🌙</button>
+    </nav>
+    
+    <div id="xplor-bharat-content">
+        <section class="hero" id="hero">
+             <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=80');"></div>
+             <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1500&q=80');"></div>
+             <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1500&q=80');"></div>
+             <div class="hero-bg" style="background-image:url('https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg');"></div>
+             <div class="hero-overlay"></div>
+             <div class="hero-content">
+                 <h2 id="hero-quote" data-translate="hero_quote">Discover Beautiful Destinations</h2>
+                 <div class="search-container">
+                     <input type="text" id="destination-input" class="search-bar" placeholder="🔍 Enter destination city..." data-translate="search_placeholder">
+                     <button class="btn" id="plan-trip-btn" data-translate="plan_trip_btn">✈️ Plan Your Trip</button>
+                 </div>
+                 <div class="filter-controls">
+                     <div class="control-group filter-dropdown"><label data-translate="filter_duration">Duration</label><span class="selected-value"></span><div class="filter-dropdown-menu duration-dropdown"><input type="date" id="from-date"><span data-translate="filter_to">to</span><input type="date" id="to-date"></div></div>
+                     <div class="control-group filter-dropdown"><label data-translate="filter_festive">Festive Season</label><span class="selected-value"></span><div class="filter-dropdown-menu"><a href="#" class="option-yn" data-value="Yes" data-type="festival"><span data-translate="filter_yes">Yes</span></a><a href="#" class="option-yn" data-value="No" data-type="festival"><span data-translate="filter_no">No</span></a></div></div>
+                     <div class="control-group filter-dropdown"><label data-translate="filter_holiday">Holiday</label><span class="selected-value"></span><div class="filter-dropdown-menu"><a href="#" class="option-yn" data-value="Yes" data-type="holiday"><span data-translate="filter_yes">Yes</span></a><a href="#" class="option-yn" data-value="No" data-type="holiday"><span data-translate="filter_no">No</span></a></div></div>
+                     <div class="control-group"><label data-translate="filter_rating">Hotel Rating</label><div class="star-rating"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div></div>
+                 </div>
+                 <div class="prediction-btn-container"><button class="btn" id="prediction-btn" data-translate="get_predictions_btn">🔮 Get Predictions</button></div>
+             </div>
+        </section>
+
+        <section id="destinations" class="section">
+             <h3 class="section-title" data-translate="destinations_title">Top Destinations</h3>
+             <div class="card-container">
+                 <div class="card"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Goa"><h4 data-translate="dest_goa_title">Goa Beaches</h4><p data-translate="dest_goa_desc">Golden sands & nightlife.</p></div>
+                 <div class="card"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="Himalayas"><h4 data-translate="dest_himalayas_title">Himalayan Peaks</h4><p data-translate="dest_himalayas_desc">Snow-clad adventures.</p></div>
+                 <div class="card"><img src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg" alt="Jaipur"><h4 data-translate="dest_jaipur_title">Jaipur Palaces</h4><p data-translate="dest_jaipur_desc">Royal heritage.</p></div>
+                 <div class="card"><img src="https://images.unsplash.com/photo-1633931698758-f59cdaf042a2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kodaikanal"><h4 data-translate="dest_kodaikanal_title">Kodaikanal</h4><p data-translate="dest_kodaikanal_desc">Serene lakes.</p></div>
+                 <div class="card"><img src="https://images.unsplash.com/photo-1702409038727-7c5dac6764aa?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ziro"><h4 data-translate="dest_ziro_title">Ziro</h4><p data-translate="dest_ziro_desc">Verdant Valley.</p></div>
+             </div>
+        </section>
+
+        <section id="cuisine" class="section cuisine">
+             <h3 class="section-title" data-translate="cuisine_title">Indian Delicacies</h3>
+             <div class="food-slider">
+                 <div class="food-card"><img src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp" alt="Biryani"><h4 data-translate="cuisine_biryani">Biryani</h4></div>
+                 <div class="food-card"><img src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg" alt="Butter Chicken"><h4 data-translate="cuisine_butter_chicken">Butter Chicken</h4></div>
+                 <div class="food-card"><img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg" alt="Dosa"><h4 data-translate="cuisine_dosa">Dosa</h4></div>
+                 <div class="food-card"><img src="https://tse1.mm.bing.net/th/id/OIP.1HYn9SMsyxDC9StfwwaU1gHaHa?pid=ImgDet&w=183&h=183&c=7&dpr=1.3&o=7&rm=3" alt="Mysore Pak"><h4 data-translate="cuisine_mysore_pak">Mysore Pak</h4></div>
+                 <div class="food-card"><img src="https://th.bing.com/th/id/OIP.bDa8t2z2LMLyb90VeAq70AHaHa?w=195&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Gulab Jamun"><h4 data-translate="cuisine_gulab_jamun">Gulab Jamun</h4></div>
+             </div>
+        </section>
+
+        <button id="chatbot-btn">💬</button>
+        <div id="chatbot-popup">
+             <div class="chatbot-header"><h4>YatraGenie ✨</h4><button id="close-chatbot">&times;</button></div>
+             <div id="chatbot-messages"><div class="chat-message bot-message" data-translate="chatbot_welcome">Hi, I am YatraGenie, your personalised trip planner.</div></div>
+             <div class="chatbot-input"><input type="text" id="chatbot-input-field" placeholder="Type your message..." data-translate="chatbot_placeholder"><button id="chatbot-send-btn">➤</button></div>
+        </div>
+
+        <footer><p data-translate="footer_text">© 2025 Xplor Bharat. All Rights Reserved.</p></footer>
+    </div>
+    
+    <div id="itinerary-generator-content" style="display: none;">
+        <button id="back-to-home-btn"><i data-lucide="arrow-left" class="h-6 w-6 text-emerald-700"></i></button>
+        <div class="min-h-screen py-8 px-4">
+            <div class="container mx-auto max-w-6xl">
+                <div class="text-center mb-12 animatable"><h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1><p class="text-xl text-gray-600 max-w-2xl mx-auto">Get personalized travel plans tailored to your interests, duration, and travel style</p></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-xl border-0 animatable">
+                        <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-t-lg p-6"><h2 class="flex items-center text-xl font-semibold"><i data-lucide="sparkles" class="mr-2 h-5 w-5"></i> Plan Your Journey</h2><p class="text-emerald-100 mt-1">Tell us your preferences and let AI create the perfect itinerary</p></div>
+                        <div class="p-6 space-y-6">
+                            <div class="space-y-2"><label for="duration" class="block text-sm font-medium text-gray-700">Trip Duration</label><select id="duration" class="select"><option value="" disabled selected>Select duration</option><option value="1-2">1-2 Days</option><option value="2-3">2-3 Days</option><option value="4-5">4-5 Days</option><option value="1-week">1 Week</option><option value="2-weeks">2+ Weeks</option></select></div>
+                            <div class="space-y-3"><label class="block text-sm font-medium text-gray-700">Your Interests</label><div id="interest-buttons-container" class="grid grid-cols-2 gap-3"></div></div>
+                            <div class="space-y-2"><label for="travelType" class="block text-sm font-medium text-gray-700">Travel Type</label><select id="travelType" class="select"><option value="" disabled selected>Select travel type</option><option value="solo">Solo Adventure</option><option value="couple">Romantic Getaway</option><option value="family">Family Trip</option><option value="group">Group Adventure</option><option value="backpacking">Backpacking</option></select></div>
+                            <div class="space-y-2"><label for="budget" class="block text-sm font-medium text-gray-700">Budget Range</label><select id="budget" class="select"><option value="" disabled selected>Select budget</option><option value="budget">Budget (₹2000-5000)</option><option value="moderate">Moderate (₹5000-10000)</option><option value="luxury">Luxury (₹10000+)</option></select></div>
+                            <button id="generate-btn" class="w-full justify-center p-3 font-medium text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 rounded-md flex items-center"></button>
+                        </div>
+                    </div>
+                    <div id="itinerary-container" class="animatable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // =============================================================
+        // ===== SHARED & XPLOR BHARAT SCRIPT =====
+        // =============================================================
+        
+        let selectedFestival = null, selectedHoliday = null, selectedRating = 0, isSpeaking = false;
+        const translations = {
+            en: { nav_home: 'Home', nav_features: 'Features', nav_ai_planner: 'AI Planner', nav_tts: 'Text to Speech', nav_explore: 'Explore', nav_top_destinations: 'Top destinations', nav_indian_delicacy: 'Indian Delicacy', nav_filter: 'Filter', nav_language: 'Language', hero_quote: 'Discover Beautiful Destinations', search_placeholder: '🔍 Enter destination city...', plan_trip_btn: '✈️ Plan Your Trip', filter_duration: 'Duration', filter_to: 'to', filter_festive: 'Festive Season', filter_holiday: 'Holiday', filter_yes: 'Yes', filter_no: 'No', filter_rating: 'Hotel Rating', get_predictions_btn: '🔮 Get Predictions' },
+            hi: { nav_home: 'होम', nav_features: 'विशेषताएँ', nav_ai_planner: 'एआई प्लानर', nav_tts: 'टेक्स्ट टू स्पीच', nav_explore: 'अन्वेषण करें', nav_top_destinations: 'शीर्ष गंतव्य', nav_indian_delicacy: 'भारतीय व्यंजन', nav_filter: 'फ़िल्टर', nav_language: 'भाषा', hero_quote: 'सुंदर स्थलों की खोज करें', search_placeholder: '🔍 गंतव्य शहर दर्ज करें...', plan_trip_btn: '✈️ अपनी यात्रा की योजना बनाएं', filter_duration: 'अवधि', filter_to: 'तक', filter_festive: 'त्योहार का मौसम', filter_holiday: 'छुट्टी', filter_yes: 'हाँ', filter_no: 'नहीं', filter_rating: 'होटल रेटिंग', get_predictions_btn: '🔮 भविष्यवाणियाँ प्राप्त करें' },
+            mr: { nav_home: 'मुख्यपृष्ठ', nav_features: 'वैशिष्ट्ये', nav_ai_planner: 'एआय प्लॅनर', nav_tts: 'टेक्स्ट टू स्पीच', nav_explore: 'अन्वेषण करा', nav_top_destinations: 'शीर्ष गंतव्ये', nav_indian_delicacy: 'भारतीय स्वादिष्ट पदार्थ', nav_filter: 'फिल्टर', nav_language: 'भाषा', hero_quote: 'सुंदर स्थळांचा शोध घ्या', search_placeholder: '🔍 गंतव्य शहर प्रविष्ट करा...', plan_trip_btn: '✈️ आपल्या सहलीची योजना करा', filter_duration: 'कालावधी', filter_to: 'पर्यंत', filter_festive: 'सणासुदीचा हंगाम', filter_holiday: 'सुट्टी', filter_yes: 'होय', filter_no: 'नाही', filter_rating: 'हॉटेल रेटिंग', get_predictions_btn: '🔮 अंदाज मिळवा' },
+            es: { nav_home: 'Inicio', nav_features: 'Características', nav_ai_planner: 'Planificador de IA', nav_tts: 'Texto a voz', nav_explore: 'Explorar', nav_top_destinations: 'Mejores destinos', nav_indian_delicacy: 'Delicadeza india', nav_filter: 'Filtro', nav_language: 'Idioma', hero_quote: 'Descubre Destinos Hermosos', search_placeholder: '🔍 Ingrese la ciudad de destino...', plan_trip_btn: '✈️ Planifica Tu Viaje', filter_duration: 'Duración', filter_to: 'a', filter_festive: 'Temporada festiva', filter_holiday: 'Feriado', filter_yes: 'Sí', filter_no: 'No', filter_rating: 'Calificación del hotel', get_predictions_btn: '🔮 Obtener Predicciones' }
+        };
+        const setLanguage = (lang) => { document.querySelectorAll('[data-translate]').forEach(el => { const key = el.getAttribute('data-translate'); if(translations[lang]?.[key]) el.placeholder ? el.placeholder=translations[lang][key] : el.innerHTML=translations[lang][key]; }); localStorage.setItem('language', lang); };
+        document.querySelectorAll('.lang-switcher').forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); setLanguage(e.target.getAttribute('data-lang')); }));
+        setLanguage(localStorage.getItem('language') || 'en');
+        document.getElementById('text-to-speech-btn').addEventListener('click', (e) => { e.preventDefault(); if (isSpeaking) { window.speechSynthesis.cancel(); isSpeaking = false; } else { let textToSpeak = ''; document.querySelectorAll('#xplor-bharat-content [data-translate]').forEach(el => textToSpeak += el.innerText + '. '); const utterance = new SpeechSynthesisUtterance(textToSpeak); utterance.lang = localStorage.getItem('language') || 'en'; utterance.onend = () => isSpeaking = false; window.speechSynthesis.speak(utterance); isSpeaking = true; } });
+        const themeToggle = document.getElementById("theme-toggle");
+        if (localStorage.getItem("theme") === "dark") { document.body.classList.add("dark"); themeToggle.textContent = "☀️"; }
+        themeToggle.addEventListener("click", () => { document.body.classList.toggle("dark"); const dark = document.body.classList.contains("dark"); themeToggle.textContent = dark ? "☀️" : "🌙"; localStorage.setItem("theme", dark ? "dark" : "light"); });
+        const chatBtn = document.getElementById("chatbot-btn"), chatPop = document.getElementById("chatbot-popup"), closeChatbotBtn = document.getElementById("close-chatbot"), sendChatBtn = document.getElementById("chatbot-send-btn"), chatInputField = document.getElementById("chatbot-input-field"), chatMessages = document.getElementById("chatbot-messages"), aiPlannerBtn = document.getElementById("ai-planner-btn");
+        const toggleChatbot = () => { chatPop.style.display = chatPop.style.display === "flex" ? "none" : "flex"; };
+        [chatBtn, closeChatbotBtn, aiPlannerBtn].forEach(btn => btn.addEventListener("click", (e) => { e.preventDefault(); toggleChatbot(); }));
+        const appendMessage = (text, sender) => { const el = document.createElement('div'); el.className = `chat-message ${sender}-message`; el.textContent = text; chatMessages.appendChild(el); chatMessages.scrollTop = chatMessages.scrollHeight; };
+        const handleSendMessage = () => { const userText = chatInputField.value.trim(); if (userText) { appendMessage(userText, 'user'); chatInputField.value = ''; setTimeout(() => appendMessage("This is a simulated response. Full functionality requires a backend.", 'bot'), 600); } };
+        sendChatBtn.addEventListener("click", handleSendMessage);
+        chatInputField.addEventListener("keypress", (e) => { if (e.key === 'Enter') handleSendMessage(); });
+        const heroBgs = document.querySelectorAll(".hero-bg"), heroQuote = document.getElementById("hero-quote"), quotes = { en: ["Discover Beautiful Destinations", "Explore the Wonders of India", "Adventure Awaits You", "Taste Local Cuisines"], hi: ["सुंदर स्थलों की खोज करें", "भारत के अजूबों को खोजें", "साहसिक कार्य आपको बुला रहा है", "स्थानीय व्यंजनों का स्वाद लें"], mr: ["सुंदर स्थळांचा शोध घ्या", "भारताच्या आश्चर्यांचा शोध घ्या", "साहस तुमची वाट पाहत आहे", "स्थानिक पदार्थांची चव घ्या"], es: ["Descubre Destinos Hermosos", "Explora las Maravillas de la India", "La Aventura te Espera", "Prueba las Cocinas Locales"] };
+        let idx = 0;
+        const nextHero = () => { if (!heroBgs.length) return; heroBgs.forEach(bg => bg.classList.remove("active")); heroBgs[idx].classList.add("active"); const lang = localStorage.getItem('language') || 'en'; heroQuote.style.opacity=0; setTimeout(() => { heroQuote.textContent = quotes[lang][idx]; heroQuote.style.opacity=1; }, 500); idx=(idx+1)%heroBgs.length; };
+        nextHero(); setInterval(nextHero, 4000);
+        const revealEls = document.querySelectorAll("#xplor-bharat-content .section, #xplor-bharat-content .card, #xplor-bharat-content .food-card");
+        const reveal = () => { const trig = window.innerHeight * 0.85; revealEls.forEach(el => { if (el.getBoundingClientRect().top < trig) el.classList.add("show"); }); };
+        window.addEventListener("scroll", reveal); reveal();
+        const stars = document.querySelectorAll(".star-rating span");
+        stars.forEach((star, i) => { star.addEventListener("mouseover", () => stars.forEach((s, k) => s.classList.toggle("hovered", k <= i))); star.addEventListener("click", () => { selectedRating = i + 1; stars.forEach((s, k) => { s.classList.remove("hovered"); s.classList.toggle("selected", k < selectedRating); }); }); });
+        document.querySelector(".star-rating").addEventListener("mouseout", () => { stars.forEach(s => s.classList.remove("hovered")); stars.forEach((s, k) => s.classList.toggle("selected", k < selectedRating)); });
+        document.querySelectorAll('.filter-dropdown').forEach(dd => { const vs = dd.querySelector('.selected-value'); if (!vs) return; dd.querySelectorAll('.option-yn').forEach(opt => opt.addEventListener('click', e => { e.preventDefault(); const val = opt.dataset.value, type = opt.dataset.type, lang = localStorage.getItem('language')||'en'; vs.textContent = `: ${val==='Yes'?translations[lang].filter_yes:translations[lang].filter_no}`; if(type==='festival') selectedFestival=val; else if(type==='holiday') selectedHoliday=val; })); });
+        const getPredictions = () => { if (!document.getElementById('destination-input').value.trim() || !selectedFestival || !selectedHoliday || selectedRating === 0) { alert('Please fill in all fields: Destination, Festive Season, Holiday, and Hotel Rating.'); return; } alert(`Getting predictions for ...`); };
+        document.getElementById('prediction-btn').addEventListener('click', getPredictions);
+        document.getElementById('plan-trip-btn').addEventListener('click', getPredictions);
+
+        // =============================================================
+        // ===== SCRIPT FOR AI ITINERARY GENERATOR =====
+        // =============================================================
+
+        const state = { formData: { duration: '', interests: [], travelType: '', budget: '' }, generatedItinerary: null, isGenerating: false };
+        const interestsData = [ { id: 'waterfalls', label: 'Waterfalls', icon: 'waves' }, { id: 'wildlife', label: 'Wildlife', icon: 'trees' }, { id: 'culture', label: 'Tribal Culture', icon: 'users' }, { id: 'adventure', label: 'Adventure Sports', icon: 'mountain' }, { id: 'photography', label: 'Photography', icon: 'camera' }, { id: 'nature', label: 'Nature Walks', icon: 'leaf' }];
+        const mockItineraries = { '2-3': { title: "Weekend Waterfall Escape", days: [ { day: 1, title: "Arrival & Dassam Falls", activities: [ { time: "9:00 AM", title: "Arrive in Ranchi", description: "Check into eco-friendly homestay near Dassam Falls", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "11:00 AM", title: "Dassam Falls Exploration", description: "Trek to the spectacular 44-feet waterfall, enjoy photography and natural pools", location: "Dassam Falls", type: "attraction", ecoFriendly: true }, { time: "2:00 PM", title: "Local Tribal Lunch", description: "Traditional Santali cuisine at local homestay with cultural performance", location: "Tribal Village", type: "food", ecoFriendly: true }, { time: "6:00 PM", title: "Sunset at Tagore Hill", description: "Panoramic views of Ranchi city and surrounding forests", location: "Tagore Hill", type: "viewpoint", ecoFriendly: false } ] }, { day: 2, title: "Hundru Falls & Tribal Culture", activities: [ { time: "7:00 AM", title: "Journey to Hundru Falls", description: "Early morning drive to Jharkhand's highest waterfall (322 feet)", location: "Hundru Falls", type: "transport", ecoFriendly: true }, { time: "9:00 AM", title: "Hundru Falls Trek", description: "Challenging trek with breathtaking views and natural swimming spots", location: "Hundru Falls", type: "attraction", ecoFriendly: true }, { time: "1:00 PM", title: "Tribal Craft Workshop", description: "Learn Dokra metal craft techniques from local artisans", location: "Craft Village", type: "cultural", ecoFriendly: true }, { time: "4:00 PM", title: "Departure", description: "Return journey with memories and handcrafted souvenirs", location: "Ranchi", type: "transport", ecoFriendly: false } ] } ] }, '4-5': { title: "Complete Jharkhand Explorer", days: [ { day: 1, title: "Ranchi Arrival & Local Sights", activities: [ { time: "10:00 AM", title: "Arrive & City Tour", description: "Check-in and explore Ranchi's historical sites and markets", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "2:00 PM", title: "Dassam Falls", description: "First waterfall experience with local guide stories", location: "Dassam Falls", type: "attraction", ecoFriendly: true } ] }, { day: 2, title: "Netarhat Hill Station", activities: [ { time: "6:00 AM", title: "Journey to Netarhat", description: "Scenic drive to the 'Queen of Chotanagpur' hill station", location: "Netarhat", type: "transport", ecoFriendly: true }, { time: "8:00 AM", title: "Sunrise Point", description: "Witness spectacular sunrise views over the Chotanagpur plateau", location: "Netarhat Sunrise Point", type: "viewpoint", ecoFriendly: true } ] }, { day: 3, title: "Betla National Park Safari", activities: [ { time: "5:00 AM", title: "Wildlife Safari", description: "Early morning safari to spot tigers, elephants, and diverse birdlife", location: "Betla National Park", type: "wildlife", ecoFriendly: true } ] }, { day: 4, title: "Cultural Immersion Day", activities: [ { time: "9:00 AM", title: "Tribal Village Visit", description: "Experience authentic Santali and Munda tribal lifestyle", location: "Traditional Village", type: "cultural", ecoFriendly: true } ] } ] } };
+        const getActivityIconName = type => ({ transport: 'car', attraction: 'map-pin', food: 'home', cultural: 'users', wildlife: 'trees', viewpoint: 'mountain' }[type] || 'map-pin');
+        const durationSelect = document.getElementById('duration'), travelTypeSelect = document.getElementById('travelType'), budgetSelect = document.getElementById('budget'), generateBtn = document.getElementById('generate-btn'), interestContainer = document.getElementById('interest-buttons-container'), itineraryContainer = document.getElementById('itinerary-container');
+        const renderInterestButtons = () => { interestContainer.innerHTML = interestsData.map(i => `<button data-interest-id="${i.id}" class="justify-start h-auto p-3 text-left w-full flex items-center border rounded-md transition-colors ${state.formData.interests.includes(i.id) ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-white border-gray-300 hover:bg-emerald-50'}"><i data-lucide="${i.icon}" class="mr-2 h-4 w-4"></i><span class="text-sm">${i.label}</span></button>`).join(''); lucide.createIcons(); };
+        const renderGenerateButton = () => { if (state.isGenerating) { generateBtn.innerHTML = `<div class="spinner mr-2"></div> Generating...`; generateBtn.disabled = true; } else { generateBtn.innerHTML = `<i data-lucide="sparkles" class="mr-2 h-4 w-4"></i> Generate AI Itinerary`; generateBtn.disabled = !state.formData.duration; } lucide.createIcons(); };
+        const renderItinerary = () => { if (state.generatedItinerary) { const itinerary = state.generatedItinerary; const daysHTML = itinerary.days.map(d => { const actHTML = d.activities.map(a => { const ecoBadge = a.ecoFriendly ? `<div class="flex items-center text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full"><i data-lucide="leaf" class="mr-1 h-3 w-3"></i> Eco-Friendly</div>` : ''; return `<div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-emerald-50 transition-colors"><div class="flex-shrink-0 mt-1"><div class="bg-white p-2 rounded-lg shadow-sm"><i data-lucide="${getActivityIconName(a.type)}" class="h-4 w-4 text-emerald-600"></i></div></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-1"><h4 class="font-medium text-gray-900">${a.title}</h4><div class="flex items-center text-sm text-gray-500"><i data-lucide="clock" class="mr-1 h-3 w-3"></i> ${a.time}</div></div><p class="text-sm text-gray-600 mb-2">${a.description}</p><div class="flex items-center justify-between"><div class="flex items-center text-xs text-gray-500"><i data-lucide="map-pin" class="mr-1 h-3 w-3"></i> ${a.location}</div>${ecoBadge}</div></div></div>`; }).join(''); return `<div class="p-6 border-b border-gray-100 last:border-b-0"><div class="flex items-center mb-4"><div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">${d.day}</div><div><h3 class="font-semibold text-emerald-800">${d.title}</h3><p class="text-sm text-gray-600">Day ${d.day}</p></div></div><div class="space-y-3">${actHTML}</div></div>`; }).join(''); itineraryContainer.innerHTML = `<div class="bg-white shadow-xl border-0 rounded-lg"><div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg p-6"><h2 class="flex items-center text-xl font-semibold"><i data-lucide="check-circle" class="mr-2 h-5 w-5"></i> ${itinerary.title}</h2><p class="text-green-100 mt-1">Your personalized itinerary is ready!</p></div><div class="max-h-[600px] overflow-y-auto">${daysHTML}<div class="p-6 bg-gray-50 rounded-b-lg"><div class="flex flex-col sm:flex-row gap-3"><button class="flex-1 justify-center p-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-md flex items-center"><i data-lucide="calendar" class="mr-2 h-4 w-4"></i> Save Itinerary</button><button class="flex-1 justify-center p-3 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-md flex items-center">Share with Friends</button></div></div></div></div>`; } else { itineraryContainer.innerHTML = `<div class="bg-white shadow-xl border-0 border-dashed border-emerald-300 rounded-lg"><div class="p-12 text-center"><div class="bg-emerald-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><i data-lucide="sparkles" class="h-8 w-8 text-emerald-600"></i></div><h3 class="text-lg font-medium text-emerald-800 mb-2">Your AI Itinerary</h3><p class="text-gray-600">Fill out the form to generate your personalized travel plan</p></div></div>`; } lucide.createIcons(); };
+        durationSelect.addEventListener('change', e => { state.formData.duration = e.target.value; renderGenerateButton(); });
+        travelTypeSelect.addEventListener('change', e => { state.formData.travelType = e.target.value; });
+        budgetSelect.addEventListener('change', e => { state.formData.budget = e.target.value; });
+        interestContainer.addEventListener('click', e => { const btn = e.target.closest('button'); if (btn?.dataset.interestId) { const id = btn.dataset.interestId; const interests = state.formData.interests; if (interests.includes(id)) state.formData.interests = interests.filter(i => i !== id); else interests.push(id); renderInterestButtons(); } });
+        generateBtn.addEventListener('click', () => { state.isGenerating = true; renderGenerateButton(); setTimeout(() => { state.generatedItinerary = mockItineraries[state.formData.duration] || mockItineraries['2-3']; state.isGenerating = false; renderGenerateButton(); renderItinerary(); }, 2000); });
+        renderInterestButtons(); renderGenerateButton(); renderItinerary();
+
+        // =============================================================
+        // ===== PAGE SWITCHING & ANIMATION LOGIC =====
+        // =============================================================
+        const filterRedirectBtn = document.getElementById('filter-redirect-btn');
+        const preloader = document.getElementById('preloader');
+        const xplorBharatContent = document.getElementById('xplor-bharat-content');
+        const itineraryGeneratorContent = document.getElementById('itinerary-generator-content');
+        const backToHomeBtn = document.getElementById('back-to-home-btn');
+        const homeLink = document.getElementById('home-link');
+        const animatableElements = itineraryGeneratorContent.querySelectorAll('.animatable');
+        
+        const showHomePage = () => {
+            itineraryGeneratorContent.style.display = 'none';
+            xplorBharatContent.style.display = 'block';
+            window.scrollTo(0, 0);
+            animatableElements.forEach(el => el.classList.remove('animate-fade-in'));
+        };
+
+        const showItineraryPage = () => {
+            preloader.style.display = 'flex'; 
+            setTimeout(() => {
+                preloader.style.display = 'none'; 
+                xplorBharatContent.style.display = 'none'; 
+                itineraryGeneratorContent.style.display = 'block'; 
+                
+                // Trigger animation
+                animatableElements.forEach((el, index) => {
+                    el.classList.remove('animate-fade-in'); 
+                    void el.offsetWidth; 
+                    setTimeout(() => {
+                        el.style.animationDelay = `${index * 0.2}s`;
+                        el.classList.add('animate-fade-in');
+                    }, 50);
+                });
+                
+                lucide.createIcons();
+                window.scrollTo(0, 0);
+            }, 2000); 
+        };
+
+        filterRedirectBtn.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            showItineraryPage();
+        });
+
+        backToHomeBtn.addEventListener('click', showHomePage);
+        
+        homeLink.addEventListener('click', (e) => {
+            if (itineraryGeneratorContent.style.display === 'block') {
+                e.preventDefault();
+                showHomePage();
+            }
+        });
+    });
+    </script>
+</body>
+</html>
