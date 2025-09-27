@@ -60,18 +60,16 @@ body {
     z-index: 1000;
     background: var(--navbar-bg);
     backdrop-filter: blur(10px);
-    /* Reduced padding for a slightly narrower look */
-    padding: 0rem 3%; 
+    padding: 1rem 5%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     transition: background-color 0.5s ease;
 }
 
 .nav-container {
     display: flex;
-    justify-content: space-between;  
+    justify-content: space-between;
     align-items: center;
-    /* Decreased max-width to reduce overall navbar width */
-    /* max-width: 1000px;  */
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -82,15 +80,12 @@ body {
     text-decoration: none;
     text-shadow: 0 0 10px var(--text-color);
     transition: color 0.5s ease;
-    /* IMPROVEMENT: Force text onto a single line */
-    white-space: nowrap; 
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    /* Adjusted gap to be slightly smaller as padding will add space */
-    gap: 0.5rem; 
+    gap: 2rem;
 }
 
 .nav-links a {
@@ -98,18 +93,12 @@ body {
     text-decoration: none;
     font-weight: 500;
     font-size: 1rem;
-    transition: color 0.3s ease, text-shadow 0.3s ease, background-color 0.3s ease;
-    /* Added padding for larger clickable area and better visual separation */
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    display: block; /* Ensure padding is applied correctly */
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .nav-links a:hover {
     color: var(--primary-color);
     text-shadow: 0 0 10px var(--primary-color);
-    /* Optional: subtle background change on hover for visual feedback */
-    background-color: rgba(255, 255, 255, 0.1); 
 }
 
 .theme-btn {
@@ -146,9 +135,9 @@ h1 {
     color: var(--header-text);
 }
 
-/* IMPROVEMENT 1: Centering Section Titles (h2) for better alignment */
 h2 {
     font-size: clamp(1.8rem, 5vw, 3rem);
+    text-align: center;
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
@@ -158,11 +147,6 @@ h2 {
 }
 
 section h2 {
-    /* Set margin-left/right to auto and display: block to center the inline-block h2 */
-    margin-left: auto;
-    margin-right: auto;
-    display: block; 
-    text-align: center; /* Center the text inside h2 */
     width: 100%;
     margin-bottom: 3rem;
 }
@@ -212,12 +196,6 @@ p {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 25px;
-    position: relative;
-    z-index: 1;
-    /* IMPROVEMENT: Limit the width of the inputs container */
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .calculator input,
@@ -310,11 +288,7 @@ body.light-theme .calculator input::placeholder {
 section {
     padding: 80px 5%;
     max-width: 1200px;
-    /* Ensuring horizontal centering of content */
-    margin-left: auto;
-    margin-right: auto;
-    /* Added text-align: center for sections that contain centered blocks (like calculator) */
-    text-align: center;
+    margin: 0 auto;
 }
 
 /* --- History Section --- */
@@ -362,11 +336,6 @@ section {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.5s ease, box-shadow 0.5s ease;
-    
-    /* IMPROVEMENT: Decrease width of the calculator section itself and center it */
-    max-width: 900px; /* Reduced from 1200px section max-width */
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .calculator h2,
@@ -409,6 +378,14 @@ section {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
+.calculator-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 1;
+}
 
 #result-container {
     max-height: 0;
@@ -417,8 +394,7 @@ section {
 }
 
 #result-container.visible {
-    /* FIX: Increased max-height to ensure all generated content is visible */
-    max-height: 500px; 
+    max-height: 300px;
 }
 
 #result-content {
@@ -432,9 +408,6 @@ section {
     color: var(--text-color);
     text-shadow: none;
     transition: background-color 0.5s ease;
-    /* Ensure content inside is aligned */
-    margin: 20px auto 0;
-    max-width: 600px; /* Optional: cap width for better readability */
 }
 
 /* --- Famous Places & Cuisine Grids --- */
@@ -445,10 +418,6 @@ section {
     gap: 2rem;
     justify-content: center;
     align-items: stretch;
-    /* IMPROVEMENT 2: Explicitly center the grid itself within the section */
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; /* Ensure it spans the full content width */
 }
 
 /* Base card styles and transition for animation */
@@ -457,12 +426,10 @@ section {
     height: 400px;
     perspective: 1000px;
     border-radius: 15px;
-    /* box-shadow: 0 8px 30px var(--card-shadow); */
+    box-shadow: 0 8px 30px var(--card-shadow);
     cursor: pointer;
     transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     opacity: 0;
-    /* Ensure no unwanted spacing */
-    vertical-align: top;
 }
 
 /* Initial hidden state with off-screen transform */
@@ -514,19 +481,12 @@ section {
     backface-visibility: hidden;
     border-radius: 15px;
     overflow: hidden;
-    /* IMPROVEMENT: Use flexbox to center content vertically/horizontally */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 }
 
 /* Front Faces */
 .card-front,
 .cuisine-card-front {
     background: #fff;
-    /* Reset flex alignment for the media element to take precedence */
-    display: block; 
 }
 
 .card-front video,
@@ -534,11 +494,8 @@ section {
 .cuisine-card-front img {
     width: 100%;
     height: 100%;
-    /* IMPROVEMENT: object-fit: cover ensures the image/video fills the space, potentially clipping if aspect ratios don't match */
-    object-fit: cover; 
+    object-fit: cover;
     transition: transform 0.6s ease;
-    /* Ensure media is aligned to the top/center if needed, though cover should fill */
-    display: block;
 }
 
 .card:hover video,
@@ -553,11 +510,9 @@ section {
     left: 0;
     right: 0;
     padding: 20px;
-    color: #ecf0f1; /* Changed from --light-text to text-color for dark theme compatibility */
     background: rgba(0, 0, 0, 0.4);
+    color: var(--light-text);
     transition: background 0.3s ease;
-    /* Reset flex-direction from card-front parent */
-    display: block;
 }
 
 .cuisine-card:hover .cuisine-info {
@@ -570,7 +525,10 @@ section {
     background: linear-gradient(135deg, #001f44, #007991);
     color: #fff;
     transform: rotateY(180deg);
-    /* Already has flex setup from general card-back style */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
     text-align: center;
 }
@@ -584,7 +542,8 @@ section {
 }
 
 .cuisine-info h3 {
-    color: #fff; /* Ensures cuisine title on front is always light */
+    color: var(--light-text);
+    /* Ensures cuisine title on front is always light */
 }
 
 .card-back p,
@@ -607,13 +566,11 @@ footer {
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
     .nav-links {
-        /* Revert to stacking on small screens if necessary, though currently hidden by default */
         display: none;
     }
 
     .calculator-inputs {
-        /* Allow the grid to collapse to a single column */
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
     .calculator input,
