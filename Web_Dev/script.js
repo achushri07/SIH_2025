@@ -27,7 +27,26 @@ document.addEventListener("DOMContentLoaded", () => {
             filter_no: 'No',
             filter_rating: 'Hotel Rating',
             get_predictions_btn: '🔮 Get Predictions',
-            // ... (add all other English translations)
+            destinations_title: 'Top Destinations',
+            dest_goa_title: 'Goa Beaches',
+            dest_goa_desc: 'Golden sands & nightlife.',
+            dest_himalayas_title: 'Himalayan Peaks',
+            dest_himalayas_desc: 'Snow-clad adventures.',
+            dest_jaipur_title: 'Jaipur Palaces',
+            dest_jaipur_desc: 'Royal heritage.',
+            dest_kodaikanal_title: 'Kodaikanal',
+            dest_kodaikanal_desc: 'Serene lakes.',
+            dest_ziro_title: 'Ziro',
+            dest_ziro_desc: 'Verdant Valley.',
+            cuisine_title: 'Indian Delicacies',
+            cuisine_biryani: 'Biryani',
+            cuisine_butter_chicken: 'Butter Chicken',
+            cuisine_dosa: 'Dosa',
+            cuisine_mysore_pak: 'Mysore Pak',
+            cuisine_gulab_jamun: 'Gulab Jamun',
+            chatbot_welcome: 'Hi, I am YatraGenie, your personalised trip planner.',
+            chatbot_placeholder: 'Type your message...',
+            footer_text: '© 2025 Xplor Bharat. All Rights Reserved.'
         },
         hi: {
             nav_home: 'होम',
@@ -50,7 +69,26 @@ document.addEventListener("DOMContentLoaded", () => {
             filter_no: 'नहीं',
             filter_rating: 'होटल रेटिंग',
             get_predictions_btn: '🔮 भविष्यवाणियाँ प्राप्त करें',
-             // ... (add all other Hindi translations)
+            destinations_title: 'शीर्ष गंतव्य',
+            dest_goa_title: 'गोवा के समुद्र तट',
+            dest_goa_desc: 'सुनहरी रेत और नाइटलाइफ़।',
+            dest_himalayas_title: 'हिमालय की चोटियाँ',
+            dest_himalayas_desc: 'बर्फ से ढके रोमांच।',
+            dest_jaipur_title: 'जयपुर के महल',
+            dest_jaipur_desc: 'शाही विरासत।',
+            dest_kodaikanal_title: 'कोडाइकनाल',
+            dest_kodaikanal_desc: 'शांत झीलें।',
+            dest_ziro_title: 'जिरो',
+            dest_ziro_desc: 'हरी-भरी घाटी।',
+            cuisine_title: 'भारतीय व्यंजन',
+            cuisine_biryani: 'बिरयानी',
+            cuisine_butter_chicken: 'बटर चिकन',
+            cuisine_dosa: 'डोसा',
+            cuisine_mysore_pak: 'मैसूर पाक',
+            cuisine_gulab_jamun: 'गुलाब जामुन',
+            chatbot_welcome: 'नमस्ते, मैं यात्राजिनी हूँ, आपका व्यक्तिगत यात्रा योजनाकार।',
+            chatbot_placeholder: 'अपना संदेश टाइप करें...',
+            footer_text: '© 2025 एक्सप्लोर भारत। सर्वाधिकार सुरक्षित।'
         },
         mr: {
             nav_home: 'मुख्यपृष्ठ',
@@ -73,7 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
             filter_no: 'नाही',
             filter_rating: 'हॉटेल रेटिंग',
             get_predictions_btn: '🔮 अंदाज मिळवा',
-             // ... (add all other Marathi translations)
+            destinations_title: 'शीर्ष गंतव्ये',
+            dest_goa_title: 'गोव्याचे समुद्रकिनारे',
+            dest_goa_desc: 'सोनेरी वाळू आणि नाईटलाइफ.',
+            dest_himalayas_title: 'हिमालयीन शिखरे',
+            dest_himalayas_desc: 'बर्फाच्छादित साहसे.',
+            dest_jaipur_title: 'जयपूरचे राजवाडे',
+            dest_jaipur_desc: 'शाही वारसा.',
+            dest_kodaikanal_title: 'कोडाइकनाल',
+            dest_kodaikanal_desc: 'शांत सरोवर.',
+            dest_ziro_title: 'झिरो',
+            dest_ziro_desc: 'हिरवीगार दरी.',
+            cuisine_title: 'भारतीय स्वादिष्ट पदार्थ',
+            cuisine_biryani: 'बिर्याणी',
+            cuisine_butter_chicken: 'बटर चिकन',
+            cuisine_dosa: 'डोसा',
+            cuisine_mysore_pak: 'म्हैसूर पाक',
+            cuisine_gulab_jamun: 'गुलाब जामुन',
+            chatbot_welcome: 'नमस्कार, मी यात्राजिनी आहे, तुमचा वैयक्तिक सहल नियोजक।',
+            chatbot_placeholder: 'तुमचा संदेश टाइप करा...',
+            footer_text: '© 2025 एक्सप्लोर भारत। सर्व हक्क राखीव.'
         },
         es: {
             nav_home: 'Inicio',
@@ -96,7 +153,26 @@ document.addEventListener("DOMContentLoaded", () => {
             filter_no: 'No',
             filter_rating: 'Calificación del hotel',
             get_predictions_btn: '🔮 Obtener Predicciones',
-             // ... (add all other Spanish translations)
+            destinations_title: 'Mejores Destinos',
+            dest_goa_title: 'Playas de Goa',
+            dest_goa_desc: 'Arenas doradas y vida nocturna.',
+            dest_himalayas_title: 'Picos del Himalaya',
+            dest_himalayas_desc: 'Aventuras nevadas.',
+            dest_jaipur_title: 'Palacios de Jaipur',
+            dest_jaipur_desc: 'Herencia real.',
+            dest_kodaikanal_title: 'Kodaikanal',
+            dest_kodaikanal_desc: 'Lagos serenos.',
+            dest_ziro_title: 'Ziro',
+            dest_ziro_desc: 'Valle verde.',
+            cuisine_title: 'Delicias Indias',
+            cuisine_biryani: 'Biryani',
+            cuisine_butter_chicken: 'Pollo a la mantequilla',
+            cuisine_dosa: 'Dosa',
+            cuisine_mysore_pak: 'Mysore Pak',
+            cuisine_gulab_jamun: 'Gulab Jamun',
+            chatbot_welcome: 'Hola, soy YatraGenie, tu planificador de viajes personalizado.',
+            chatbot_placeholder: 'Escribe tu mensaje...',
+            footer_text: '© 2025 Xplor Bharat. Todos los derechos reservados.'
         }
     };
 
@@ -111,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-        localStorage.setItem('language', lang); // Save language choice
+        localStorage.setItem('language', lang);
     };
 
     document.querySelectorAll('.lang-switcher').forEach(button => {
@@ -139,9 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = localStorage.getItem('language') || 'en';
-            utterance.onend = () => {
-                isSpeaking = false;
-            };
+            utterance.onend = () => { isSpeaking = false; };
             window.speechSynthesis.speak(utterance);
             isSpeaking = true;
         }
@@ -167,22 +241,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendChatBtn = document.getElementById("chatbot-send-btn");
     const chatInputField = document.getElementById("chatbot-input-field");
     const chatMessages = document.getElementById("chatbot-messages");
-    const aiPlannerBtn = document.getElementById("ai-planner-btn"); // Get AI Planner button
+    const aiPlannerBtn = document.getElementById("ai-planner-btn");
 
     const toggleChatbot = () => {
         const isVisible = chatPop.style.display === "flex";
         chatPop.style.display = isVisible ? "none" : "flex";
     };
 
-    chatBtn.addEventListener("click", toggleChatbot);
-    closeChatbotBtn.addEventListener("click", toggleChatbot);
-    
-    // Event listener for AI Planner button to open chatbot
-    aiPlannerBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        toggleChatbot();
+    [chatBtn, closeChatbotBtn, aiPlannerBtn].forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            toggleChatbot();
+        });
     });
-
+    
     const appendMessage = (text, sender) => {
         const messageElement = document.createElement('div');
         messageElement.classList.add('chat-message', `${sender}-message`);
@@ -220,15 +292,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let index = 0;
-
     function nextHero() {
         if (heroBgs.length === 0) return;
         heroBgs.forEach(bg => bg.classList.remove("active"));
         heroBgs[index].classList.add("active");
-
         const currentLang = localStorage.getItem('language') || 'en';
         const currentQuotes = quotes[currentLang];
-
         heroQuote.style.opacity = 0;
         setTimeout(() => {
             heroQuote.textContent = currentQuotes[index];
@@ -238,10 +307,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     nextHero();
     setInterval(nextHero, 4000);
-    
-    // --- SCROLL REVEAL ---
-    const revealEls = document.querySelectorAll(".section,.card,.food-card");
 
+    // --- SCROLL REVEAL (FOR SECTIONS AND CARDS) ---
+    const revealEls = document.querySelectorAll(".section, .scroll-animate");
     function reveal() {
         const trig = window.innerHeight * 0.85;
         revealEls.forEach(el => {
@@ -255,7 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- STAR RATING ---
     const stars = document.querySelectorAll(".star-rating span");
-    const ratingContainer = document.querySelector(".star-rating");
     stars.forEach((star, index) => {
         star.addEventListener("mouseover", () => {
             stars.forEach((s, i) => s.classList.toggle("hovered", i <= index));
@@ -268,11 +335,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     });
-    ratingContainer.addEventListener("mouseout", () => {
+    document.querySelector(".star-rating").addEventListener("mouseout", () => {
         stars.forEach(s => s.classList.remove("hovered"));
-        stars.forEach((s, i) => {
-            s.classList.toggle("selected", i < selectedRating);
-        });
+        stars.forEach((s, i) => s.classList.toggle("selected", i < selectedRating));
     });
 
     // --- FILTER CONTROLS ---
@@ -284,13 +349,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault();
                 const selectedValue = option.getAttribute('data-value');
                 const dataType = option.getAttribute('data-type');
-
                 const currentLang = localStorage.getItem('language') || 'en';
                 const translatedYes = translations[currentLang]['filter_yes'];
                 const translatedNo = translations[currentLang]['filter_no'];
-
                 valueSpan.textContent = `: ${selectedValue === 'Yes' ? translatedYes : translatedNo}`;
-
                 if (dataType === 'festival') selectedFestival = selectedValue;
                 else if (dataType === 'holiday') selectedHoliday = selectedValue;
             });
@@ -298,8 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- PREDICTION LOGIC ---
-    const predictionBtn = document.getElementById('prediction-btn');
-    const planTripBtn = document.getElementById('plan-trip-btn');
     const getPredictions = () => {
         const destination = document.getElementById('destination-input').value.trim();
         if (!destination || !selectedFestival || !selectedHoliday || selectedRating === 0) {
@@ -308,6 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         alert(`Getting predictions for ${destination}...\nThis is a front-end demonstration. A backend is needed for real predictions.`);
     };
-    predictionBtn.addEventListener('click', getPredictions);
-    planTripBtn.addEventListener('click', getPredictions);
+    document.getElementById('prediction-btn').addEventListener('click', getPredictions);
+    document.getElementById('plan-trip-btn').addEventListener('click', getPredictions);
 });
