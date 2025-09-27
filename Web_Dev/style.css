@@ -87,7 +87,6 @@ body.dark .navbar {
     position: relative;
     transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
     font-size: 20px;
-    /* Flexbox for icon alignment */
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -466,7 +465,8 @@ body.dark .section-title {
     text-shadow: 0 0 6px var(--glow-orange);
 }
 
-.card-container {
+.card-container,
+.food-slider {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
@@ -512,13 +512,6 @@ body.dark .card:hover {
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-cyan);
 }
 
-.food-slider {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
 .food-card {
     width: 200px;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 224, 224, 0.7) 100%);
@@ -536,6 +529,8 @@ body.dark .food-card {
 
 .food-card img {
     width: 100%;
+    height: 150px;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.4s;
@@ -554,33 +549,36 @@ body.dark .food-card:hover {
     box-shadow: 0 20px 25px rgba(0, 0, 0, 0.5), 0 0 20px 4px var(--glow-orange);
 }
 
-/* ===== FOOTER ===== */
-footer {
-    text-align: center;
-    padding: 1rem;
-    border-top: 1px solid rgba(0, 255, 255, 0.2);
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 128, 0, 0.05));
-}
-
-body.dark footer {
-    border-top-color: rgba(255, 255, 255, 0.1);
-}
-
 /* ===== ANIMATION ON SCROLL ===== */
-.section,
-.card,
-.food-card {
+.section {
     opacity: 0;
-    transform: translateY(40px) scale(0.95);
-    transition: all 0.6s ease;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.section.show,
-.card.show,
-.food-card.show {
+.section.show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
 }
+
+.scroll-animate {
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-animate:nth-child(odd) {
+     transform: perspective(800px) rotateY(-90deg) translateX(-100px);
+}
+
+.scroll-animate:nth-child(even) {
+    transform: perspective(800px) rotateY(90deg) translateX(100px);
+}
+
+.scroll-animate.show {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0) translateX(0);
+}
+
 
 /* ===== YATRA GENIE CHATBOT STYLES ===== */
 #chatbot-btn {
@@ -609,12 +607,9 @@ body.dark footer {
 }
 
 @keyframes pulse {
-
-    0%,
-    100% {
+    0%, 100% {
         box-shadow: 0 0 12px var(--glow-cyan);
     }
-
     50% {
         box-shadow: 0 0 20px var(--glow-orange);
     }
@@ -649,7 +644,6 @@ body.dark #chatbot-popup {
         opacity: 0;
         transform: scale(0.5) translateY(20px) rotateX(-20deg);
     }
-
     to {
         opacity: 1;
         transform: scale(1) translateY(0) rotateX(0deg);
@@ -771,35 +765,41 @@ body.dark #chatbot-send-btn {
     transform: scale(1.1);
 }
 
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 128, 0, 0.05));
+}
+
+body.dark footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px) {
     .nav-links {
         display: none;
     }
-
     .search-container {
         flex-direction: column;
     }
-
     .hero-content .search-bar {
         width: 100%;
     }
-
     .card-container,
     .food-slider {
         flex-direction: column;
         align-items: center;
     }
-
     .hero-content h2 {
         font-size: 1.8rem;
     }
-
     .filter-controls {
         flex-direction: column;
         align-items: stretch;
     }
-
     #chatbot-popup {
         width: calc(100vw - 2.4rem);
         max-height: 60vh;
