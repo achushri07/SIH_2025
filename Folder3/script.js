@@ -38,30 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.filter-dropdown').forEach(dd => { const vs = dd.querySelector('.selected-value'); if (!vs) return; dd.querySelectorAll('.option-yn').forEach(opt => opt.addEventListener('click', e => { e.preventDefault(); const val = opt.dataset.value, type = opt.dataset.type, lang = localStorage.getItem('language') || 'en'; vs.textContent = `: ${val === 'Yes' ? translations[lang].filter_yes : translations[lang].filter_no}`; if (type === 'festival') selectedFestival = val; else if (type === 'holiday') selectedHoliday = val; })); });
 
     // =============================================================
-    // ===== MODIFIED getPredictions FUNCTION WITH REDIRECT LOGIC =====
+    // ===== MANALI REDIRECT LOGIC (UNCHANGED) =====
     // =============================================================
     const getPredictions = () => {
         const destination = document.getElementById('destination-input').value.toLowerCase().trim();
 
-        // 1. Check for "manali" input
         if (destination === 'manali') {
             const splashScreen = document.getElementById('manali-splash-logo');
             splashScreen.style.display = 'flex';
-            // Force reflow to ensure the opacity transition works
             void splashScreen.offsetWidth;
             splashScreen.classList.add('show');
 
-            // 2. Set timeout for 3000ms (3 seconds) before redirecting
             setTimeout(() => {
-                // 3. Redirect to the Manali site (assuming the second HTML snippet is saved as this file)
                 window.location.href = 'manali-site.html';
             }, 3000);
 
-            // Stop normal prediction flow
             return;
         }
 
-        // Normal prediction logic for other inputs
         if (!document.getElementById('destination-input').value.trim() || !selectedFestival || !selectedHoliday || selectedRating === 0) {
             alert('Please fill in all fields: Destination, Festive Season, Holiday, and Hotel Rating.');
             return;
@@ -74,26 +68,134 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =============================================================
-    // ===== SCRIPT FOR AI ITINERARY GENERATOR (Logic restored) =====
+    // ===== NEW AI ITINERARY GENERATOR LOGIC (MERGED) =====
     // =============================================================
 
-    const state = { formData: { duration: '', interests: [], travelType: '', budget: '' }, generatedItinerary: null, isGenerating: false };
-    const interestsData = [{ id: 'waterfalls', label: 'Waterfalls', icon: 'waves' }, { id: 'wildlife', label: 'Wildlife', icon: 'trees' }, { id: 'culture', label: 'Tribal Culture', icon: 'users' }, { id: 'adventure', label: 'Adventure Sports', icon: 'mountain' }, { id: 'photography', label: 'Photography', icon: 'camera' }, { id: 'nature', label: 'Nature Walks', icon: 'leaf' }];
-    const mockItineraries = { '2-3': { title: "Weekend Waterfall Escape", days: [{ day: 1, title: "Arrival & Dassam Falls", activities: [{ time: "9:00 AM", title: "Arrive in Ranchi", description: "Check into eco-friendly homestay near Dassam Falls", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "11:00 AM", title: "Dassam Falls Exploration", description: "Trek to the spectacular 44-feet waterfall, enjoy photography and natural pools", location: "Dassam Falls", type: "attraction", ecoFriendly: true }, { time: "2:00 PM", title: "Local Tribal Lunch", description: "Traditional Santali cuisine at local homestay with cultural performance", location: "Tribal Village", type: "food", ecoFriendly: true }, { time: "6:00 PM", title: "Sunset at Tagore Hill", description: "Panoramic views of Ranchi city and surrounding forests", location: "Tagore Hill", type: "viewpoint", ecoFriendly: false }] }, { day: 2, title: "Hundru Falls & Tribal Culture", activities: [{ time: "7:00 AM", title: "Journey to Hundru Falls", description: "Early morning drive to Jharkhand's highest waterfall (322 feet)", location: "Hundru Falls", type: "transport", ecoFriendly: true }, { time: "9:00 AM", title: "Hundru Falls Trek", description: "Challenging trek with breathtaking views and natural swimming spots", location: "Hundru Falls", type: "attraction", ecoFriendly: true }, { time: "1:00 PM", title: "Tribal Craft Workshop", description: "Learn Dokra metal craft techniques from local artisans", location: "Craft Village", type: "cultural", ecoFriendly: true }, { time: "4:00 PM", title: "Departure", description: "Return journey with memories and handcrafted souvenirs", location: "Ranchi", type: "transport", ecoFriendly: false }] }] }, '4-5': { title: "Complete Jharkhand Explorer", days: [{ day: 1, title: "Ranchi Arrival & Local Sights", activities: [{ time: "10:00 AM", title: "Arrive & City Tour", description: "Check-in and explore Ranchi's historical sites and markets", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "2:00 PM", title: "Dassam Falls", description: "First waterfall experience with local guide stories", location: "Dassam Falls", type: "attraction", ecoFriendly: true }] }, { day: 2, title: "Netarhat Hill Station", activities: [{ time: "6:00 AM", title: "Journey to Netarhat", description: "Scenic drive to the 'Queen of Chotanagpur' hill station", location: "Netarhat", type: "transport", ecoFriendly: true }, { time: "8:00 AM", title: "Sunrise Point", description: "Witness spectacular sunrise views over the Chotanagpur plateau", location: "Netarhat Sunrise Point", type: "viewpoint", ecoFriendly: true }] }, { day: 3, title: "Betla National Park Safari", activities: [{ time: "5:00 AM", title: "Wildlife Safari", description: "Early morning safari to spot tigers, elephants, and diverse birdlife", location: "Betla National Park", type: "wildlife", ecoFriendly: true }] }, { day: 4, title: "Cultural Immersion Day", activities: [{ time: "9:00 AM", title: "Tribal Village Visit", description: "Experience authentic Santali and Munda tribal lifestyle", location: "Traditional Village", type: "cultural", ecoFriendly: true }] }] } };
-    const getActivityIconName = type => ({ transport: 'car', attraction: 'map-pin', food: 'home', cultural: 'users', wildlife: 'trees', viewpoint: 'mountain' }[type] || 'map-pin');
-    const durationSelect = document.getElementById('duration'), travelTypeSelect = document.getElementById('travelType'), budgetSelect = document.getElementById('budget'), generateBtn = document.getElementById('generate-btn'), interestContainer = document.getElementById('interest-buttons-container'), itineraryContainer = document.getElementById('itinerary-container');
-    const renderInterestButtons = () => { interestContainer.innerHTML = interestsData.map(i => `<button data-interest-id="${i.id}" class="justify-start h-auto p-3 text-left w-full flex items-center border rounded-md transition-colors ${state.formData.interests.includes(i.id) ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-white border-gray-300 hover:bg-emerald-50'}"><i data-lucide="${i.icon}" class="mr-2 h-4 w-4"></i><span class="text-sm">${i.label}</span></button>`).join(''); lucide.createIcons(); };
-    const renderGenerateButton = () => { if (state.isGenerating) { generateBtn.innerHTML = `<div class="spinner mr-2"></div> Generating...`; generateBtn.disabled = true; } else { generateBtn.innerHTML = `<i data-lucide="sparkles" class="mr-2 h-4 w-4"></i> Generate AI Itinerary`; generateBtn.disabled = !state.formData.duration; } lucide.createIcons(); };
-    const renderItinerary = () => { if (state.generatedItinerary) { const itinerary = state.generatedItinerary; const daysHTML = itinerary.days.map(d => { const actHTML = d.activities.map(a => { const ecoBadge = a.ecoFriendly ? `<div class="flex items-center text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full"><i data-lucide="leaf" class="mr-1 h-3 w-3"></i> Eco-Friendly</div>` : ''; return `<div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-emerald-50 transition-colors"><div class="flex-shrink-0 mt-1"><div class="bg-white p-2 rounded-lg shadow-sm"><i data-lucide="${getActivityIconName(a.type)}" class="h-4 w-4 text-emerald-600"></i></div></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-1"><h4 class="font-medium text-gray-900">${a.title}</h4><div class="flex items-center text-sm text-gray-500"><i data-lucide="clock" class="mr-1 h-3 w-3"></i> ${a.time}</div></div><p class="text-sm text-gray-600 mb-2">${a.description}</p><div class="flex items-center justify-between"><div class="flex items-center text-xs text-gray-500"><i data-lucide="map-pin" class="mr-1 h-3 w-3"></i> ${a.location}</div>${ecoBadge}</div></div></div>`; }).join(''); return `<div class="p-6 border-b border-gray-100 last:border-b-0"><div class="flex items-center mb-4"><div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">${d.day}</div><div><h3 class="font-semibold text-emerald-800">${d.title}</h3><p class="text-sm text-gray-600">Day ${d.day}</p></div></div><div class="space-y-3">${actHTML}</div></div>`; }).join(''); itineraryContainer.innerHTML = `<div class="bg-white shadow-xl border-0 rounded-lg"><div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg p-6"><h2 class="flex items-center text-xl font-semibold"><i data-lucide="check-circle" class="mr-2 h-5 w-5"></i> ${itinerary.title}</h2><p class="text-green-100 mt-1">Your personalized itinerary is ready!</p></div><div class="max-h-[600px] overflow-y-auto">${daysHTML}<div class="p-6 bg-gray-50 rounded-b-lg"><div class="flex flex-col sm:flex-row gap-3"><button class="flex-1 justify-center p-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-md flex items-center"><i data-lucide="calendar" class="mr-2 h-4 w-4"></i> Save Itinerary</button><button class="flex-1 justify-center p-3 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-md flex items-center">Share with Friends</button></div></div></div></div>`; } else { itineraryContainer.innerHTML = `<div class="bg-white shadow-xl border-0 border-dashed border-emerald-300 rounded-lg"><div class="p-12 text-center"><div class="bg-emerald-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4"><i data-lucide="sparkles" class="h-8 w-8 text-emerald-600"></i></div><h3 class="text-lg font-medium text-emerald-800 mb-2">Your AI Itinerary</h3><p class="text-gray-600">Fill out the form to generate your personalized travel plan</p></div></div>`; } lucide.createIcons(); };
-    durationSelect.addEventListener('change', e => { state.formData.duration = e.target.value; renderGenerateButton(); });
-    travelTypeSelect.addEventListener('change', e => { state.formData.travelType = e.target.value; });
-    budgetSelect.addEventListener('change', e => { state.formData.budget = e.target.value; });
-    interestContainer.addEventListener('click', e => { const btn = e.target.closest('button'); if (btn?.dataset.interestId) { const id = btn.dataset.interestId; const interests = state.formData.interests; if (interests.includes(id)) state.formData.interests = interests.filter(i => i !== id); else interests.push(id); renderInterestButtons(); } });
-    generateBtn.addEventListener('click', () => { state.isGenerating = true; renderGenerateButton(); setTimeout(() => { state.generatedItinerary = mockItineraries[state.formData.duration] || mockItineraries['2-3']; state.isGenerating = false; renderGenerateButton(); renderItinerary(); }, 2000); });
-    renderInterestButtons(); renderGenerateButton(); renderItinerary();
+    const itState = {
+        formData: { duration: '', interests: [], travelType: '', budget: '' },
+        generatedItinerary: null,
+        isGenerating: false,
+    };
+
+    const itInterests = [
+        { id: 'waterfalls_lakes', label: 'Waterfalls & Lakes', icon: 'waves' },
+        { id: 'adventure_trekking', label: 'Adventure & Trekking', icon: 'mountain' },
+        { id: 'beaches_islands', label: 'Beaches & Islands', icon: 'ship' },
+        { id: 'heritage_culture', label: 'Heritage & Culture', icon: 'landmark' },
+        { id: 'nature_wildlife', label: 'Nature & Wildlife', icon: 'leaf' },
+        { id: 'food_culinary', label: 'Food & Culinary', icon: 'utensils-crossed' },
+        { id: 'shopping_markets', label: 'Shopping & Markets', icon: 'shopping-cart' },
+        { id: 'festivals_nightlife', label: 'Festivals & Nightlife', icon: 'party-popper' }
+    ];
+
+    const itMockItineraries = {
+        default: { title: "Spiritual Rishikesh Escape", days: [{ day: 1, title: "Arrival & Spiritual Evening", activities: [{ time: "2:00 PM", title: "Arrive in Rishikesh", description: "Check into a serene ashram or riverside hotel.", location: "Rishikesh", type: "transport" }, { time: "5:00 PM", title: "Ganga Aarti Ceremony", description: "Witness the mesmerizing evening prayer ceremony at Parmarth Niketan.", location: "Parmarth Niketan Ghat", type: "cultural" }, { time: "7:30 PM", title: "Sattvic Dinner", description: "Enjoy a healthy and pure vegetarian meal at a local cafe.", location: "Ram Jhula", type: "food" }] }, { day: 2, title: "Yoga, Beatles & Bridges", activities: [{ time: "7:00 AM", title: "Sunrise Yoga", description: "Participate in a morning yoga session overlooking the Ganges.", location: "Your Ashram/Hotel", type: "activity" }, { time: "10:00 AM", title: "Beatles Ashram Exploration", description: "Explore the graffiti-covered domes where The Beatles stayed.", location: "Beatles Ashram", type: "attraction" }, { time: "1:00 PM", title: "Cross Laxman Jhula", description: "Walk across the iconic suspension bridge with stunning river views.", location: "Laxman Jhula", type: "attraction" }] }] },
+        adventure_trekking: { title: "Himalayan Trekking Adventure", days: [{ day: 1, title: "Manali to Chika", activities: [{ time: "9:00 AM", title: "Drive to Jobra", description: "Start your journey with a scenic drive from Manali to the trek starting point.", location: "Jobra", type: "transport" }, { time: "11:00 AM", title: "Trek to Chika", description: "A gentle 2-hour trek through lush forests to the beautiful campsite of Chika.", location: "Chika Campsite", type: "trekking" }, { time: "6:00 PM", title: "Campfire & Stargazing", description: "Enjoy dinner by the campfire under a clear Himalayan sky.", location: "Chika", type: "activity" }] }, { day: 2, title: "Trek to Balu ka Ghera", activities: [{ time: "8:00 AM", title: "Begin Trek", description: "Trek along the river, crossing streams and boulder sections.", location: "Trail to Balu ka Ghera", type: "trekking" }, { time: "2:00 PM", title: "Reach Campsite", description: "Arrive at Balu ka Ghera (Heap of Sand), a flat plain at the base of Hampta Pass.", location: "Balu ka Ghera", type: "attraction" }] }] },
+        beaches_islands: { title: "Andaman Islands Paradise", days: [{ day: 1, title: "Arrival in Port Blair & Cellular Jail", activities: [{ time: "11:00 AM", title: "Arrive at Port Blair", description: "Transfer to your hotel and relax.", location: "Port Blair", type: "transport" }, { time: "3:00 PM", title: "Cellular Jail Visit", description: "Visit the historic colonial prison and learn about India's freedom struggle.", location: "Cellular Jail", type: "heritage_culture" }, { time: "6:00 PM", title: "Light & Sound Show", description: "Experience the moving saga of the freedom fighters at the Cellular Jail.", location: "Cellular Jail", type: "activity" }] }, { day: 2, title: "Havelock Island & Radhanagar Beach", activities: [{ time: "8:00 AM", title: "Ferry to Havelock", description: "Take a high-speed ferry to the stunning Havelock Island (Swaraj Dweep).", location: "Havelock Island", type: "transport" }, { time: "2:00 PM", title: "Radhanagar Beach", description: "Relax and swim at one of Asia's best beaches, known for its white sand and turquoise water.", location: "Radhanagar Beach", type: "attraction" }] }] },
+        heritage_culture: { title: "Royal Rajasthan Discovery", days: [{ day: 1, title: "Jaipur: The Pink City", activities: [{ time: "10:00 AM", title: "Amer Fort", description: "Explore the magnificent hilltop fort with its intricate architecture and stunning views.", location: "Amer Fort", type: "attraction" }, { time: "2:00 PM", title: "City Palace", description: "Visit the royal residence, a beautiful blend of Rajput and Mughal architecture.", location: "City Palace, Jaipur", type: "heritage_culture" }, { time: "5:00 PM", title: "Hawa Mahal", description: "Admire the iconic 'Palace of Winds' with its unique five-story facade.", location: "Hawa Mahal", type: "attraction" }] }, { day: 2, title: "Jodhpur: The Blue City", activities: [{ time: "10:00 AM", title: "Mehrangarh Fort", description: "Discover one of India's largest forts, towering over the blue city.", location: "Mehrangarh Fort", type: "attraction" }, { time: "3:00 PM", title: "Jaswant Thada", description: "Visit the beautiful marble cenotaph built in memory of Maharaja Jaswant Singh II.", location: "Jaswant Thada", type: "heritage_culture" }] }] }
+    };
+
+    const itGetActivityIconName = (type) => ({ 'transport': 'car', 'attraction': 'map-pin', 'food': 'utensils-crossed', 'cultural': 'landmark', 'activity': 'gamepad-2', 'trekking': 'mountain', 'heritage_culture': 'palace' }[type] || 'map-pin');
+
+    // --- DOM ELEMENTS (ITINERARY) ---
+    const itGenerateBtn = document.getElementById('generate-btn-new');
+    const itInterestContainer = document.getElementById('interest-buttons-container-it');
+    const itItineraryContainer = document.getElementById('itinerary-container-it');
+
+    // --- RENDER FUNCTIONS (ITINERARY) ---
+    function itRenderInterestButtons() {
+        if (!itInterestContainer) return;
+        itInterestContainer.innerHTML = itInterests.map(interest => {
+            const isSelected = itState.formData.interests.includes(interest.id);
+            return `<button data-interest-id="${interest.id}" class="interest-btn justify-start h-auto p-3 text-left w-full flex items-center rounded-md ${isSelected ? 'selected' : ''}"><i data-lucide="${interest.icon}" class="mr-2 h-4 w-4"></i><span class="text-sm">${interest.label}</span></button>`;
+        }).join('');
+        lucide.createIcons();
+    }
+
+    function itRenderGenerateButton() {
+        if (!itGenerateBtn) return;
+        if (itState.isGenerating) {
+            itGenerateBtn.innerHTML = `<div class="spinner mr-2 w-5 h-5 border-2 border-white border-r-transparent rounded-full"></div>Generating Your Perfect Trip...`;
+            itGenerateBtn.disabled = true;
+        } else {
+            itGenerateBtn.innerHTML = `<i data-lucide="sparkles" class="mr-2 h-5 w-5"></i>Generate AI Itinerary`;
+            itGenerateBtn.disabled = !itState.formData.duration;
+        }
+        lucide.createIcons();
+    }
+
+    function itRenderItinerary() {
+        if (!itItineraryContainer) return;
+        if (itState.generatedItinerary) {
+            const itinerary = itState.generatedItinerary;
+            const daysHTML = itinerary.days.map(day => {
+                const activitiesHTML = day.activities.map(activity => `<div class="flex items-start space-x-3 p-3 rounded-lg bg-dark-blue-bg hover:bg-opacity-50 transition-colors"><div class="flex-shrink-0 mt-1"><div class="bg-light-blue-bg p-2 rounded-lg shadow-sm border border-card-border"><i data-lucide="${itGetActivityIconName(activity.type)}" class="h-4 w-4 text-neon-cyan"></i></div></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-1"><h4 class="font-medium text-text-primary-it">${activity.title}</h4><div class="flex items-center text-sm text-text-secondary-it"><i data-lucide="clock" class="mr-1 h-3 w-3"></i>${activity.time}</div></div><p class="text-sm text-text-secondary-it mb-2">${activity.description}</p><div class="flex items-center justify-between"><div class="flex items-center text-xs text-text-secondary-it"><i data-lucide="map-pin" class="mr-1 h-3 w-3"></i>${activity.location}</div></div></div></div>`).join('');
+                return `<div class="p-4"><div class="flex items-center mb-4"><div class="bg-neon-cyan text-dark-blue-bg rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">${day.day}</div><div><h3 class="font-semibold">${day.title}</h3><p class="text-sm text-text-secondary-it">Day ${day.day}</p></div></div><div class="space-y-3">${activitiesHTML}</div></div>`;
+            }).join('');
+            itItineraryContainer.innerHTML = `<div class="control-block rounded-lg"><div class="p-6 border-b-2 border-neon-cyan"><h2 class="flex items-center text-xl font-semibold"><i data-lucide="check-circle" class="mr-2 h-5 w-5"></i>${itinerary.title}</h2><p class="text-text-secondary-it mt-1">Your personalized itinerary is ready!</p></div><div class="max-h-[80vh] overflow-y-auto">${daysHTML}</div></div>`;
+        } else {
+            itItineraryContainer.innerHTML = `<div class="control-block border-dashed h-full"><div class="p-12 text-center flex flex-col justify-center items-center h-full"><div class="bg-light-blue-bg border border-card-border rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4"><i data-lucide="sparkles" class="h-10 w-10 text-neon-cyan"></i></div><h3 class="text-lg font-medium text-text-primary-it mb-2">Your AI Itinerary</h3><p class="text-text-secondary-it">Fill out the form to generate your travel plan.</p></div></div>`;
+        }
+        lucide.createIcons();
+    }
+
+    // --- Custom Select Logic (ITINERARY) ---
+    function itInitializeCustomSelect(containerId, stateKey) {
+        const container = document.getElementById(containerId);
+        if (!container) return; // Exit if not found
+        const trigger = container.querySelector('.custom-select-trigger span');
+        const options = container.querySelectorAll('.custom-option');
+
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                trigger.innerHTML = option.innerHTML;
+                trigger.style.color = 'var(--text-primary-it)';
+                itState.formData[stateKey] = option.getAttribute('data-value');
+                if (stateKey === 'duration') { itRenderGenerateButton(); }
+                document.activeElement.blur();
+            });
+        });
+    }
+
+    // --- EVENT LISTENERS (ITINERARY) ---
+    if (itInterestContainer) {
+        itInterestContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('.interest-btn');
+            if (button && button.dataset.interestId) {
+                const interestId = button.dataset.interestId;
+                const interestsState = itState.formData.interests;
+                const index = interestsState.indexOf(interestId);
+
+                if (index > -1) {
+                    interestsState.splice(index, 1);
+                    button.classList.remove('selected');
+                } else {
+                    interestsState.push(interestId);
+                    button.classList.add('selected');
+                }
+            }
+        });
+    }
+
+    if (itGenerateBtn) {
+        itGenerateBtn.addEventListener('click', () => {
+            itState.isGenerating = true;
+            itRenderGenerateButton();
+            setTimeout(() => {
+                if (itState.formData.interests.includes('beaches_islands')) { itState.generatedItinerary = itMockItineraries.beaches_islands; }
+                else if (itState.formData.interests.includes('adventure_trekking')) { itState.generatedItinerary = itMockItineraries.adventure_trekking; }
+                else if (itState.formData.interests.includes('heritage_culture')) { itState.generatedItinerary = itMockItineraries.heritage_culture; }
+                else { itState.generatedItinerary = itMockItineraries.default; }
+                itState.isGenerating = false;
+                itRenderGenerateButton();
+                itRenderItinerary();
+            }, 2000);
+        });
+    }
 
     // =============================================================
-    // ===== PAGE SWITCHING & ANIMATION LOGIC (Restored) =====
+    // ===== PAGE SWITCHING & ANIMATION LOGIC (UNCHANGED) =====
     // =============================================================
     const filterRedirectBtn = document.getElementById('filter-redirect-btn');
     const preloader = document.getElementById('preloader');
@@ -127,17 +229,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 50);
             });
 
+            // Initialize the new itinerary content functions
+            itInitializeCustomSelect('duration-select-it', 'duration');
+            itInitializeCustomSelect('travelType-select-it', 'travelType');
+            itInitializeCustomSelect('budget-select-it', 'budget');
+            itRenderInterestButtons();
+            itRenderGenerateButton();
+            itRenderItinerary();
+
+
             lucide.createIcons();
             window.scrollTo(0, 0);
         }, 2000);
     };
 
-    // This is the restored logic for the 'Filter' button
     filterRedirectBtn.addEventListener('click', (e) => {
         e.preventDefault();
         showItineraryPage();
     });
-    // End restored logic
 
     backToHomeBtn.addEventListener('click', showHomePage);
 
@@ -147,4 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
             showHomePage();
         }
     });
+
+    // Initial render calls (only run when elements are present, for safety)
+    itRenderInterestButtons();
+    itRenderGenerateButton();
+    itRenderItinerary();
 });
