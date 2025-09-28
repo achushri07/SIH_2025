@@ -4,1403 +4,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xplor Bharat - Jharkhand Travel Guide</title>
+    <title>Xplor Bharat & AI Itinerary Planner</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* ==================== CUSTOM CSS VARIABLES & COLORS ==================== */
-        :root {
-            --color-primary: 255 56 92;
-            /* Equivalent to #FF385C (Xplor Bharat branding) */
-            --color-chart-2: 60 180 75;
-            /* Mock color for chart-2 (Green) */
-            --color-dark-grey: 156 163 175;
-            /* Mock color for dark:text-grey (gray-400) */
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-            /* Itinerary Generator Colors (Emerald/Green palette) */
-            --emerald-600: #059669;
-            --green-600: #10B981;
-            --emerald-800: #065F46;
-            --emerald-100: #D1FAE5;
 
-            /* Cultural Crafts Colors (Orange/Amber/Purple palette) */
-            --orange-600: 234 88 12;
-            --amber-50: 255 251 235;
-            --orange-800: 153 27 27;
-            --purple-600: 147 51 234;
-
-            --gray-50: #F9FAFB;
-        }
-
-        .bg-primary {
-            background-color: rgb(var(--color-primary));
-        }
-
-        .text-primary {
-            color: rgb(var(--color-primary));
-        }
-
-        .bg-primary\/10 {
-            background-color: rgba(var(--color-primary), 0.1);
-        }
-
-        .hover\:bg-primary\/90:hover {
-            background-color: rgba(var(--color-primary), 0.9);
-        }
-
-        .from-primary\/5 {
-            background-image: linear-gradient(to right, rgba(var(--color-primary), 0.05), rgba(var(--color-chart-2), 0.05));
-        }
-
-        .dark .dark\:text-grey {
-            color: rgb(var(--color-dark-grey));
-        }
-
-        .dark .dark\:text-black-300 {
-            color: #d1d5db;
-        }
-
-        /* Custom Colors from CulturalCrafts */
-        .bg-gradient-to-b-cultural {
-            background-image: linear-gradient(to bottom, #FFF7ED, #FFFBEB);
-        }
-
-        .text-orange-800 {
-            color: rgb(var(--orange-800));
-        }
-
-        .bg-orange-600 {
-            background-color: rgb(var(--orange-600));
-        }
-
-        .hover\:bg-orange-700:hover {
-            background-color: #c04c0d;
-        }
-
-        .border-orange-600 {
-            border-color: rgb(var(--orange-600));
-        }
-
-        .text-orange-600 {
-            color: rgb(var(--orange-600));
-        }
-
-        .text-purple-800 {
-            color: #581c87;
-        }
-
-        .text-purple-600 {
-            color: rgb(var(--purple-600));
-        }
-
-        .bg-purple-600 {
-            background-color: rgb(var(--purple-600));
-        }
-
-        .border-purple-600 {
-            border-color: rgb(var(--purple-600));
-        }
-
-        .text-\[\#c8c216\] {
-            color: #c8c216;
-        }
-
-        /* General UI Styles */
-        .ghost-button:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .dark .ghost-button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .text-custom-outline {
-            color: rgba(247, 33, 33, 1);
-        }
-
-        /* ==================== ICON MIMICS (Emojis) ==================== */
-        .leaf-icon::before {
-            content: "🌿";
-        }
-
-        .sun-icon::before {
-            content: "☀️";
-        }
-
-        .moon-icon::before {
-            content: "🌙";
-        }
-
-        .menu-icon::before {
-            content: "☰";
-        }
-
-        .chevron-down-icon::before {
-            content: "▼";
-        }
-
-        .sparkles-icon::before {
-            content: "✨";
-        }
-
-        .mappin-icon::before {
-            content: "📍";
-        }
-
-        .star-icon::before {
-            content: "⭐";
-        }
-
-        .arrow-right-icon::before {
-            content: "➜";
-        }
-
-        .users-icon::before {
-            content: "👥";
-        }
-
-        .home-icon::before {
-            content: "🏠";
-        }
-
-        .features-icon::before {
-            content: "⭐";
-        }
-
-        .explore-icon::before {
-            content: "🧭";
-        }
-
-        .filter-icon::before {
-            content: "▼";
-        }
-
-        .language-icon::before {
-            content: "🔠";
-        }
-
-        .icon-waves::before {
-            content: "🌊";
-        }
-
-        .icon-trees::before {
-            content: "🌳";
-        }
-
-        .icon-car::before {
-            content: "🚗";
-        }
-
-        .icon-mountain::before {
-            content: "⛰️";
-        }
-
-        .icon-clock::before {
-            content: "🕒";
-        }
-
-        .icon-checkcircle::before {
-            content: "✅";
-        }
-
-        .icon-calendar::before {
-            content: "📅";
-        }
-
-        .icon-hammer::before {
-            content: "🔨";
-        }
-
-        .icon-music::before {
-            content: "🎵";
-        }
-
-        .icon-heart::before {
-            content: "❤️";
-        }
-
-        .icon-share::before {
-            content: "📤";
-        }
-
-        .icon-play::before {
-            content: "▶️";
-        }
-
-        /* ==================== LAYOUT & ANIMATIONS ==================== */
-        #mobile-menu {
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 300px;
-            background-color: white;
-            border-left: 1px solid #e5e7eb;
-            box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-            z-index: 50;
-        }
-
-        #mobile-menu.open {
-            transform: translateX(0);
-        }
-
-        /* 3D and Hover Effects */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-
-        .card-3d {
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-            transform-style: preserve-3d;
-        }
-
-        .card-3d:hover {
-            transform: translateY(-12px) rotateX(8deg) rotateY(5deg) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-image-wrapper:hover .card-image {
-            transform: scale(1.1) rotate(2deg);
-            transition: transform 0.5s;
-        }
-
-        .btn-3d-hover {
-            transform-style: preserve-3d;
-            perspective: 500px;
-        }
-
-        .btn-3d-hover:hover {
-            transform: translateY(-8px) scale(1.05) rotateX(10deg);
-            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.3);
-            transition: all 0.2s ease-out;
-        }
-
-        /* Floating Hero Element Animation 1 */
-        @keyframes float-hero-small {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0) scale(1);
-            }
-
-            50% {
-                transform: translateY(-20px) rotate(360deg) scale(1.2);
-            }
-        }
-
-        .floating-hero-small {
-            animation: float-hero-small 4s infinite ease-in-out;
-        }
-
-        /* Floating Hero Element Animation 2 */
-        @keyframes float-hero-large {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0) scale(1);
-            }
-
-            50% {
-                transform: translateY(30px) rotate(-360deg) scale(0.8);
-            }
-        }
-
-        .floating-hero-large {
-            animation: float-hero-large 6s infinite ease-in-out 1s;
-        }
-
-        /* Floating Background Animation 2 (Hidden Gems) */
-        @keyframes float-animation {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(50px, -30px) scale(1.2);
-            }
-
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-        }
-
-        .floating-element {
-            animation: float-animation 8s infinite ease-in-out;
-        }
-
-        /* Floating Background Animation 3 (Final CTA) */
-        @keyframes float-animation-2 {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(-40px, 20px) scale(1.1);
-            }
-
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-        }
-
-        .floating-element-2 {
-            animation: float-animation-2 10s infinite ease-in-out;
-        }
-    </style>
 </head>
 
-<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+<body>
 
-    <div
-        class="container flex h-16 items-center justify-between px-4 sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm">
-
-        <div id="logo" class="flex items-center space-x-3 cursor-pointer group" onclick="handleNavClick('home')">
-            <div class="p-2 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-all duration-200 hover:rotate-180"
-                style="transition-duration: 0.3s;">
-                <span class="leaf-icon h-7 w-7 text-primary"></span>
-            </div>
-            <span class="text-2xl font-semibold text-foreground hover:scale-105" style="transition-duration: 0.2s;">
-                Xplor Bharat
-            </span>
-        </div>
-
-        <div class="hidden md:flex items-center space-x-1" id="desktop-menu">
-            <div>
-                <button id="theme-toggle"
-                    class="ghost-button ml-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-md transition-all duration-200"
-                    title="Toggle theme">
-                    <span id="theme-icon" class="sun-icon h-4 w-4"></span>
-                </button>
-            </div>
-
-            <div class="relative">
-                <button id="lang-trigger"
-                    class="ghost-button ml-2 text-foreground hover:bg-accent gap-1 p-2 rounded-md flex items-center transition-all duration-200"
-                    aria-label="Select language">
-                    <span class="language-icon h-4 w-4"></span>
-                    <span id="current-language" class="text-xs font-medium uppercase">EN</span>
-                    <span class="chevron-down-icon h-3 w-3"></span>
-                </button>
-                <div id="lang-dropdown"
-                    class="absolute hidden right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-md z-10">
-                </div>
-            </div>
-        </div>
-
-        <div class="md:hidden">
-            <button id="mobile-menu-trigger"
-                class="ghost-button p-2 rounded-md text-foreground hover:bg-accent transition-all duration-200"
-                aria-label="Toggle navigation menu">
-                <span id="menu-icon" class="menu-icon h-6 w-6" style="transition: transform 0.2s;"></span>
-            </button>
-        </div>
+    <div id="manali-splash-logo" class="">
+        <svg class="splash-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle class="logo-circle" cx="50" cy="50" r="45" />
+            <path class="logo-mountain" d="M25 65 L40 45 L50 55 L65 35 L75 65 Z" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+        <p style="font-size: 1.5rem; font-weight: 600;">Redirecting to Manali... 🏔️</p>
+    </div>
+    <div id="preloader">
+        <svg class="preloader-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle class="logo-circle" cx="50" cy="50" r="45" />
+            <path class="logo-mountain" d="M25 65 L40 45 L50 55 L65 35 L75 65 Z" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+        <p>Loading AI Itinerary Planner...</p>
     </div>
 
-    <section id="home-section"
-        class="relative h-[75vh] flex items-center justify-center overflow-hidden perspective-1000">
-
-        <div id="hero-image-wrapper" class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080"
-                alt="Jharkhand Culture" class="w-full h-full object-cover" />
+    <nav class="navbar">
+        <div class="logo"><img src="remove.png" alt="logo">
+            <h1>Xplor Bharat</h1>
         </div>
+        <ul class="nav-links">
+            <li><a href="#hero" id="home-link"><i class="fa-solid fa-house"></i><span
+                        data-translate="nav_home">Home</span></a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fa-solid fa-star"></i><span data-translate="nav_features">Features</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="ai-planner-btn"><span data-translate="nav_ai_planner">AI Planner</span></a></li>
+                    <li><a href="#" id="text-to-speech-btn"><i class="fa-solid fa-volume-high"></i><span
+                                data-translate="nav_tts">Text to Speech</span></a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#destinations"><i class="fa-solid fa-compass"></i><span
+                        data-translate="nav_explore">Explore</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#destinations"><span data-translate="nav_top_destinations">Top destinations</span></a>
+                    </li>
+                    <li><a href="#cuisine"><span data-translate="nav_indian_delicacy">Indian Delicacy</span></a></li>
+                </ul>
+            </li>
+            <li><a href="#" id="filter-redirect-btn"><i class="fa-solid fa-filter"></i><span
+                        data-translate="nav_filter">Filter</span></a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fa-solid fa-language"></i><span data-translate="nav_language">Language</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="lang-switcher" data-lang="en">English</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="hi">हिंदी (Hindi)</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="mr">मराठी (Marathi)</a></li>
+                    <li><a href="#" class="lang-switcher" data-lang="es">Español (Spanish)</a></li>
+                </ul>
+            </li>
+        </ul>
+        <button id="theme-toggle">🌙</button>
+    </nav>
 
-        <div id="hero-overlay"
-            class="absolute inset-0 bg-gradient-to-r from-black/50 to-black/30 z-10 transition-opacity duration-300">
-        </div>
-
-        <div class="floating-hero-small absolute top-20 left-10 w-4 h-4 bg-white/30 rounded-full z-20"></div>
-        <div class="floating-hero-large absolute bottom-32 right-16 w-6 h-6 bg-primary/30 rounded-full z-20"></div>
-
-        <div id="hero-content"
-            class="relative z-30 text-center text-white max-w-5xl px-6 transition-transform duration-500"
-            style="transform: perspective(1000px) translateY(0) rotateX(0deg); opacity: 1;">
-
-            <h1 class="mb-8 text-6xl md:text-7xl font-semibold leading-tight">
-                <span class="block text-white">Xplor</span>
-                <span
-                    class="block bg-gradient-to-r from-primary to-pink-400 bg-clip-text text-transparent">Bharat</span>
-            </h1>
-
-            <p class="mb-10 text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
-                Experience the untamed beauty of waterfalls, forests, and tribal culture with AI-powered smart tourism
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                <button
-                    class="bg-primary hover:bg-primary/90 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-lg transition-all duration-200 btn-3d-hover"
-                    onclick="onSectionChange('itinerary')">
-                    <span class="sparkles-icon mr-3 h-6 w-6"></span>
-                    Plan Your Journey
-                </button>
-
-                <button
-                    class="border-2 border-white/80 text-custom-outline hover:bg-white hover:text-gray-900 px-10 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-200 font-bold font-normal btn-3d-hover"
-                    onclick="onSectionChange('explore-map')">
-                    <span class="mappin-icon mr-3 h-6 w-6"></span>
-                    Explore Interactive Map
-                </button>
+    <div id="xplor-bharat-content">
+        <section class="hero" id="hero">
+            <div class="hero-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500&q=80');">
             </div>
-        </div>
-    </section>
-
-    <section id="destinations-section" class="py-20 px-6 perspective-1000">
-        <div class="container mx-auto">
-
-            <div class="text-center mb-16">
-                <h2 class="mb-6 text-5xl font-semibold text-gray-900 dark:text-red-400">
-                    Popular Destinations
-                </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                    Explore Jharkhand's most beloved tourist attractions, from cascading waterfalls to wildlife
-                    sanctuaries
-                </p>
+            <div class="hero-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1500&q=80');">
             </div>
-
-            <div id="destinations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="hero-bg"
+                style="background-image:url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1500&q=80');">
             </div>
-        </div>
-    </section>
-
-    <section id="hidden-gems-section"
-        class="py-20 px-6 bg-gray-50 dark:bg-gray-800/50 perspective-1000 relative overflow-hidden">
-
-        <div
-            class="floating-element absolute top-20 right-10 w-32 h-32 bg-gradient-to-r from-primary/5 to-chart-2/5 rounded-full blur-2xl">
-        </div>
-
-        <div class="container mx-auto relative z-10">
-
-            <div class="text-center mb-16">
-                <h2 class="mb-6 text-5xl font-semibold text-black dark:text-grey">
-                    Hidden Gems
-                </h2>
-                <p class="text-xl text-gray-600 dark:text-black-300 max-w-3xl mx-auto leading-relaxed">
-                    Discover unexplored treasures and secret spots known only to locals
-                </p>
+            <div class="hero-bg"
+                style="background-image:url('https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg');">
             </div>
-
-            <div id="gems-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            </div>
-        </div>
-    </section>
-
-    <section id="cultural-crafts-section" class="py-16 px-4 bg-gradient-to-b-cultural">
-        <div class="container mx-auto max-w-6xl">
-            <div class="text-center mb-12">
-                <h1 class="mb-4 text-4xl font-bold text-orange-800 dark:text-orange-400">Cultural Heritage & Crafts</h1>
-                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                    Discover the rich tribal culture, traditional crafts, vibrant festivals, and artistic heritage of
-                    Jharkhand's diverse communities
-                </p>
-            </div>
-
-            <div class="w-full">
-                <div class="grid w-full grid-cols-3 mb-8 bg-gray-200/50 dark:bg-gray-900/80 rounded-lg p-1"
-                    id="tabs-list">
-                    <button onclick="handleTabChange('crafts')" id="tab-crafts"
-                        class="flex items-center justify-center p-2 rounded-md font-medium transition-all duration-200"
-                        data-value="crafts">
-                        <span class="icon-hammer mr-2 h-4 w-4"></span> Traditional Crafts
-                    </button>
-                    <button onclick="handleTabChange('dances')" id="tab-dances"
-                        class="flex items-center justify-center p-2 rounded-md font-medium transition-all duration-200"
-                        data-value="dances">
-                        <span class="icon-music mr-2 h-4 w-4"></span> Tribal Dances
-                    </button>
-                    <button onclick="handleTabChange('festivals')" id="tab-festivals"
-                        class="flex items-center justify-center p-2 rounded-md font-medium transition-all duration-200"
-                        data-value="festivals">
-                        <span class="icon-calendar mr-2 h-4 w-4"></span> Festivals
-                    </button>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h2 id="hero-quote" data-translate="hero_quote">Discover Beautiful Destinations</h2>
+                <div class="search-container">
+                    <input type="text" id="destination-input" class="search-bar"
+                        placeholder="🔍 Enter destination city..." data-translate="search_placeholder">
+                    <button class="btn" id="plan-trip-btn" data-translate="plan_trip_btn">✈️ Plan Your Trip</button>
                 </div>
-
-                <div id="tabs-content" class="space-y-8">
-                </div>
-            </div>
-
-            <div
-                class="mt-16 text-center bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-500 dark:to-amber-500 text-white p-12 rounded-2xl dark:shadow-2xl dark:shadow-orange-500/20">
-                <h2 class="text-3xl font-bold mb-4">Experience Authentic Jharkhand Culture</h2>
-                <p class="text-xl text-orange-100 dark:text-orange-50 mb-6 max-w-2xl mx-auto">
-                    Join workshops, visit artisan villages, and participate in traditional festivals to truly connect
-                    with Jharkhand's rich heritage
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                        class="bg-white text-orange-600 hover:bg-orange-50 dark:bg-white dark:text-orange-600 dark:hover:bg-orange-50 px-6 py-3 dark:shadow-lg">
-                        <span class="users-icon mr-2 h-5 w-5"></span>
-                        Book Cultural Tour
-                    </button>
-                    <button
-                        class="border-2 border-white text-white hover:bg-white hover:text-orange-600 dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-orange-600 px-6 py-3">
-                        <span class="icon-hammer mr-2 h-5 w-5"></span>
-                        Find Craft Workshop
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="itinerary-section" class="min-h-screen bg-gradient-to-b from-emerald-50 to-green-50 py-16 px-4">
-        <div class="container mx-auto max-w-6xl">
-            <div class="text-center mb-12">
-                <h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Get personalized travel plans tailored to your interests, duration, and travel style
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-                <div id="form-card" class="bg-white rounded-xl shadow-xl border-0 overflow-hidden">
-                    <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white p-6 rounded-t-lg">
-                        <h2 class="flex items-center text-xl font-semibold">
-                            <span class="sparkles-icon mr-2 h-5 w-5"></span>
-                            Plan Your Journey
-                        </h2>
-                        <p class="text-emerald-100 text-sm">
-                            Tell us your preferences and let AI create the perfect itinerary
-                        </p>
+                <div class="filter-controls">
+                    <div class="control-group filter-dropdown"><label
+                            data-translate="filter_duration">Duration</label><span class="selected-value"></span>
+                        <div class="filter-dropdown-menu duration-dropdown"><input type="date" id="from-date"><span
+                                data-translate="filter_to">to</span><input type="date" id="to-date"></div>
                     </div>
-
-                    <div class="p-6 space-y-6">
-                        <div class="space-y-2">
-                            <label for="duration" class="block text-sm font-medium text-gray-700">Trip Duration</label>
-                            <select id="duration"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
-                                <option value="">Select duration</option>
-                                <option value="1-2">1-2 Days</option>
-                                <option value="2-3">2-3 Days</option>
-                                <option value="4-5">4-5 Days</option>
-                                <option value="1-week">1 Week</option>
-                                <option value="2-weeks">2+ Weeks</option>
-                            </select>
+                    <div class="control-group filter-dropdown"><label data-translate="filter_festive">Festive
+                            Season</label><span class="selected-value"></span>
+                        <div class="filter-dropdown-menu"><a href="#" class="option-yn" data-value="Yes"
+                                data-type="festival"><span data-translate="filter_yes">Yes</span></a><a href="#"
+                                class="option-yn" data-value="No" data-type="festival"><span
+                                    data-translate="filter_no">No</span></a></div>
+                    </div>
+                    <div class="control-group filter-dropdown"><label
+                            data-translate="filter_holiday">Holiday</label><span class="selected-value"></span>
+                        <div class="filter-dropdown-menu"><a href="#" class="option-yn" data-value="Yes"
+                                data-type="holiday"><span data-translate="filter_yes">Yes</span></a><a href="#"
+                                class="option-yn" data-value="No" data-type="holiday"><span
+                                    data-translate="filter_no">No</span></a></div>
+                    </div>
+                    <div class="control-group"><label data-translate="filter_rating">Hotel Rating</label>
+                        <div class="star-rating"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                         </div>
+                    </div>
+                </div>
+                <div class="prediction-btn-container"><button class="btn" id="prediction-btn"
+                        data-translate="get_predictions_btn">🔮 Get Predictions</button></div>
+            </div>
+        </section>
 
-                        <div class="space-y-3">
-                            <label class="block text-sm font-medium text-gray-700">Your Interests</label>
-                            <div id="interests-container" class="grid grid-cols-2 gap-3">
+        <section id="destinations" class="section">
+            <h3 class="section-title" data-translate="destinations_title">Top Destinations</h3>
+            <div class="card-container">
+                <div class="card"><img
+                        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+                        alt="Goa">
+                    <h4 data-translate="dest_goa_title">Goa Beaches</h4>
+                    <p data-translate="dest_goa_desc">Golden sands & nightlife.</p>
+                </div>
+                <div class="card"><img
+                        src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80"
+                        alt="Himalayas">
+                    <h4 data-translate="dest_himalayas_title">Himalayan Peaks</h4>
+                    <p data-translate="dest_himalayas_desc">Snow-clad adventures.</p>
+                </div>
+                <div class="card"><img
+                        src="https://www.tripsavvy.com/thmb/0HGQXifrUIn0HJVvSu_TomFSEE4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-507311190-5ae34c6e0e23d90039a57d00.jpg"
+                        alt="Jaipur">
+                    <h4 data-translate="dest_jaipur_title">Jaipur Palaces</h4>
+                    <p data-translate="dest_jaipur_desc">Royal heritage.</p>
+                </div>
+                <div class="card"><img
+                        src="https://images.unsplash.com/photo-1633931698758-f59cdaf042a2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Kodaikanal">
+                    <h4 data-translate="dest_kodaikanal_title">Kodaikanal</h4>
+                    <p data-translate="dest_kodaikanal_desc">Serene lakes.</p>
+                </div>
+                <div class="card"><img
+                        src="https://images.unsplash.com/photo-1702409038727-7c5dac6764aa?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Ziro">
+                    <h4 data-translate="dest_ziro_title">Ziro</h4>
+                    <p data-translate="dest_ziro_desc">Verdant Valley.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cuisine" class="section cuisine">
+            <h3 class="section-title" data-translate="cuisine_title">Indian Delicacies</h3>
+            <div class="food-slider">
+                <div class="food-card"><img
+                        src="https://www.cookwithnabeela.com/wp-content/uploads/2025/01/ChickenBiryani-500x500.webp"
+                        alt="Biryani">
+                    <h4 data-translate="cuisine_biryani">Biryani</h4>
+                </div>
+                <div class="food-card"><img
+                        src="https://sugarspunrun.com/wp-content/uploads/2025/04/Butter-chicken-1-of-1.jpg"
+                        alt="Butter Chicken">
+                    <h4 data-translate="cuisine_butter_chicken">Butter Chicken</h4>
+                </div>
+                <div class="food-card"><img
+                        src="https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg"
+                        alt="Dosa">
+                    <h4 data-translate="cuisine_dosa">Dosa</h4>
+                </div>
+                <div class="food-card"><img
+                        src="https://tse1.mm.bing.net/th/id/OIP.1HYn9SMsyxDC9StfwwaU1gHaHa?pid=ImgDet&w=183&h=183&c=7&dpr=1.3&o=7&rm=3"
+                        alt="Mysore Pak">
+                    <h4 data-translate="cuisine_mysore_pak">Mysore Pak</h4>
+                </div>
+                <div class="food-card"><img
+                        src="https://th.bing.com/th/id/OIP.bDa8t2z2LMLyb90VeAq70AHaHa?w=195&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+                        alt="Gulab Jamun">
+                    <h4 data-translate="cuisine_gulab_jamun">Gulab Jamun</h4>
+                </div>
+            </div>
+        </section>
+
+        <button id="chatbot-btn">💬</button>
+        <div id="chatbot-popup">
+            <div class="chatbot-header">
+                <h4>YatraGenie ✨</h4><button id="close-chatbot">&times;</button>
+            </div>
+            <div id="chatbot-messages">
+                <div class="chat-message bot-message" data-translate="chatbot_welcome">Hi, I am YatraGenie, your
+                    personalised trip planner.</div>
+            </div>
+            <div class="chatbot-input"><input type="text" id="chatbot-input-field" placeholder="Type your message..."
+                    data-translate="chatbot_placeholder"><button id="chatbot-send-btn">➤</button></div>
+        </div>
+
+        <footer>
+            <p data-translate="footer_text">© 2025 Xplor Bharat. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <div id="itinerary-generator-content" style="display: none;">
+        <button id="back-to-home-btn"><i data-lucide="arrow-left" class="h-6 w-6 text-emerald-700"></i></button>
+        <div class="min-h-screen py-8 px-4">
+            <div class="container mx-auto max-w-6xl">
+                <div class="text-center mb-12 animatable">
+                    <h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Get personalized travel plans tailored to your
+                        interests, duration, and travel style</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-xl border-0 animatable">
+                        <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-t-lg p-6">
+                            <h2 class="flex items-center text-xl font-semibold"><i data-lucide="sparkles"
+                                    class="mr-2 h-5 w-5"></i> Plan Your Journey</h2>
+                            <p class="text-emerald-100 mt-1">Tell us your preferences and let AI create the perfect
+                                itinerary</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="space-y-2"><label for="duration"
+                                    class="block text-sm font-medium text-gray-700">Trip Duration</label><select
+                                    id="duration" class="select">
+                                    <option value="" disabled selected>Select duration</option>
+                                    <option value="1-2">1-2 Days</option>
+                                    <option value="2-3">2-3 Days</option>
+                                    <option value="4-5">4-5 Days</option>
+                                    <option value="1-week">1 Week</option>
+                                    <option value="2-weeks">2+ Weeks</option>
+                                </select></div>
+                            <div class="space-y-3"><label class="block text-sm font-medium text-gray-700">Your
+                                    Interests</label>
+                                <div id="interest-buttons-container" class="grid grid-cols-2 gap-3"></div>
                             </div>
+                            <div class="space-y-2"><label for="travelType"
+                                    class="block text-sm font-medium text-gray-700">Travel Type</label><select
+                                    id="travelType" class="select">
+                                    <option value="" disabled selected>Select travel type</option>
+                                    <option value="solo">Solo Adventure</option>
+                                    <option value="couple">Romantic Getaway</option>
+                                    <option value="family">Family Trip</option>
+                                    <option value="group">Group Adventure</option>
+                                    <option value="backpacking">Backpacking</option>
+                                </select></div>
+                            <div class="space-y-2"><label for="budget"
+                                    class="block text-sm font-medium text-gray-700">Budget Range</label><select
+                                    id="budget" class="select">
+                                    <option value="" disabled selected>Select budget</option>
+                                    <option value="budget">Budget (₹2000-5000)</option>
+                                    <option value="moderate">Moderate (₹5000-10000)</option>
+                                    <option value="luxury">Luxury (₹10000+)</option>
+                                </select></div>
+                            <button id="generate-btn"
+                                class="w-full justify-center p-3 font-medium text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 rounded-md flex items-center"></button>
                         </div>
-
-                        <div class="space-y-2">
-                            <label for="travelType" class="block text-sm font-medium text-gray-700">Travel Type</label>
-                            <select id="travelType"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
-                                <option value="">Select travel type</option>
-                                <option value="solo">Solo Adventure</option>
-                                <option value="couple">Romantic Getaway</option>
-                                <option value="family">Family Trip</option>
-                                <option value="group">Group Adventure</option>
-                                <option value="backpacking">Backpacking</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="budget" class="block text-sm font-medium text-gray-700">Budget Range</label>
-                            <select id="budget"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50">
-                                <option value="">Select budget</option>
-                                <option value="budget">Budget (₹2000-5000)</option>
-                                <option value="moderate">Moderate (₹5000-10000)</option>
-                                <option value="luxury">Luxury (₹10000+)</option>
-                            </select>
-                        </div>
-
-                        <button id="generate-btn" onclick="generateItinerary()" disabled
-                            class="w-full p-3 rounded-lg text-white font-semibold transition-all duration-200 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 disabled:opacity-50">
-                            <span id="button-content">
-                                <span class="sparkles-icon mr-2 h-4 w-4"></span>
-                                Generate AI Itinerary
-                            </span>
-                        </button>
                     </div>
-                </div>
-
-                <div id="itinerary-output">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="cta-section"
-        class="py-20 px-6 bg-primary dark:bg-primary/90 relative overflow-hidden perspective-1000">
-
-        <div class="floating-element-2 absolute bottom-0 left-10 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
-
-        <div class="container mx-auto text-center relative z-10">
-            <div class="mb-8 text-5xl font-semibold text-white">
-                Start Your Jharkhand Adventure
-            </div>
-            <p class="mb-12 text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                Join thousands of travelers discovering the authentic beauty of Jharkhand with our AI-powered platform
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
-
-                <button
-                    class="bg-white text-primary hover:bg-gray-50 px-10 py-4 text-lg font-semibold rounded-xl shadow-lg transition-all duration-200 btn-3d-hover"
-                    onclick="onSectionChange('itinerary')">
-                    <span class="icon-calendar mr-3 h-6 w-6"></span>
-                    Generate Itinerary
-                </button>
-
-                <button
-                    class="border-2 border-white/80 text-white hover:bg-white hover:text-primary px-10 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-200 btn-3d-hover"
-                    onclick="onSectionChange('community')">
-                    <span class="users-icon mr-3 h-6 w-6"></span>
-                    Join Community
-                </button>
-            </div>
-        </div>
-    </section>
-
-
-    <div id="mobile-menu">
-        <div class="flex flex-col space-y-3 mt-6 p-4">
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="p-2 bg-primary/10 rounded-xl">
-                    <span class="leaf-icon h-6 w-6 text-primary"></span>
-                </div>
-                <span class="font-semibold text-foreground">Xplor Bharat</span>
-            </div>
-
-            <div class="flex flex-col space-y-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                <div>
-                    <button id="mobile-theme-toggle"
-                        class="ghost-button justify-start w-full font-medium text-foreground hover:bg-accent p-2 rounded-md flex items-center gap-3 transition-all duration-200">
-                        <span id="mobile-theme-icon" class="sun-icon h-4 w-4"></span>
-                        <span id="mobile-theme-text">Switch to Dark Theme</span>
-                    </button>
-                </div>
-
-                <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 px-3">
-                    Language
-                </div>
-                <div id="mobile-lang-list" class="space-y-1">
+                    <div id="itinerary-container" class="animatable"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // --- State Management ---
-        let currentSection = 'home';
-        let theme = 'light';
-        let language = 'en';
-        let isOpen = false;
-        let formData = { duration: '', interests: [], travelType: '', budget: '' };
-        let generatedItinerary = null;
-        let isGenerating = false;
-        let activeTab = 'crafts';
-        let favoriteItems = [];
-
-        // --- Mock Data ---
-        const menuItems = [
-            { id: 'home', label: 'Home', iconClass: 'home-icon' },
-            { id: 'features', label: 'Features', iconClass: 'features-icon' },
-            { id: 'explore', label: 'Explore', iconClass: 'explore-icon' },
-            { id: 'cultural-crafts', label: 'Local Crafts', iconClass: 'icon-hammer' },
-            { id: 'filter', label: 'Filter', iconClass: 'filter-icon' },
-            { id: 'destinations', label: 'Destinations', iconClass: 'mappin-icon' },
-            { id: 'hidden-gems', label: 'Hidden Gems', iconClass: 'star-icon' },
-            { id: 'about', label: 'About', iconClass: 'arrow-right-icon' },
-            { id: 'itinerary', label: 'Generate Itinerary', iconClass: 'icon-calendar', isButton: true },
-            { id: 'contact', label: 'Contact', iconClass: 'arrow-right-icon' },
-        ];
-
-        const languageNames = { en: 'English', hi: 'Hindi', es: 'Español', fr: 'Français' };
-
-        const popularPlaces = [
-            { id: 1, name: 'Hundru Falls', description: 'A magnificent cascade of water, Hundru is one of the highest waterfalls in Jharkhand, perfect for a nature retreat.', image: 'https://images.unsplash.com/photo-1620958189589-9404285d8866?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxodW5kcnUlMjBmYWxsc3xlbnwxfHx8fDE3NTg0ODI0MDR8MA&ixlib=rb-4.1.0&q=80&w=1080', category: 'Waterfall', rating: 4.5 },
-            { id: 2, name: 'Betla National Park', description: 'Famous for its dense forests and diverse wildlife, including tigers, elephants, and various deer species.', image: 'https://images.unsplash.com/photo-1547476839-a9a7a6c6e3b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxCYmV0bGElMjBuYXRpb25hbCUyMHBhcmt8ZW58MXx8fHwxNzU4NDgyNDc4fDA&ixlib=rb-4.1.0&q=80&w=1080', category: 'Wildlife', rating: 4.7 },
-            { id: 3, name: 'Parasnath Hill', description: 'A sacred Jain pilgrimage site, offering breathtaking views and a tranquil atmosphere atop the highest hill in the state.', image: 'https://images.unsplash.com/photo-1601057404396-0e1012a6a8e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxQYXJhc25hdGglMjBoaWxsfGVufDF8fHx8MTc1ODQ4MjU0MHww&ixlib=rb-4.1.0&q=80&w=1080', category: 'Pilgrimage', rating: 4.8 }
-        ];
-
-        const hiddenGems = [
-            { id: 4, name: 'Netarhat', description: 'The "Queen of Chotanagpur" plateau, known for its stunning sunrise and sunset views and pine forests.', category: 'Hill Station' },
-            { id: 5, name: 'Jonha Falls', description: 'Also known as Gautam Dhara, this beautiful waterfall requires descending hundreds of steps to reach its base.', category: 'Waterfall' },
-            { id: 6, name: 'Jubilee Park', description: 'Located in Jamshedpur, this large park features musical fountains, a zoo, and a stunning light display in the evenings.', category: 'City Park' },
-            { id: 7, name: 'Vaishno Devi Temple (Ranchi)', description: 'A smaller replica of the original Katra temple, built on a hill with a charming surrounding view.', category: 'Temple' }
-        ];
-
-        const interestsData = [
-            { id: 'waterfalls', label: 'Waterfalls', iconClass: 'icon-waves' },
-            { id: 'wildlife', label: 'Wildlife', iconClass: 'icon-trees' },
-            { id: 'culture', label: 'Tribal Culture', iconClass: 'icon-users' },
-            { id: 'adventure', label: 'Adventure Sports', iconClass: 'icon-mountain' },
-            { id: 'photography', label: 'Photography', iconClass: 'icon-camera' },
-            { id: 'nature', label: 'Nature Walks', iconClass: 'icon-leaf' }
-        ];
-
-        const tribalArts = [
-            { id: 'sohrai-art', name: 'Sohrai Art', description: 'Ancient wall painting tradition of Jharkhand tribes, featuring nature-inspired motifs.', details: 'Sohrai paintings are created during harvest festivals using natural pigments like ochre, charcoal, and clay.', image: 'https://images.unsplash.com/photo-1699799085041-e288623615ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHx0cmFkaXRpb25hbCUyMEluZGlhbiUyMGNyYWZ0cyUyMG1ldGFsfGVufDF8fHx8MTc1ODQ4MTAzOHww&ixlib=rb-4.1.0&q=80&w=1080', origin: 'Hazaribagh, Jharkhand', difficulty: 'Intermediate', time: '2-4 hours', materials: 'Natural pigments, brushes, mud surface' },
-            { id: 'dokra-metal', name: 'Dokra Metal Craft', description: 'Ancient lost-wax casting technique creating beautiful bronze sculptures and decorative items.', details: '4000-year-old technique using beeswax, clay, and bronze. Artisans create intricate figurines, jewelry, and tribal motifs.', image: 'https://images.unsplash.com/photo-1699799085041-e288623615ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHx0cmFkaXRpb25hbCUyMEluZGlhbiUyMGNyYWZ0cyUyMG1ldGFsfGVufDF8fHx8MTc1ODQ4MTAzOHww&ixlib=rb-4.1.0&q=80&w=1080', origin: 'Bastar region', difficulty: 'Advanced', time: '1-3 days', materials: 'Bronze, beeswax, clay, furnace' },
-            { id: 'bamboo-craft', name: 'Bamboo Handicrafts', description: 'Eco-friendly bamboo products ranging from baskets to decorative items and furniture.', details: 'Sustainable craft using locally sourced bamboo. Artisans create baskets, mats, decorative items, and even musical instruments.', image: 'https://images.unsplash.com/photo-1699799085041-e288623615ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHx0cmFkaXRpb25hbCUyMEluZGlhbiUyMGNyYWZ0cyUyMG1ldGFsfGVufDF8fHx8MTc1ODQ4MTAzOHww&ixlib=rb-4.1.0&q=80&w=1080', origin: 'Tribal villages', difficulty: 'Beginner', time: '1-2 hours', materials: 'Bamboo strips, natural dyes, tools' }
-        ];
-
-        const tribalDances = [
-            { id: 'jhumair-dance', name: 'Jhumair Dance', description: 'Traditional group dance performed during festivals with rhythmic movements and folk songs.', details: 'Performed by Santal, Munda, and Oraon tribes during harvest season. Dancers form circles, moving in synchronized steps while singing traditional folk songs.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', tribe: 'Santal, Munda, Oraon', season: 'Post-harvest', instruments: 'Madal, Dhol, Shehnai' },
-            { id: 'karma-dance', name: 'Karma Dance', description: 'Sacred dance dedicated to Karma Devta, performed for good harvest and prosperity.', details: 'Performed around Karma tree branches during Karma festival. Young men and women dance in circles, celebrating nature and seeking blessings for fertility and prosperity.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', tribe: 'Oraon, Munda', season: 'August-September', instruments: 'Mandar, Nagara, Bansi' },
-            { id: 'chhau-dance', name: 'Chhau Dance', description: 'Martial dance form combining combat techniques, acrobatics, and storytelling.', details: 'Semi-classical dance depicting stories from epics like Ramayana and Mahabharata. Performers wear elaborate masks and costumes, showcasing warrior movements and mythological tales.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', tribe: 'Various communities', season: 'Winter festivals', instruments: 'Dhol, Shehnai, Mohuri' }
-        ];
-
-        const festivals = [
-            { id: 'karma-festival', name: 'Karma Festival', description: 'Harvest festival celebrating nature and fertility, dedicated to Karma Devta.', details: 'Celebrated in August-September, this festival involves worship of Karma tree, traditional dances, and community feasts.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', date: 'August-September', duration: '3 days', significance: 'Harvest celebration' },
-            { id: 'sarhul-festival', name: 'Sarhul Festival', description: 'Spring festival welcoming new year with Sal tree worship and nature celebration.', details: 'Celebrated in March-April when Sal trees bloom. Communities gather to worship nature, perform traditional dances, and share local delicacies made from Sal flowers.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', date: 'March-April', duration: '5 days', significance: 'Spring welcome' },
-            { id: 'tusu-festival', name: 'Tusu Festival', description: 'Winter solstice festival celebrated with elaborate decorations and folk songs.', details: 'Celebrated in December-January by young girls who create beautiful Tusu decorations and sing folk songs.', image: 'https://images.unsplash.com/photo-1585563741139-4d488b8291c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHxJbmRpYW4lMjB0cmliYWwlMjBjdWx0dXJlJTIwZGFuY2V8ZW58MXx8fHwxNzU4NDgxMDM4fDA&ixlib=rb-4.1.0&q=80&w=1080', date: 'December-January', duration: '1 month', significance: 'Winter solstice' }
-        ];
-
-        // --- DOM Element Selection ---
-        const htmlEl = document.documentElement;
-        const desktopMenu = document.getElementById('desktop-menu');
-        const langTrigger = document.getElementById('lang-trigger');
-        const langDropdown = document.getElementById('lang-dropdown');
-        const currentLanguageSpan = document.getElementById('current-language');
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
-        const mobileThemeIcon = document.getElementById('mobile-theme-icon');
-        const mobileThemeText = document.getElementById('mobile-theme-text');
-        const destinationsGrid = document.getElementById('destinations-grid');
-        const gemsGrid = document.getElementById('gems-grid');
-        const mobileLangList = document.getElementById('mobile-lang-list');
-
-        // Hero Section Elements for Parallax
-        const heroSection = document.getElementById('home-section');
-        const imageWrapper = document.getElementById('hero-image-wrapper');
-        const overlay = document.getElementById('hero-overlay');
-        const content = document.getElementById('hero-content');
-
-
-        // --- Theme & Language Functions (FINAL WORKING LOGIC) ---
-
-        function checkInitialTheme() {
-            const savedTheme = localStorage.getItem('xplor-theme');
-            if (savedTheme === 'light' || savedTheme === 'dark') {
-                return savedTheme;
-            }
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
-            return 'light';
-        }
-
-        function updateTheme() {
-            // 1. Apply classes and save preference
-            htmlEl.classList.remove('light', 'dark');
-            htmlEl.classList.add(theme);
-            localStorage.setItem('xplor-theme', theme);
-
-            // 2. Update icons and text
-            if (theme === 'dark') {
-                themeIcon.className = 'moon-icon h-4 w-4';
-                mobileThemeIcon.className = 'moon-icon h-4 w-4';
-                mobileThemeText.textContent = 'Switch to Light Theme';
-            } else {
-                themeIcon.className = 'sun-icon h-4 w-4';
-                mobileThemeIcon.className = 'sun-icon h-4 w-4';
-                mobileThemeText.textContent = 'Switch to Dark Theme';
-            }
-
-            // 3. Re-render all elements affected by state (Nav, Crafts tabs)
-            renderNavItems();
-            renderCulturalCrafts();
-        }
-
-        function toggleTheme() {
-            theme = (theme === 'light' ? 'dark' : 'light');
-            updateTheme();
-        }
-
-        function setLanguage(code) {
-            language = code;
-            currentLanguageSpan.textContent = code.toUpperCase();
-            langDropdown.classList.add('hidden');
-            renderLanguageDropdown();
-            renderMobileLanguageList();
-        }
-
-        // --- Navigation & Scrolling ---
-
-        function handleScrollParallax() {
-            if (!heroSection || !imageWrapper || !overlay || !content) return;
-
-            const scrollY = window.scrollY;
-            const maxScroll = 300;
-
-            const y1 = scrollY > maxScroll ? -50 : -(scrollY / maxScroll) * 50;
-            const y2 = scrollY > maxScroll ? -100 : -(scrollY / maxScroll) * 100;
-            const opacityValue = scrollY > maxScroll ? 0 : 1 - (scrollY / maxScroll);
-
-            // Parallax transforms
-            heroSection.style.transform = `translateY(${y1}px)`;
-            imageWrapper.style.transform = `translateY(${y2}px)`;
-
-            // Opacity fade
-            overlay.style.opacity = opacityValue;
-            content.style.opacity = Math.max(0, opacityValue);
-        }
-
-        function handleNavClick(id) {
-            currentSection = id;
-            renderNavItems();
-            if (isOpen) {
-                setIsOpen(false);
-            }
-            const targetElement = document.getElementById(id + '-section');
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        function onSectionChange(id) {
-            if (menuItems.some(item => item.id === id)) {
-                handleNavClick(id);
-            } else {
-                alert(`Feature triggered: ${id}`);
-            }
-        }
-
-        function setIsOpen(newOpenState) {
-            isOpen = newOpenState;
-            const mobileMenuTrigger = document.getElementById('mobile-menu-trigger').querySelector('span');
-
-            if (isOpen) {
-                document.getElementById('mobile-menu').classList.add('open');
-                mobileMenuTrigger.style.transform = 'rotateZ(45deg)';
-            } else {
-                document.getElementById('mobile-menu').classList.remove('open');
-                mobileMenuTrigger.style.transform = 'rotateZ(0deg)';
-            }
-        }
-
-        // --- Itinerary Form Logic ---
-
-        function updateGenerateButton() {
-            const btn = document.getElementById('generate-btn');
-            if (!btn) return;
-
-            if (isGenerating) {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span> Generating Your Perfect Trip...';
-            } else if (!formData.duration) {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="sparkles-icon mr-2 h-4 w-4"></span> Generate AI Itinerary';
-            } else {
-                btn.disabled = false;
-                btn.innerHTML = '<span class="sparkles-icon mr-2 h-4 w-4"></span> Generate AI Itinerary';
-            }
-        }
-
-        function handleFormChange(id, value) {
-            formData[id] = value;
-            updateGenerateButton();
-        }
-
-        function handleInterestToggle(interestId) {
-            const index = formData.interests.indexOf(interestId);
-            if (index > -1) {
-                formData.interests.splice(index, 1);
-            } else {
-                formData.interests.push(interestId);
-            }
-            renderInterests();
-        }
-
-        function generateItinerary() {
-            if (!formData.duration) return;
-
-            isGenerating = true;
-            generatedItinerary = null;
-            renderOutput();
-            updateGenerateButton();
-
-            setTimeout(() => {
-                const itinerary = mockItineraries[formData.duration] || mockItineraries['2-3'];
-                generatedItinerary = itinerary;
-                isGenerating = false;
-                renderOutput();
-                updateGenerateButton();
-            }, 2000);
-        }
-
-        // --- Cultural Crafts Logic ---
-        function handleTabChange(tabId) {
-            activeTab = tabId;
-            renderCulturalCrafts();
-        }
-
-        function toggleFavorite(id) {
-            const index = favoriteItems.indexOf(id);
-            if (index > -1) {
-                favoriteItems.splice(index, 1);
-            } else {
-                favoriteItems.push(id);
-            }
-            renderCulturalCrafts();
-        }
-
-
-        // --- Dynamic Content Rendering ---
-
-        function renderInterests() {
-            const container = document.getElementById('interests-container');
-            if (!container) return;
-
-            container.innerHTML = interestsData.map(interest => {
-                const isSelected = formData.interests.includes(interest.id);
-                const baseClass = 'justify-start h-auto p-3 text-sm flex items-center rounded-lg font-medium transition-colors duration-200';
-                const styleClass = isSelected
-                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow'
-                    : 'border border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-200';
-
-                return `
-                    <button
-                        onclick="handleInterestToggle('${interest.id}')"
-                        class="${baseClass} ${styleClass}"
-                    >
-                        <span class="${interest.iconClass} mr-2 h-4 w-4"></span>
-                        <span>${interest.label}</span>
-                    </button>
-                `;
-            }).join('');
-        }
-
-        function renderOutput() {
-            const outputDiv = document.getElementById('itinerary-output');
-            if (!outputDiv) return;
-
-            if (isGenerating) {
-                outputDiv.innerHTML = `
-                    <div class="bg-white rounded-xl shadow-xl p-12 text-center border-dashed border-emerald-300">
-                        <div class="animate-spin mx-auto h-8 w-8 border-4 border-emerald-600 border-t-transparent rounded-full mb-4"></div>
-                        <h3 class="text-lg font-medium text-emerald-600">Generating Trip...</h3>
-                        <p class="text-gray-500">Processing preferences and checking available destinations.</p>
-                    </div>
-                `;
-            } else if (generatedItinerary) {
-                const daysHtml = generatedItinerary.days.map((day, dayIndex) => {
-                    const activitiesHtml = day.activities.map((activity, actIndex) => {
-                        const iconClass = getActivityIconClass(activity.type);
-                        const ecoBadge = activity.ecoFriendly ? `
-                            <span class="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-800">
-                                <span class="leaf-icon mr-1 h-3 w-3"></span>
-                                Eco-Friendly
-                            </span>
-                        ` : '';
-
-                        return `
-                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-emerald-50 transition-colors">
-                                <div class="flex-shrink-0 mt-1">
-                                    <div class="bg-white p-2 rounded-lg shadow-sm">
-                                        <span class="${iconClass} h-4 w-4 text-emerald-600"></span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h4 class="font-medium text-gray-900">${activity.title}</h4>
-                                        <div class="flex items-center text-sm text-gray-500">
-                                            <span class="icon-clock mr-1 h-3 w-3"></span>
-                                            ${activity.time}
-                                        </div>
-                                    </div>
-                                    <p class="text-sm text-gray-600 mb-2">${activity.description}</p>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center text-xs text-gray-500">
-                                            <span class="mappin-icon mr-1 h-3 w-3"></span>
-                                            ${activity.location}
-                                        </div>
-                                        ${ecoBadge}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-
-                    return `
-                        <div class="p-6 border-b border-gray-100 last:border-b-0">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                                    ${day.day}
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-emerald-800">${day.title}</h3>
-                                    <p class="text-sm text-gray-600">Day ${day.day}</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">${activitiesHtml}</div>
-                        </div>
-                    `;
-                }).join('');
-
-                const actionButtons = `
-                    <div class="p-6 bg-gray-50">
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <button class="flex-1 p-3 rounded-lg text-white font-semibold bg-emerald-600 hover:bg-emerald-700">
-                                <span class="icon-calendar mr-2 h-4 w-4"></span>
-                                Save Itinerary
-                            </button>
-                            <button class="flex-1 p-3 rounded-lg font-semibold border border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-                                Share with Friends
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                outputDiv.innerHTML = `
-                    <div class="bg-white rounded-xl shadow-xl border-0">
-                        <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-t-lg">
-                            <h2 class="flex items-center text-xl font-semibold">
-                                <span class="icon-checkcircle mr-2 h-5 w-5"></span>
-                                ${generatedItinerary.title}
-                            </h2>
-                            <p class="text-green-100 text-sm">Your personalized itinerary is ready!</p>
-                        </div>
-                        <div class="p-0 max-h-[600px] overflow-y-auto">
-                            ${daysHtml}
-                            ${actionButtons}
-                        </div>
-                    </div>
-                `;
-            } else {
-                outputDiv.innerHTML = `
-                    <div class="bg-white rounded-xl shadow-xl border-0 border-dashed border-emerald-300">
-                        <div class="p-12 text-center">
-                            <div class="bg-emerald-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                                <span class="sparkles-icon h-8 w-8 text-emerald-600"></span>
-                            </div>
-                            <h3 class="text-lg font-medium text-emerald-600 mb-2">Your AI Itinerary</h3>
-                            <p class="text-placeholder-green">
-                                Fill out the form to generate your personalized travel plan for Jharkhand
-                            </p>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function renderCulturalCrafts() {
-            const tabsContentDiv = document.getElementById('tabs-content');
-            const tabsList = document.getElementById('tabs-list');
-            if (!tabsContentDiv || !tabsList) return;
-
-            // 1. Update Tab List Styles
-            ['crafts', 'dances', 'festivals'].forEach(tabId => {
-                const button = document.getElementById(`tab-${tabId}`);
-                if (button) {
-                    // Reset all styles and add base classes
-                    button.className = 'flex items-center justify-center p-2 rounded-md font-medium transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800';
-
-                    if (tabId === activeTab) {
-                        let activeClasses = '';
-                        if (tabId === 'crafts') activeClasses = 'bg-orange-600 text-white shadow-lg';
-                        if (tabId === 'dances') activeClasses = 'bg-purple-600 text-white shadow-lg';
-                        if (tabId === 'festivals') activeClasses = 'bg-green-600 text-white shadow-lg';
-                        button.className = button.className.replace(/text-gray-700|text-gray-300|hover:bg-gray-100|hover:bg-gray-800/g, '').trim() + ' ' + activeClasses;
-                    }
-                }
-            });
-
-            // 2. Render Tab Content
-            let contentHtml = '';
-
-            if (activeTab === 'crafts') {
-                contentHtml = `
-                    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                        ${tribalArts.map(craft => {
-                    const isFavorite = favoriteItems.includes(craft.id);
-                    const heartFill = isFavorite ? 'currentColor' : 'none';
-                    const heartClass = isFavorite ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-white/80 hover:bg-white text-gray-700 dark:bg-gray-800/80 dark:hover:bg-gray-800 dark:text-gray-200';
-                    return `
-                                <div class="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg dark:bg-gray-900/80 dark:backdrop-blur-sm dark:border-gray-700/50 overflow-hidden rounded-2xl bg-white">
-                                    <div class="relative overflow-hidden">
-                                        <img src="${craft.image}" alt="${craft.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
-                                        <div class="absolute top-3 right-3 flex space-x-2">
-                                            <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-orange-600 text-white backdrop-blur-sm">${craft.difficulty}</span>
-                                            <button onclick="toggleFavorite('${craft.id}')" class="p-2 rounded-full backdrop-blur-sm ${heartClass}">
-                                                <span class="icon-heart h-4 w-4" style="color: ${isFavorite ? 'white' : 'inherit'}; fill: ${heartFill};"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="p-6">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <h3 class="text-xl font-semibold text-orange-800 dark:text-orange-400">${craft.name}</h3>
-                                            <button class="p-1 text-orange-600 hover:text-orange-700">
-                                                <span class="icon-share h-4 w-4"></span>
-                                            </button>
-                                        </div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${craft.description}</p>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">${craft.details}</p>
-                                        <div class="space-y-2 mb-4">
-                                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400"><span class="mappin-icon mr-2 h-4 w-4 text-orange-500 dark:text-orange-400"></span>Origin: ${craft.origin}</div>
-                                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400"><span class="icon-clock mr-2 h-4 w-4 text-orange-500 dark:text-orange-400"></span>Time: ${craft.time}</div>
-                                        </div>
-                                        <div class="pt-2"><p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Materials needed:</p><p class="text-sm text-gray-700 dark:text-gray-300">${craft.materials}</p></div>
-                                        <div class="flex space-x-2 pt-4">
-                                            <button class="flex-1 p-3 rounded-lg bg-orange-600 hover:bg-orange-700 text-white text-sm">Learn Craft</button>
-                                            <button class="flex-1 p-3 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-50 text-sm">Find Artisan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                }).join('')}
-                    </div>
-                `;
-            } else if (activeTab === 'dances') {
-                contentHtml = `
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        ${tribalDances.map(dance => {
-                    const isFavorite = favoriteItems.includes(dance.id);
-                    const heartFill = isFavorite ? 'currentColor' : 'none';
-                    const heartClass = isFavorite ? 'text-red-500 hover:text-red-600 dark:text-red-400' : 'text-gray-400 hover:text-red-500 dark:text-gray-500';
-                    return `
-                                <div class="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg dark:bg-gray-900/80 dark:backdrop-blur-sm dark:border-gray-700/50 overflow-hidden rounded-2xl bg-white">
-                                    <div class="relative overflow-hidden">
-                                        <img src="${dance.image}" alt="${dance.name}" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300" />
-                                        <div class="absolute top-3 right-3"><button class="bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full backdrop-blur-sm"><span class="icon-play h-4 w-4"></span></button></div>
-                                        <div class="absolute bottom-3 left-3"><span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-purple-600 text-white backdrop-blur-sm">${dance.season}</span></div>
-                                    </div>
-                                    <div class="p-6">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <h3 class="text-xl font-semibold text-purple-800 dark:text-purple-400">${dance.name}</h3>
-                                            <button onclick="toggleFavorite('${dance.id}')" class="p-2 rounded-full ${heartClass}">
-                                                <span class="icon-heart h-4 w-4" style="color: ${isFavorite ? 'var(--color-primary)' : 'inherit'}; fill: ${heartFill};"></span>
-                                            </button>
-                                        </div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${dance.description}</p>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">${dance.details}</p>
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm mb-4">
-                                            <div class="flex items-center text-gray-600 dark:text-gray-400"><span class="users-icon mr-2 h-4 w-4 text-purple-500 dark:text-purple-400"></span><div><span class="block font-medium">Performed by</span><span class="text-xs">${dance.tribe}</span></div></div>
-                                            <div class="flex items-center text-gray-600 dark:text-gray-400"><span class="icon-music mr-2 h-4 w-4 text-purple-500 dark:text-purple-400"></span><div><span class="block font-medium">Instruments</span><span class="text-xs">${dance.instruments}</span></div></div>
-                                        </div>
-                                        <div class="flex space-x-2 pt-2">
-                                            <button class="flex-1 p-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm"><span class="icon-play mr-2 h-4 w-4"></span>Watch Performance</button>
-                                            <button class="flex-1 p-3 rounded-lg border border-purple-600 text-purple-600 hover:bg-purple-50 text-sm">Learn Steps</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                }).join('')}
-                    </div>
-                `;
-            } else if (activeTab === 'festivals') {
-                contentHtml = `
-                    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                        ${festivals.map(festival => {
-                    const isFavorite = favoriteItems.includes(festival.id);
-                    const heartFill = isFavorite ? 'currentColor' : 'none';
-                    const heartClass = isFavorite ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-white/80 hover:bg-white text-gray-700 dark:bg-gray-800/80 dark:hover:bg-gray-800 dark:text-gray-200';
-                    return `
-                                <div class="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg dark:bg-gray-900/80 dark:backdrop-blur-sm dark:border-gray-700/50 overflow-hidden rounded-2xl bg-white">
-                                    <div class="relative overflow-hidden">
-                                        <img src="${festival.image}" alt="${festival.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
-                                        <div class="absolute top-3 left-3"><span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-green-600 text-white backdrop-blur-sm">${festival.duration}</span></div>
-                                        <div class="absolute top-3 right-3">
-                                            <button onclick="toggleFavorite('${festival.id}')" class="p-2 rounded-full backdrop-blur-sm ${heartClass}">
-                                                <span class="icon-heart h-4 w-4" style="color: ${isFavorite ? 'white' : 'inherit'}; fill: ${heartFill};"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="p-6">
-                                        <h3 class="text-xl font-semibold text-green-800 dark:text-green-400 mb-2">${festival.name}</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${festival.description}</p>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">${festival.details}</p>
-                                        <div class="space-y-2 mb-4">
-                                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400"><span class="icon-calendar mr-2 h-4 w-4 text-green-500 dark:text-green-400"></span>Celebrated: ${festival.date}</div>
-                                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400"><span class="star-icon mr-2 h-4 w-4 text-green-500 dark:text-green-400"></span>Significance: ${festival.significance}</div>
-                                        </div>
-                                        <div class="flex space-x-2 pt-2">
-                                            <button class="flex-1 p-3 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm"><span class="icon-calendar mr-2 h-4 w-4"></span>Add to Calendar</button>
-                                            <button class="flex-1 p-3 rounded-lg border border-green-600 text-green-600 hover:bg-green-50 text-sm">Learn More</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                }).join('')}
-                    </div>
-                `;
-            }
-
-            tabsContentDiv.innerHTML = contentHtml;
-        }
-
-        function renderDestinations() {
-            if (!destinationsGrid) return;
-            const cardsHtml = popularPlaces.map(place => `
-                <div class="card-3d">
-                    <div class="group border border-gray-200 dark:border-gray-700/50 overflow-hidden rounded-2xl bg-white dark:bg-gray-900/80 dark:backdrop-blur-sm dark:shadow-2xl">
-                        <div class="relative overflow-hidden card-image-wrapper">
-                            <img src="${place.image}" alt="${place.name}" class="w-full h-64 object-cover transition-transform duration-500 card-image"/>
-                            <div class="absolute top-4 right-4"><span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 border-0 backdrop-blur-sm">${place.category}</span></div>
-                            <div class="absolute bottom-4 left-4 flex items-center bg-white/95 dark:bg-gray-800/95 rounded-full px-3 py-2 shadow-sm backdrop-blur-sm"><span class="star-icon h-4 w-4 text-yellow-500 fill-current"></span><span class="ml-2 text-sm font-semibold text-gray-900 dark:text-gray-100">${place.rating}</span></div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl text-gray-900 dark:text-white font-semibold mb-3">${place.name}</h3>
-                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">${place.description}</p>
-                            <button class="w-full bg-primary hover:bg-primary/90 text-white rounded-xl py-3 font-semibold transition-all duration-200 flex items-center justify-center" onclick="onSectionChange('itinerary')">Add to Itinerary<span class="arrow-right-icon ml-2 h-4 w-4"></span></button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            destinationsGrid.innerHTML = cardsHtml;
-        }
-
-        function renderHiddenGems() {
-            if (!gemsGrid) return;
-            const cardsHtml = hiddenGems.map(gem => `
-                <div class="card-3d h-full">
-                    <div class="group bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-2xl h-full dark:backdrop-blur-sm dark:shadow-2xl flex flex-col justify-between">
-                        <div class="p-6 pb-3"><div class="flex items-start justify-between"><h3 class="text-lg font-semibold text-gray-900 dark:text-white pr-2">${gem.name}</h3><span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200 border-0 backdrop-blur-sm">${gem.category}</span></div></div>
-                        <div class="p-6 pt-0 flex flex-col justify-between flex-1"><p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">${gem.description}</p>
-                            <div><button class="w-full text-primary hover:text-primary/90 hover:bg-primary/5 dark:hover:bg-primary/10 rounded-xl font-medium transition-all duration-200 p-2" onclick="onSectionChange('hidden-gems')">Learn More</button></div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            gemsGrid.innerHTML = cardsHtml;
-        }
-
-        function renderNavItems() {
-            // Desktop Menu
-            const desktopItemsHtml = menuItems.map(item => {
-                const isActive = currentSection === item.id;
-
-                if (item.isButton) {
-                    return `<div><button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center whitespace-nowrap" onclick="onSectionChange('${item.id}')"><span class="${item.iconClass} mr-2 h-4 w-4"></span>${item.label}</button></div>`;
-                } else {
-                    const variantClass = isActive ? 'bg-primary text-white hover:bg-primary/90' : 'ghost-button text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100';
-                    return `<div><button class="font-medium transition-all duration-200 ${variantClass} p-2 rounded-md" onclick="handleNavClick('${item.id}')">${item.label}</button></div>`;
-                }
-            }).join('');
-
-            const existingDesktopItems = desktopMenu.querySelectorAll(':scope > div:not(:last-child):not(:nth-last-child(2))');
-            existingDesktopItems.forEach(el => el.remove());
-            const themeToggleWrapper = desktopMenu.querySelector('#theme-toggle').closest('div');
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = desktopItemsHtml;
-            Array.from(tempDiv.children).reverse().forEach(child => {
-                desktopMenu.insertBefore(child, themeToggleWrapper);
-            });
-
-            // Mobile Menu
-            const mobileItemsHtml = menuItems.map(item => {
-                const isActive = currentSection === item.id;
-                let variantClass;
-                if (item.isButton) {
-                    variantClass = 'bg-primary hover:bg-primary/90 text-white';
-                } else {
-                    variantClass = isActive ? 'bg-primary hover:bg-primary/90 text-white' : 'ghost-button text-foreground hover:bg-accent';
-                }
-
-                const mobileMenuContainer = document.querySelector('.flex-col.space-y-3.mt-6');
-                if (!mobileMenuContainer) return '';
-
-                // Clear and insert mobile items (needs specific logic as it's not a single container)
-
-                return `<div><button class="justify-start w-full font-medium ${variantClass} p-2 rounded-md transition-all duration-200 flex items-center gap-3" onclick="${item.isButton ? `onSectionChange('${item.id}')` : `handleNavClick('${item.id}')`}"><span class="${item.iconClass} h-4 w-4"></span>${item.label}</button></div>`;
-            }).join('');
-
-            const mobileMenuContainer = document.querySelector('.flex-col.space-y-3.mt-6');
-            if (mobileMenuContainer) {
-                const mobileNavStartMarker = mobileMenuContainer.querySelector('.flex.items-center.space-x-3.mb-6');
-                let current = mobileNavStartMarker ? mobileNavStartMarker.nextElementSibling : null;
-                while (current && !current.classList.contains('border-t')) {
-                    let next = current.nextElementSibling;
-                    current.remove();
-                    current = next;
-                }
-                const tempMobileDiv = document.createElement('div');
-                tempMobileDiv.innerHTML = mobileItemsHtml;
-                Array.from(tempMobileDiv.children).forEach(child => {
-                    mobileMenuContainer.insertBefore(child, mobileMenuContainer.querySelector('.border-t'));
-                });
-            }
-        }
-
-        function renderLanguageDropdown() {
-            const dropdownItemsHtml = Object.entries(languageNames).map(([code, name]) => {
-                const isActive = language === code;
-                const activeClass = isActive ? 'bg-primary text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-foreground';
-                const checkedDot = isActive ? '<span class="ml-auto w-2 h-2 bg-white rounded-full"></span>' : '';
-                return `<button class="block w-full text-left px-4 py-2 text-sm cursor-pointer transition-colors duration-200 flex items-center ${activeClass}" onclick="setLanguage('${code}')"><span class="font-medium">${name}</span>${checkedDot}</button>`;
-            }).join('');
-            langDropdown.innerHTML = dropdownItemsHtml;
-        }
-
-        function renderMobileLanguageList() {
-            const mobileLangItemsHtml = Object.entries(languageNames).map(([code, name]) => {
-                const isActive = language === code;
-                const activeClass = isActive ? 'bg-primary text-white hover:bg-primary/90' : 'text-foreground hover:bg-accent';
-                const checkedDot = isActive ? '<span class="ml-auto w-2 h-2 bg-white rounded-full"></span>' : '';
-                return `<div><button class="justify-start w-full font-medium gap-3 p-2 rounded-md flex items-center transition-all duration-200 ${activeClass}" onclick="setLanguage('${code}')"><span class="language-icon h-4 w-4"></span><span>${name}</span>${checkedDot}</button></div>`;
-            }).join('');
-            mobileLangList.innerHTML = mobileLangItemsHtml;
-        }
-
-
-        // --- Initialization ---
-
-        // 1. Set initial theme based on system/storage BEFORE DOMContentLoaded
-        theme = checkInitialTheme();
-        htmlEl.classList.add(theme);
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // Attach form listeners globally
-            document.getElementById('duration').addEventListener('change', (e) => handleFormChange('duration', e.target.value));
-            document.getElementById('travelType').addEventListener('change', (e) => handleFormChange('travelType', e.target.value));
-            document.getElementById('budget').addEventListener('change', (e) => handleFormChange('budget', e.target.value));
-
-            // Attach scroll listener for Parallax effect
-            window.addEventListener('scroll', handleScrollParallax);
-
-            // Attach theme/menu handlers
-            themeToggle.addEventListener('click', toggleTheme);
-            document.getElementById('mobile-menu-trigger').addEventListener('click', (e) => {
-                const mobileMenuTrigger = document.getElementById('mobile-menu-trigger');
-                const menuIcon = mobileMenuTrigger.querySelector('.menu-icon');
-                if (menuIcon) {
-                    menuIcon.style.transform = 'rotateZ(45deg)';
-                }
-                setIsOpen(true);
-            });
-            mobileThemeToggle.addEventListener('click', toggleTheme);
-
-            // Language dropdown handlers
-            langTrigger.addEventListener('click', () => langDropdown.classList.toggle('hidden'));
-            document.addEventListener('click', (event) => {
-                const langDropdown = document.getElementById('lang-dropdown');
-                const langTrigger = document.getElementById('lang-trigger');
-                if (langDropdown && !langTrigger.contains(event.target) && !langDropdown.contains(event.target)) {
-                    langDropdown.classList.add('hidden');
-                }
-            });
-
-            // Cultural Crafts Tab change handlers
-            document.getElementById('tab-crafts').addEventListener('click', () => handleTabChange('crafts'));
-            document.getElementById('tab-dances').addEventListener('click', () => handleTabChange('dances'));
-            document.getElementById('tab-festivals').addEventListener('click', () => handleTabChange('festivals'));
-
-
-            // Initial Renders
-            updateTheme();
-            renderNavItems();
-            renderLanguageDropdown();
-            renderMobileLanguageList();
-            renderDestinations();
-            renderHiddenGems();
-            renderCulturalCrafts();
-
-            renderInterests();
-            renderOutput();
-            updateGenerateButton();
-
-            // Run parallax once on load
-            handleScrollParallax();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
