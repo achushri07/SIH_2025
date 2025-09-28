@@ -1,5 +1,6 @@
 // Existing budget calculator function
 function calculateBudget() {
+  // Get values from hidden inputs, which are updated by the custom select logic
   const cityInput = document.getElementById("city").value.trim().toLowerCase();
   const tripType = document.getElementById("tripType").value;
   const fuelType = document.getElementById("fuelType").value;
@@ -9,19 +10,19 @@ function calculateBudget() {
 
   // Sample distances (in km) from major cities to Manali
   const distances = {
-    "delhi": 540,
-    "chandigarh": 310,
-    "shimla": 250,
-    "mumbai": 1950,
-    "kolkata": 2100,
-    "bangalore": 2700
+    "delhi": 501,
+    "chandigarh": 269,
+    "shimla": 239,
+    "mumbai": 1901,
+    "kolkata": 2041,
+    "bangalore": 2660
   };
 
   // Sample average fuel prices in INR per litre/kg
   const fuelPrices = {
-    "petrol": 95.00,
-    "diesel": 88.00,
-    "cng": 76.00
+    "petrol": 100.87,
+    "diesel": 89.45,
+    "cng": 83.79
   };
 
   // Input validation
@@ -40,10 +41,9 @@ function calculateBudget() {
 
   const fuelPrice = fuelPrices[fuelType];
   let totalDistance = distance;
-  let tripText = "One-Way";
+  let tripText = tripType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '); // Capitalize and space
   if (tripType === "round-trip") {
     totalDistance = distance * 2;
-    tripText = "Round Trip";
   }
 
   // Fuel cost calculation
@@ -83,8 +83,9 @@ function toggleTheme() {
   }
 }
 
+// *** ADDED: Custom Select Interaction Logic ***
 document.addEventListener('DOMContentLoaded', () => {
-  // Intersection Observer setup for card animations
+  // Existing Intersection Observer setup for card animations
   const observerOptions = {
     root: null,
     rootMargin: '0px 0px -100px 0px',
@@ -105,5 +106,49 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       observer.observe(card);
     }, index * 200);
+  });
+
+  // New Custom Select Logic
+  const customSelects = document.querySelectorAll('.custom-select');
+
+  customSelects.forEach(selectContainer => {
+    const optionsList = selectContainer.querySelector('.select-options');
+    const displayBox = selectContainer.querySelector('.select-display');
+    const targetId = optionsList.getAttribute('data-target-id');
+    const hiddenInput = document.getElementById(targetId);
+
+    // Handle selection of an option
+    optionsList.querySelectorAll('li').forEach(option => {
+      option.addEventListener('click', function (event) {
+        const newValue = this.getAttribute('data-value');
+        const newText = this.textContent;
+
+        // 1. Update the hidden input value (used by calculateBudget)
+        hiddenInput.value = newValue;
+
+        // 2. Update the display box text and value attribute
+        displayBox.textContent = newText;
+        displayBox.setAttribute('data-value', newValue);
+
+        // 3. Close the dropdown (optional for hover, but good practice)
+        // selectContainer.classList.remove('active');
+      });
+    });
+
+    // Close dropdown when clicking outside (Crucial for custom selects)
+    document.addEventListener('click', (e) => {
+      if (!selectContainer.contains(e.target) && selectContainer.classList.contains('active')) {
+        // selectContainer.classList.remove('active');
+      }
+    });
+
+    // REMOVED: Block that automatically set the display text on load
+    /*
+    const initialOption = optionsList.querySelector(`li[data-value="${hiddenInput.value}"]`);
+    if (initialOption) {
+        displayBox.textContent = initialOption.textContent;
+        displayBox.setAttribute('data-value', initialOption.getAttribute('data-value'));
+    }
+    */
   });
 });
