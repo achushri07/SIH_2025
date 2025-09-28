@@ -136,7 +136,7 @@
             <video autoplay muted playsinline loop object-fit="contain">
               <source
                 src="https://www.shutterstock.com/shutterstock/videos/1096998039/preview/stock-footage-manali-himachal-pradesh-india-circa-river-rafting-in-beas-river-at-manali-rafting-on-a.webm"
-                                type="video/mp4">
+                type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -153,7 +153,7 @@
             <video autoplay muted playsinline loop object-fit="contain">
               <source
                 src="https://www.shutterstock.com/shutterstock/videos/3903971981/preview/stock-footage-an-aerial-drone-clip-of-mall-road-christ-church-at-shimla-himachal-pradesh-india.webm"
-                                type="video/mp4">
+                type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -168,7 +168,7 @@
         <div class="card-inner">
           <div class="card-front">
             <video autoplay muted playsinline loop object-fit="contain">
-              <source src="https://www.pexels.com/download/video/3135811/"                 type="video/mp4">
+              <source src="https://www.pexels.com/download/video/3135811/" type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -185,7 +185,7 @@
             <video autoplay muted playsinline loop object-fit="contain">
               <source
                 src="https://www.shutterstock.com/shutterstock/videos/1094416737/preview/stock-footage-a-guy-jumps-from-a-tower-a-man-falls-from-a-height-rope-jumping.webm"
-                                type="video/mp4">
+                type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -202,7 +202,7 @@
             <video autoplay muted playsinline loop object-fit="contain">
               <source
                 src="https://www.shutterstock.com/shutterstock/videos/1018174657/preview/stock-footage-yercaud-tamilnadu-india-kids-enjoying-zorbing-on-water-at-poppy-hills-on-sept.webm"
-                                type="video/mp4">
+                type="video/mp4">
               Your browser does not support the video tag.
             </video>
           </div>
@@ -318,15 +318,24 @@
     <h2>Trip Budget Calculator</h2>
     <div class="calculator-inputs">
       <input type="text" id="city" placeholder="Enter your city (e.g., Delhi)">
-      <select id="tripType">
-        <option value="one-way">One-Way Trip</option>
-        <option value="round-trip">Round Trip</option>
-      </select>
-      <select id="fuelType">
-        <option value="petrol">Petrol</option>
-        <option value="diesel">Diesel</option>
-        <option value="cng">CNG</option>
-      </select>
+
+      <div class="custom-select" id="tripType-select" data-selected-value="one-way">
+        <div class="select-display" data-value="one-way">Trip Type</div>
+        <ul class="select-options" data-target-id="tripType">
+          <li data-value="one-way">One-Way Trip</li>
+          <li data-value="round-trip">Round Trip</li>
+        </ul>
+      </div>
+      <input type="hidden" id="tripType" value="one-way">
+      <div class="custom-select" id="fuelType-select" data-selected-value="petrol">
+        <div class="select-display" data-value="petrol">Fuel Type</div>
+        <ul class="select-options" data-target-id="fuelType">
+          <li data-value="petrol">Petrol</li>
+          <li data-value="diesel">Diesel</li>
+          <li data-value="cng">CNG</li>
+        </ul>
+      </div>
+      <input type="hidden" id="fuelType" value="petrol">
       <input type="number" id="mileage" placeholder="Vehicle Mileage (km/L or km/kg)">
     </div>
     <button onclick="calculateBudget()">Calculate Budget</button>
