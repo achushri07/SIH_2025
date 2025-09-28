@@ -213,64 +213,97 @@
 
     <div id="itinerary-generator-content" style="display: none;">
         <button id="back-to-home-btn"><i data-lucide="arrow-left" class="h-6 w-6 text-emerald-700"></i></button>
+
         <div class="min-h-screen py-8 px-4">
             <div class="container mx-auto max-w-6xl">
                 <div class="text-center mb-12 animatable">
-                    <h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1>
-                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Get personalized travel plans tailored to your
-                        interests, duration, and travel style</p>
+                    <h1
+                        class="mb-4 text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">
+                        AI-Powered Itinerary Generator</h1>
+                    <p class="text-xl text-text-secondary-it max-w-2xl mx-auto">
+                        Craft your perfect journey. Tailored to your interests, duration, and style.
+                    </p>
                 </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-lg shadow-xl border-0 animatable">
-                        <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-t-lg p-6">
-                            <h2 class="flex items-center text-xl font-semibold"><i data-lucide="sparkles"
-                                    class="mr-2 h-5 w-5"></i> Plan Your Journey</h2>
-                            <p class="text-emerald-100 mt-1">Tell us your preferences and let AI create the perfect
-                                itinerary</p>
+                    <div class="control-block p-6 space-y-6 animatable">
+
+                        <div>
+                            <h2 class="flex items-center text-xl font-semibold text-text-primary-it">
+                                <i data-lucide="sparkles" class="mr-2 h-5 w-5 text-neon-cyan"></i>
+                                Plan Your Journey
+                            </h2>
+                            <p class="text-text-secondary-it mt-1">
+                                Tell us your preferences and let AI create the perfect itinerary.
+                            </p>
                         </div>
-                        <div class="p-6 space-y-6">
-                            <div class="space-y-2"><label for="duration"
-                                    class="block text-sm font-medium text-gray-700">Trip Duration</label><select
-                                    id="duration" class="select">
-                                    <option value="" disabled selected>Select duration</option>
-                                    <option value="1-2">1-2 Days</option>
-                                    <option value="2-3">2-3 Days</option>
-                                    <option value="4-5">4-5 Days</option>
-                                    <option value="1-week">1 Week</option>
-                                    <option value="2-weeks">2+ Weeks</option>
-                                </select></div>
-                            <div class="space-y-3"><label class="block text-sm font-medium text-gray-700">Your
-                                    Interests</label>
-                                <div id="interest-buttons-container" class="grid grid-cols-2 gap-3"></div>
+
+                        <div id="duration-select-it" class="custom-select-container">
+                            <label class="block text-sm font-medium mb-2 text-text-secondary-it">Trip Duration</label>
+                            <div class="custom-select-trigger">
+                                <span data-placeholder="Select duration">Select duration</span>
+                                <i data-lucide="chevron-down" class="h-5 w-5"></i>
                             </div>
-                            <div class="space-y-2"><label for="travelType"
-                                    class="block text-sm font-medium text-gray-700">Travel Type</label><select
-                                    id="travelType" class="select">
-                                    <option value="" disabled selected>Select travel type</option>
-                                    <option value="solo">Solo Adventure</option>
-                                    <option value="couple">Romantic Getaway</option>
-                                    <option value="family">Family Trip</option>
-                                    <option value="group">Group Adventure</option>
-                                    <option value="backpacking">Backpacking</option>
-                                </select></div>
-                            <div class="space-y-2"><label for="budget"
-                                    class="block text-sm font-medium text-gray-700">Budget Range</label><select
-                                    id="budget" class="select">
-                                    <option value="" disabled selected>Select budget</option>
-                                    <option value="budget">Budget (₹2000-5000)</option>
-                                    <option value="moderate">Moderate (₹5000-10000)</option>
-                                    <option value="luxury">Luxury (₹10000+)</option>
-                                </select></div>
-                            <button id="generate-btn"
-                                class="w-full justify-center p-3 font-medium text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 rounded-md flex items-center"></button>
+                            <div class="custom-options">
+                                <div class="custom-option" data-value="1-2">1-2 Days</div>
+                                <div class="custom-option" data-value="2-3">2-3 Days</div>
+                                <div class="custom-option" data-value="4-5">4-5 Days</div>
+                                <div class="custom-option" data-value="1-week">1 Week</div>
+                                <div class="custom-option" data-value="2-weeks">2+ Weeks</div>
+                            </div>
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-text-secondary-it mb-3">Your Interests</label>
+                            <div id="interest-buttons-container-it" class="grid grid-cols-2 gap-3">
+                            </div>
+                        </div>
+
+                        <div id="travelType-select-it" class="custom-select-container">
+                            <label class="block text-sm font-medium mb-2 text-text-secondary-it">Travel Type</label>
+                            <div class="custom-select-trigger">
+                                <span data-placeholder="Select travel type">Select travel type</span>
+                                <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                            </div>
+                            <div class="custom-options">
+                                <div class="custom-option" data-value="solo">Solo Adventure</div>
+                                <div class="custom-option" data-value="couple">Romantic Getaway</div>
+                                <div class="custom-option" data-value="family">Family Trip</div>
+                                <div class="custom-option" data-value="group">Group Adventure</div>
+                                <div class="custom-option" data-value="backpacking">Backpacking</div>
+                            </div>
+                        </div>
+
+                        <div id="budget-select-it" class="custom-select-container">
+                            <label class="block text-sm font-medium mb-2 text-text-secondary-it">Budget Range</label>
+                            <div class="custom-select-trigger">
+                                <span data-placeholder="Select budget">Select budget</span>
+                                <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                            </div>
+                            <div class="custom-options">
+                                <div class="custom-option" data-value="shoestring">💵 Shoestring – Under ₹2,000/day
+                                </div>
+                                <div class="custom-option" data-value="budget">💰 Budget – ₹2,000 – ₹5,000/day</div>
+                                <div class="custom-option" data-value="mid-range">💳 Mid-Range – ₹5,000 – ₹10,000/day
+                                </div>
+                                <div class="custom-option" data-value="luxury">💎 Luxury – ₹10,000 – ₹20,000/day</div>
+                                <div class="custom-option" data-value="ultra-luxury">🚀 Ultra Luxury – ₹20,000+/day
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="generate-btn-new"
+                            class="w-full justify-center p-3 font-medium text-white rounded-md flex items-center text-lg">
+                        </button>
                     </div>
-                    <div id="itinerary-container" class="animatable"></div>
+
+                    <div id="itinerary-container-it" class="animatable">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
     <script src="script.js"></script>
 </body>
 
