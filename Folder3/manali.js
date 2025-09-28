@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resultContainer = document.getElementById("result-container");
                 const resultContent = document.getElementById("result-content");
 
-                const distances = { "delhi": 540, "chandigarh": 310, "shimla": 250, "mumbai": 1950, "kolkata": 2100, "bangalore": 2700 };
+                const distances = { "delhi": 501, "chandigarh": 269, "shimla": 239, "mumbai": 1901, "kolkata": 2041, "bangalore": 2660,"patna": 1563 };
                 const fuelPrices = { "petrol": 95.00, "diesel": 88.00, "cng": 76.00 };
 
                 if (!cityInput || isNaN(mileage) || mileage <= 0) {
