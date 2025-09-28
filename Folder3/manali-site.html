@@ -1,1 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Manali</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="manali.css">
+</head>
+
+<body id="body">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="brand">Explore Manali</a>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+                <li><a href="#history"><i class="fas fa-book-open"></i><span>History</span></a></li>
+                <li><a href="#famous-places"><i class="fas fa-map-marked-alt"></i><span>Places</span></a></li>
+                <li><a href="#things-to-do"><i class="fas fa-skiing"></i><span>Activities</span></a></li>
+                <li><a href="#cuisine"><i class="fas fa-utensils"></i><span>Cuisine</span></a></li>
+                <li><a href="#restaurants"><i class="fas fa-store"></i><span>Restaurants</span></a></li>
+                <li><a href="#calculator"><i class="fas fa-calculator"></i><span>Calculator</span></a></li>
+            </ul>
+            <button id="theme-toggle" class="theme-btn">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+    <header class="hero" id="home">
+        <div class="overlay">
+            <h1>Explore Manali</h1>
+            <p>The Valley of Gods</p>
+            <button onclick="document.getElementById('famous-places').scrollIntoView({behavior: 'smooth'})">Discover
+                Now</button>
+        </div>
+    </header>
+
+    <section class="history" id="history">
+        <h2>History of Manali</h2>
+        <p>
+            Manali, a beautiful hill station in Himachal Pradesh, is known as the "Valley of Gods". According to Hindu
+            mythology, the name "Manali" is derived from 'Manu-Alaya', which translates to 'the abode of Manu'. It is
+            believed
+            that Sage Manu, after the great flood, stepped on this land to recreate human life. This sacred origin gives
+            Manali its spiritual aura and significance.
+            <br><br>
+            Historically, the region was inhabited by nomadic tribes. Over centuries, it developed into a strategic
+            trade
+            route connecting the Kullu Valley to Ladakh and Central Asia. The British era saw Manali become a popular
+            summer
+            retreat, and its breathtaking landscapes have since drawn travelers, artists, and adventurers from around
+            the
+            globe. Today, it stands as a cultural hub with ancient temples, serene monasteries, and a rich blend of
+            traditional and modern lifestyles.
+        </p>
+    </section>
+
+    <section class="places" id="famous-places">
+        <h2>Famous Places to Visit</h2>
+        <div class="grid">
+            <div class="card card-throw-left">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/3568629615/preview/stock-footage-manali-india-january-hidimba-devi-locally-known-as-dhungari-temple-also-known.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Hadimba Temple</h3>
+                        <p>A unique 16th-century wooden temple with a pagoda-style roof, dedicated to Hidimba Devi from
+                            the Mahabharata epic.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-right">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop>
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/3812071353/preview/stock-footage-kullu-himachal-pradesh-india-april-th-delhi-to-manali-highway-all-major-tunnels-with.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Rohtang Pass</h3>
+                        <p>A high-altitude pass famous for breathtaking views of snow-capped peaks and as a gateway to
+                            Lahaul and Spiti valleys.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-left">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop>
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/1111404157/preview/stock-footage-solang-valley-india-november-th-drone-shot-of-mountain-view-with-several-hotels-in.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Solang Valley</h3>
+                        <p>A picturesque destination known for stunning landscapes and as a year-round hub for adventure
+                            sports like paragliding and skiing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="places" id="things-to-do">
+        <h2>Things to Do in Manali</h2>
+        <div class="grid" style="justify-content: center;">
+            <div class="card card-throw-right">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/1039866173/preview/stock-footage-paragliding-over-the-himalayan-mountains-in-himachal-pradesh-india.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Paragliding in Solang Valley</h3>
+                        <p>Soar high above the breathtaking valleys and snowy peaks of Manali for an unforgettable
+                            aerial view and adrenaline rush.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-left">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/1096998039/preview/stock-footage-manali-himachal-pradesh-india-circa-river-rafting-in-beas-river-at-manali-rafting-on-a.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Rafting on the Beas River</h3>
+                        <p>Experience the thrill of white-water rafting on the Beas River, battling the icy currents
+                            surrounded by stunning mountain scenery.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-right">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/3903971981/preview/stock-footage-an-aerial-drone-clip-of-mall-road-christ-church-at-shimla-himachal-pradesh-india.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Shopping at Mall Road</h3>
+                        <p>Stroll, shop, and sample local street food at the bustling Mall Road, the heart of Manali's
+                            social and commercial life.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-right">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source src="https://www.pexels.com/download/video/3135811/" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Trekking to Bhrigu Lake</h3>
+                        <p>A high-altitude alpine lake trek offering stunning views of the surrounding peaks and
+                            meadows, perfect for adventure lovers.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-left">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/1094416737/preview/stock-footage-a-guy-jumps-from-a-tower-a-man-falls-from-a-height-rope-jumping.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Bungee Jumping</h3>
+                        <p>Experience a heart-pounding free fall in Manali, offering a massive adrenaline rush with
+                            views of the valley below.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-throw-right">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <video autoplay muted playsinline loop object-fit="contain">
+                            <source
+                                src="https://www.shutterstock.com/shutterstock/videos/1018174657/preview/stock-footage-yercaud-tamilnadu-india-kids-enjoying-zorbing-on-water-at-poppy-hills-on-sept.webm"
+                                type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-back">
+                        <h3>Zorbing</h3>
+                        <p>Roll down the gentle slopes of Solang Valley inside a giant transparent ball for a fun,
+                            thrilling, and unique experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cuisine" id="cuisine">
+        <h2>Local Cuisine of Manali</h2>
+        <div class="cuisine-grid">
+            <div class="cuisine-card card-throw-right">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/c8/5a/20/trout-fish-the-most-popular.jpg"
+                            alt="Trout Fish">
+                        <div class="cuisine-info">
+                            <h3>Trout Fish</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>Freshly caught and cooked trout fish, a local delicacy of Manali. Served with local spices
+                            and herbs.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cuisine-card card-throw-left">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/77/f9/c6/siddu-local-himachali.jpg"
+                            alt="Sidu">
+                        <div class="cuisine-info">
+                            <h3>Sidu</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>Steamed bread made from wheat dough, served with ghee and lentils. Traditional Himachali dish
+                            for festivals.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cuisine-card card-throw-right">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://images.herzindagi.info/image/2023/Aug/make-babru-at-home-easy-steps.jpg"
+                            alt="Babru">
+                        <div class="cuisine-info">
+                            <h3>Babru</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>Fried bread stuffed with black gram paste, a popular Himachali snack. Perfect for tea-time
+                            cravings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cuisine" id="restaurants">
+        <h2>Famous Restaurants</h2>
+        <div class="cuisine-grid">
+            <div class="cuisine-card card-throw-left">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/a7/37/fd/the-johnson-s-cafe.jpg"
+                            alt="The Johnson's Cafe">
+                        <div class="cuisine-info">
+                            <h3>Johnson's Cafe</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>Known for its delicious Trout Fish preparations, Italian food, and cozy garden seating. A
+                            popular spot in Old Manali.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cuisine-card card-throw-right">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1HZWOGvm6drf8RkEVJY2aIVD6DGk9xLvYEg&s"
+                            alt="The Corner House">
+                        <div class="cuisine-info">
+                            <h3>The Corner House</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>A classic Manali restaurant famous for its extensive menu, warm ambiance, and must-try apple
+                            crumble.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cuisine-card card-throw-left">
+                <div class="cuisine-card-inner">
+                    <div class="cuisine-card-front">
+                        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/05/ae/a9/87/i-had-an-quite-warm-welcome.jpg?w=900&h=500&s=1"
+                            alt="Chopsticks">
+                        <div class="cuisine-info">
+                            <h3>Chopsticks</h3>
+                        </div>
+                    </div>
+                    <div class="cuisine-card-back">
+                        <p>Located on Mall Road, this restaurant specializes in Tibetan, Chinese, and Indian cuisine,
+                            perfect for a quick and tasty meal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="calculator" id="calculator">
+        <h2>Fuel Budget Calculator</h2>
+        <div class="calculator-inputs">
+            <input type="text" id="city" placeholder="Enter your city (e.g., Delhi)">
+            <div class="custom-select-container">
+                <div class="custom-select-trigger"><span>One-Way Trip</span><i class="fas fa-chevron-down"></i></div>
+                <div class="custom-options">
+                    <div class="custom-option" data-value="one-way">One-Way Trip</div>
+                    <div class="custom-option" data-value="round-trip">Round Trip</div>
+                </div>
+            </div>
+            <div class="custom-select-container">
+                <div class="custom-select-trigger"><span>Petrol</span><i class="fas fa-chevron-down"></i></div>
+                <div class="custom-options">
+                    <div class="custom-option" data-value="petrol">Petrol</div>
+                    <div class="custom-option" data-value="diesel">Diesel</div>
+                    <div class="custom-option" data-value="cng">CNG</div>
+                </div>
+            </div>
+            <input type="number" id="mileage" placeholder="Vehicle Mileage (km/L or km/kg)">
+        </div>
+        <button id="calculate-btn">Calculate Fuel Budget</button>
+        <div id="result-container">
+            <div id="result-content"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Explore Manali | Designed for Tourism</p>
+    </footer>
+
+    <script src="manali.js"></script>
+</body>
+
+</html>
