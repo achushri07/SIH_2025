@@ -21,6 +21,12 @@ html {
     --header-text: #fff;
     --navbar-bg: rgba(14, 23, 41, 0.7);
     --footer-bg: #2c3e50;
+    /* ADDED for custom select/radio appearance */
+    --select-option-bg: #2c3e50;
+    --select-option-hover-bg: #34495e;
+    --select-text-color: #ecf0f1;
+    /* Added for options text */
+    --select-bg-active: #050b16;
 }
 
 /* Light Theme Variables */
@@ -35,6 +41,12 @@ body.light-theme {
     --header-text: #ffffff;
     --navbar-bg: rgba(255, 255, 255, 0.7);
     --footer-bg: #e0e6ec;
+    /* ADDED for custom select/radio appearance in light theme */
+    --select-option-bg: #f5f7fa;
+    --select-option-hover-bg: #e0e6ec;
+    --select-text-color: #2c3e50;
+    /* Added for options text */
+    --select-bg-active: #f0f4f8;
 }
 
 * {
@@ -93,12 +105,14 @@ body {
     text-decoration: none;
     font-weight: 500;
     font-size: 1rem;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    display: inline-block;
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .nav-links a:hover {
     color: var(--primary-color);
     text-shadow: 0 0 10px var(--primary-color);
+    transform: scale(1.1);
 }
 
 .theme-btn {
@@ -198,8 +212,9 @@ p {
     margin-bottom: 25px;
 }
 
+/* Base styles for all inputs (including the custom select container) */
 .calculator input,
-.calculator select {
+.calculator .custom-select {
     padding: 12px 20px;
     font-size: 1rem;
     border: none;
@@ -214,6 +229,92 @@ p {
     backdrop-filter: blur(5px);
 }
 
+/* --- CUSTOM SELECT STYLES --- */
+.custom-select {
+    position: relative;
+    cursor: pointer;
+}
+
+.select-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.custom-select:hover {
+    box-shadow: 0 0 0 2px var(--secondary-color), 0 0 15px var(--secondary-color);
+    transform: scale(1.02);
+    border: 1px solid var(--secondary-color);
+}
+
+.custom-select.active .select-display {
+    border-radius: 20px 20px 0 0;
+    background: var(--select-bg-active);
+}
+
+/* Options List Container */
+.select-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 105%;
+    /* Detached from select box */
+    left: 0;
+    right: auto;
+    min-width: 100%;
+    width: calc(100% + 1px);
+    /* Match width of input box exactly */
+    z-index: 50;
+    max-height: 0;
+    overflow: hidden;
+    /* Transparent background with blur */
+    background: rgba(14, 23, 41, 0.85);
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    /* Smooth Transition */
+    transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.0), border 0.5s ease, background-color 0.5s ease;
+    backdrop-filter: blur(5px);
+}
+
+/* SHOW OPTIONS LIST ON HOVER */
+.custom-select:hover .select-options {
+    max-height: 300px;
+    border: none;
+}
+
+.select-options li {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: var(--select-text-color);
+    transition: background-color 0.2s ease;
+    text-align: left;
+    background: transparent;
+    width: auto;
+    white-space: nowrap;
+    /* Prevents text wrap */
+}
+
+.select-options li:hover {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* --- Light Theme adjustments for transparency --- */
+body.light-theme .select-options {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* End Custom Select Styles */
+
+.calculator input:hover {
+    box-shadow: 0 0 0 2px var(--secondary-color), 0 0 15px var(--secondary-color);
+    transform: scale(1.02);
+    border: 1px solid var(--secondary-color);
+}
+
 .calculator input::placeholder {
     color: rgba(255, 255, 255, 0.6);
 }
@@ -223,11 +324,13 @@ body.light-theme .calculator input::placeholder {
 }
 
 .calculator input:focus,
-.calculator select:focus {
+.calculator .custom-select:focus-within {
     box-shadow: 0 0 0 2px var(--primary-color), 0 0 10px var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
-/* --- Hero Section --- */
+
+/* --- Hero Section (Rest of the CSS remains unchanged) --- */
 @keyframes zoom-effect {
     0% {
         transform: scale(1);
@@ -323,19 +426,25 @@ section {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Trip Budget Calculator --- */
+/* --- Trip Budget Calculator (with enhanced animations) --- */
 .calculator {
     background: var(--card-bg);
     border-radius: 20px;
     box-shadow: 0 10px 40px var(--card-hover-shadow);
-    padding: 40px;
+    /* Increased vertical padding from 40px to 60px */
+    padding: 60px 40px;
     text-align: center;
     margin-top: 50px;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: background 0.5s ease, box-shadow 0.5s ease;
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.3s ease;
+}
+
+.calculator:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .calculator h2,
@@ -538,12 +647,10 @@ section {
     font-size: 1.5rem;
     margin-bottom: 15px;
     color: var(--accent-color);
-    /* MODIFIED: Changed from --primary-color */
 }
 
 .cuisine-info h3 {
     color: var(--light-text);
-    /* Ensures cuisine title on front is always light */
 }
 
 .card-back p,
@@ -570,11 +677,11 @@ footer {
     }
 
     .calculator-inputs {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .calculator input,
-    .calculator select {
+    .calculator .custom-select {
         width: 100%;
     }
 
