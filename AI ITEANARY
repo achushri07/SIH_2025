@@ -3,111 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Itinerary Generator</title>
+    <title>AI Itinerary Generator - Xplor Bharat</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* Custom styles to mimic specific UI component behaviors */
-        .select {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #d1d5db; /* gray-300 */
-            border-radius: 0.375rem; /* md */
-            background-color: white;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-        }
-        
-        /* Custom spinner animation */
-        .spinner {
-            width: 1rem;
-            height: 1rem;
-            border-width: 2px;
-            border-style: solid;
-            border-color: white transparent white white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* --- 1. NEON & DARK THEME VARIABLES --- */
+        :root {
+            --dark-blue-bg: #0a192f;
+            --light-blue-bg: #112240;
+            --neon-cyan: #00f5ff;
+            --text-primary: #ccd6f6;
+            --text-secondary: #8892b0;
+            --card-border: rgba(0, 245, 255, 0.2);
+            --shadow-color: rgba(0, 245, 255, 0.25);
+            --hover-bg: rgba(0, 245, 255, 0.1);
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        /* --- 2. GLOBAL & BODY STYLES --- */
+        body {
+            background-color: var(--dark-blue-bg);
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
         }
+        
+        /* --- 3. FORM & CONTROL STYLES --- */
+        .control-block {
+            background-color: var(--light-blue-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.5rem;
+            box-shadow: 0 0 30px var(--shadow-color);
+        }
+
+        /* --- 4. CUSTOM DROPDOWN --- */
+        .custom-select-container {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .custom-select-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--dark-blue-bg);
+            border-radius: 0.375rem;
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .custom-select-container:hover .custom-select-trigger {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--light-blue-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.5rem;
+            margin-top: 8px;
+            padding: 0.5rem;
+            z-index: 50; /* Needs to be high to appear over content below it */
+            opacity: 0;
+            visibility: hidden;
+            transform: perspective(800px) rotateX(-90deg);
+            transform-origin: top center;
+            transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s;
+        }
+
+        .custom-select-container:hover .custom-options {
+            opacity: 1;
+            visibility: visible;
+            transform: perspective(800px) rotateX(0deg);
+        }
+
+        .custom-option {
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        
+        .custom-option:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px var(--shadow-color);
+            background-color: var(--hover-bg);
+            color: var(--neon-cyan);
+            z-index: 30;
+            position: relative;
+        }
+
+        /* --- 5. INTEREST BUTTONS STYLES --- */
+        .interest-btn {
+            background-color: var(--dark-blue-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .interest-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--shadow-color), 0 0 8px var(--neon-cyan) inset;
+            color: var(--neon-cyan);
+            z-index: 5;
+        }
+        
+        .interest-btn.selected {
+            background-color: var(--hover-bg);
+            box-shadow: 0 0 20px var(--shadow-color), 0 0 8px var(--neon-cyan) inset;
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+        }
+
+        /* --- 6. GENERATE BUTTON & ITINERARY STYLES --- */
+        #generate-btn {
+            background: linear-gradient(90deg, #00c3ff, #0075ff);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        #generate-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 195, 255, 0.5);
+        }
+        #itinerary-container h2, #itinerary-container h3 {
+             color: var(--neon-cyan);
+        }
+        .spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gradient-to-b from-emerald-50 to-green-50">
+<body>
 
     <div class="min-h-screen py-8 px-4">
         <div class="container mx-auto max-w-6xl">
             <div class="text-center mb-12">
-                <h1 class="mb-4 text-4xl font-bold text-emerald-800">AI-Powered Itinerary Generator</h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Get personalized travel plans tailored to your interests, duration, and travel style
+                <h1 class="mb-4 text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">AI-Powered Itinerary Generator</h1>
+                <p class="text-xl text-text-secondary max-w-2xl mx-auto">
+                    Craft your perfect journey. Tailored to your interests, duration, and style.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-xl border-0">
-                    <div class="bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-t-lg p-6">
-                        <h2 class="flex items-center text-xl font-semibold">
-                            <i data-lucide="sparkles" class="mr-2 h-5 w-5"></i>
+                <div class="control-block p-6 space-y-6">
+                    
+                    <div>
+                        <h2 class="flex items-center text-xl font-semibold text-text-primary">
+                            <i data-lucide="sparkles" class="mr-2 h-5 w-5 text-neon-cyan"></i>
                             Plan Your Journey
                         </h2>
-                        <p class="text-emerald-100 mt-1">
-                            Tell us your preferences and let AI create the perfect itinerary
+                        <p class="text-text-secondary mt-1">
+                            Tell us your preferences and let AI create the perfect itinerary.
                         </p>
                     </div>
-                    <div class="p-6 space-y-6">
-                        <div class="space-y-2">
-                            <label for="duration" class="block text-sm font-medium text-gray-700">Trip Duration</label>
-                            <select id="duration" class="select">
-                                <option value="" disabled selected>Select duration</option>
-                                <option value="1-2">1-2 Days</option>
-                                <option value="2-3">2-3 Days</option>
-                                <option value="4-5">4-5 Days</option>
-                                <option value="1-week">1 Week</option>
-                                <option value="2-weeks">2+ Weeks</option>
-                            </select>
+                    
+                    <div id="duration-select" class="custom-select-container">
+                         <label class="block text-sm font-medium mb-2 text-text-secondary">Trip Duration</label>
+                        <div class="custom-select-trigger">
+                            <span data-placeholder="Select duration">Select duration</span>
+                            <i data-lucide="chevron-down" class="h-5 w-5"></i>
                         </div>
-
-                        <div class="space-y-3">
-                            <label class="block text-sm font-medium text-gray-700">Your Interests</label>
-                            <div id="interest-buttons-container" class="grid grid-cols-2 gap-3">
-                                </div>
+                        <div class="custom-options">
+                            <div class="custom-option" data-value="1-2">1-2 Days</div>
+                            <div class="custom-option" data-value="2-3">2-3 Days</div>
+                            <div class="custom-option" data-value="4-5">4-5 Days</div>
+                            <div class="custom-option" data-value="1-week">1 Week</div>
+                            <div class="custom-option" data-value="2-weeks">2+ Weeks</div>
                         </div>
-
-                        <div class="space-y-2">
-                            <label for="travelType" class="block text-sm font-medium text-gray-700">Travel Type</label>
-                            <select id="travelType" class="select">
-                                <option value="" disabled selected>Select travel type</option>
-                                <option value="solo">Solo Adventure</option>
-                                <option value="couple">Romantic Getaway</option>
-                                <option value="family">Family Trip</option>
-                                <option value="group">Group Adventure</option>
-                                <option value="backpacking">Backpacking</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="budget" class="block text-sm font-medium text-gray-700">Budget Range</label>
-                            <select id="budget" class="select">
-                                <option value="" disabled selected>Select budget</option>
-                                <option value="budget">Budget (₹2000-5000)</option>
-                                <option value="moderate">Moderate (₹5000-10000)</option>
-                                <option value="luxury">Luxury (₹10000+)</option>
-                            </select>
-                        </div>
-
-                        <button id="generate-btn" class="w-full justify-center p-3 font-medium text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 rounded-md flex items-center">
-                            </button>
                     </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-text-secondary mb-3">Your Interests</label>
+                        <div id="interest-buttons-container" class="grid grid-cols-2 gap-3">
+                            </div>
+                    </div>
+
+                    <div id="travelType-select" class="custom-select-container">
+                        <label class="block text-sm font-medium mb-2 text-text-secondary">Travel Type</label>
+                        <div class="custom-select-trigger">
+                            <span data-placeholder="Select travel type">Select travel type</span>
+                            <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-option" data-value="solo">Solo Adventure</div>
+                            <div class="custom-option" data-value="couple">Romantic Getaway</div>
+                            <div class="custom-option" data-value="family">Family Trip</div>
+                            <div class="custom-option" data-value="group">Group Adventure</div>
+                            <div class="custom-option" data-value="backpacking">Backpacking</div>
+                        </div>
+                    </div>
+
+                    <div id="budget-select" class="custom-select-container">
+                        <label class="block text-sm font-medium mb-2 text-text-secondary">Budget Range</label>
+                        <div class="custom-select-trigger">
+                            <span data-placeholder="Select budget">Select budget</span>
+                            <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-option" data-value="shoestring">💵 Shoestring – Under ₹2,000/day</div>
+                            <div class="custom-option" data-value="budget">💰 Budget – ₹2,000 – ₹5,000/day</div>
+                            <div class="custom-option" data-value="mid-range">💳 Mid-Range – ₹5,000 – ₹10,000/day</div>
+                            <div class="custom-option" data-value="luxury">💎 Luxury – ₹10,000 – ₹20,000/day</div>
+                            <div class="custom-option" data-value="ultra-luxury">🚀 Ultra Luxury – ₹20,000+/day</div>
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="w-full justify-center p-3 font-medium text-white rounded-md flex items-center text-lg">
+                        </button>
                 </div>
 
                 <div id="itinerary-container">
@@ -120,79 +225,51 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- STATE AND DATA ---
             const state = {
-                formData: {
-                    duration: '',
-                    interests: [],
-                    travelType: '',
-                    budget: ''
-                },
+                formData: { duration: '', interests: [], travelType: '', budget: '' },
                 generatedItinerary: null,
                 isGenerating: false,
             };
 
             const interests = [
-                { id: 'waterfalls', label: 'Waterfalls', icon: 'waves' },
-                { id: 'wildlife', label: 'Wildlife', icon: 'trees' },
-                { id: 'culture', label: 'Tribal Culture', icon: 'users' },
-                { id: 'adventure', label: 'Adventure Sports', icon: 'mountain' },
-                { id: 'photography', label: 'Photography', icon: 'camera' },
-                { id: 'nature', label: 'Nature Walks', icon: 'leaf' }
+                { id: 'waterfalls_lakes', label: 'Waterfalls & Lakes', icon: 'waves' },
+                { id: 'adventure_trekking', label: 'Adventure & Trekking', icon: 'mountain' },
+                { id: 'beaches_islands', label: 'Beaches & Islands', icon: 'ship' },
+                { id: 'heritage_culture', label: 'Heritage & Culture', icon: 'landmark' },
+                { id: 'nature_wildlife', label: 'Nature & Wildlife', icon: 'leaf' },
+                { id: 'food_culinary', label: 'Food & Culinary', icon: 'utensils-crossed' },
+                { id: 'shopping_markets', label: 'Shopping & Markets', icon: 'shopping-cart' },
+                { id: 'festivals_nightlife', label: 'Festivals & Nightlife', icon: 'party-popper' }
             ];
 
-            const mockItineraries = {
-                '2-3': { title: "Weekend Waterfall Escape", days: [ { day: 1, title: "Arrival & Dassam Falls", activities: [ { time: "9:00 AM", title: "Arrive in Ranchi", description: "Check into eco-friendly homestay near Dassam Falls", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "11:00 AM", title: "Dassam Falls Exploration", description: "Trek to the spectacular 44-feet waterfall, enjoy photography and natural pools", location: "Dassam Falls", type: "attraction", ecoFriendly: true }, { time: "2:00 PM", title: "Local Tribal Lunch", description: "Traditional Santali cuisine at local homestay with cultural performance", location: "Tribal Village", type: "food", ecoFriendly: true }, { time: "6:00 PM", title: "Sunset at Tagore Hill", description: "Panoramic views of Ranchi city and surrounding forests", location: "Tagore Hill", type: "viewpoint", ecoFriendly: false } ] }, { day: 2, title: "Hundru Falls & Tribal Culture", activities: [ { time: "7:00 AM", title: "Journey to Hundru Falls", description: "Early morning drive to Jharkhand's highest waterfall (322 feet)", location: "Hundru Falls", type: "transport", ecoFriendly: true }, { time: "9:00 AM", title: "Hundru Falls Trek", description: "Challenging trek with breathtaking views and natural swimming spots", location: "Hundru Falls", type: "attraction", ecoFriendly: true }, { time: "1:00 PM", title: "Tribal Craft Workshop", description: "Learn Dokra metal craft techniques from local artisans", location: "Craft Village", type: "cultural", ecoFriendly: true }, { time: "4:00 PM", title: "Departure", description: "Return journey with memories and handcrafted souvenirs", location: "Ranchi", type: "transport", ecoFriendly: false } ] } ] },
-                '4-5': { title: "Complete Jharkhand Explorer", days: [ { day: 1, title: "Ranchi Arrival & Local Sights", activities: [ { time: "10:00 AM", title: "Arrive & City Tour", description: "Check-in and explore Ranchi's historical sites and markets", location: "Ranchi", type: "transport", ecoFriendly: true }, { time: "2:00 PM", title: "Dassam Falls", description: "First waterfall experience with local guide stories", location: "Dassam Falls", type: "attraction", ecoFriendly: true } ] }, { day: 2, title: "Netarhat Hill Station", activities: [ { time: "6:00 AM", title: "Journey to Netarhat", description: "Scenic drive to the 'Queen of Chotanagpur' hill station", location: "Netarhat", type: "transport", ecoFriendly: true }, { time: "8:00 AM", title: "Sunrise Point", description: "Witness spectacular sunrise views over the Chotanagpur plateau", location: "Netarhat Sunrise Point", type: "viewpoint", ecoFriendly: true } ] }, { day: 3, title: "Betla National Park Safari", activities: [ { time: "5:00 AM", title: "Wildlife Safari", description: "Early morning safari to spot tigers, elephants, and diverse birdlife", location: "Betla National Park", type: "wildlife", ecoFriendly: true } ] }, { day: 4, title: "Cultural Immersion Day", activities: [ { time: "9:00 AM", title: "Tribal Village Visit", description: "Experience authentic Santali and Munda tribal lifestyle", location: "Traditional Village", type: "cultural", ecoFriendly: true } ] } ] }
+             const mockItineraries = {
+                default: { title: "Spiritual Rishikesh Escape", days: [ { day: 1, title: "Arrival & Spiritual Evening", activities: [ { time: "2:00 PM", title: "Arrive in Rishikesh", description: "Check into a serene ashram or riverside hotel.", location: "Rishikesh", type: "transport" }, { time: "5:00 PM", title: "Ganga Aarti Ceremony", description: "Witness the mesmerizing evening prayer ceremony at Parmarth Niketan.", location: "Parmarth Niketan Ghat", type: "cultural" }, { time: "7:30 PM", title: "Sattvic Dinner", description: "Enjoy a healthy and pure vegetarian meal at a local cafe.", location: "Ram Jhula", type: "food" } ] }, { day: 2, title: "Yoga, Beatles & Bridges", activities: [ { time: "7:00 AM", title: "Sunrise Yoga", description: "Participate in a morning yoga session overlooking the Ganges.", location: "Your Ashram/Hotel", type: "activity" }, { time: "10:00 AM", title: "Beatles Ashram Exploration", description: "Explore the graffiti-covered domes where The Beatles stayed.", location: "Beatles Ashram", type: "attraction" }, { time: "1:00 PM", title: "Cross Laxman Jhula", description: "Walk across the iconic suspension bridge with stunning river views.", location: "Laxman Jhula", type: "attraction" } ] } ] },
+                adventure_trekking: { title: "Himalayan Trekking Adventure", days: [ { day: 1, title: "Manali to Chika", activities: [ { time: "9:00 AM", title: "Drive to Jobra", description: "Start your journey with a scenic drive from Manali to the trek starting point.", location: "Jobra", type: "transport" }, { time: "11:00 AM", title: "Trek to Chika", description: "A gentle 2-hour trek through lush forests to the beautiful campsite of Chika.", location: "Chika Campsite", type: "trekking" }, { time: "6:00 PM", title: "Campfire & Stargazing", description: "Enjoy dinner by the campfire under a clear Himalayan sky.", location: "Chika", type: "activity" } ] }, { day: 2, title: "Trek to Balu ka Ghera", activities: [ { time: "8:00 AM", title: "Begin Trek", description: "Trek along the river, crossing streams and boulder sections.", location: "Trail to Balu ka Ghera", type: "trekking" }, { time: "2:00 PM", title: "Reach Campsite", description: "Arrive at Balu ka Ghera (Heap of Sand), a flat plain at the base of Hampta Pass.", location: "Balu ka Ghera", type: "attraction" } ] } ] },
+                beaches_islands: { title: "Andaman Islands Paradise", days: [ { day: 1, title: "Arrival in Port Blair & Cellular Jail", activities: [ { time: "11:00 AM", title: "Arrive at Port Blair", description: "Transfer to your hotel and relax.", location: "Port Blair", type: "transport" }, { time: "3:00 PM", title: "Cellular Jail Visit", description: "Visit the historic colonial prison and learn about India's freedom struggle.", location: "Cellular Jail", type: "heritage_culture" }, { time: "6:00 PM", title: "Light & Sound Show", description: "Experience the moving saga of the freedom fighters at the Cellular Jail.", location: "Cellular Jail", type: "activity" } ] }, { day: 2, title: "Havelock Island & Radhanagar Beach", activities: [ { time: "8:00 AM", title: "Ferry to Havelock", description: "Take a high-speed ferry to the stunning Havelock Island (Swaraj Dweep).", location: "Havelock Island", type: "transport" }, { time: "2:00 PM", title: "Radhanagar Beach", description: "Relax and swim at one of Asia's best beaches, known for its white sand and turquoise water.", location: "Radhanagar Beach", type: "attraction" } ] } ] },
+                heritage_culture: { title: "Royal Rajasthan Discovery", days: [ { day: 1, title: "Jaipur: The Pink City", activities: [ { time: "10:00 AM", title: "Amer Fort", description: "Explore the magnificent hilltop fort with its intricate architecture and stunning views.", location: "Amer Fort", type: "attraction" }, { time: "2:00 PM", title: "City Palace", description: "Visit the royal residence, a beautiful blend of Rajput and Mughal architecture.", location: "City Palace, Jaipur", type: "heritage_culture" }, { time: "5:00 PM", title: "Hawa Mahal", description: "Admire the iconic 'Palace of Winds' with its unique five-story facade.", location: "Hawa Mahal", type: "attraction" } ] }, { day: 2, title: "Jodhpur: The Blue City", activities: [ { time: "10:00 AM", title: "Mehrangarh Fort", description: "Discover one of India's largest forts, towering over the blue city.", location: "Mehrangarh Fort", type: "attraction" }, { time: "3:00 PM", title: "Jaswant Thada", description: "Visit the beautiful marble cenotaph built in memory of Maharaja Jaswant Singh II.", location: "Jaswant Thada", type: "heritage_culture" } ] } ] }
             };
 
-            const getActivityIconName = (type) => {
-                switch (type) {
-                    case 'transport': return 'car';
-                    case 'attraction': return 'map-pin';
-                    case 'food': return 'home';
-                    case 'cultural': return 'users';
-                    case 'wildlife': return 'trees';
-                    case 'viewpoint': return 'mountain';
-                    default: return 'map-pin';
-                }
-            };
+            const getActivityIconName = (type) => ({'transport':'car','attraction':'map-pin','food':'utensils-crossed','cultural':'landmark','activity':'gamepad-2','trekking':'mountain','heritage_culture':'palace'}[type]||'map-pin');
             
             // --- DOM ELEMENTS ---
-            const durationSelect = document.getElementById('duration');
-            const travelTypeSelect = document.getElementById('travelType');
-            const budgetSelect = document.getElementById('budget');
             const generateBtn = document.getElementById('generate-btn');
             const interestContainer = document.getElementById('interest-buttons-container');
             const itineraryContainer = document.getElementById('itinerary-container');
 
-            // --- RENDER FUNCTIONS (Replaces React's render) ---
-
+            // --- RENDER FUNCTIONS ---
             function renderInterestButtons() {
                 interestContainer.innerHTML = interests.map(interest => {
                     const isSelected = state.formData.interests.includes(interest.id);
-                    const selectedClass = isSelected ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'hover:bg-emerald-50 hover:border-emerald-200';
-                    const baseClass = 'justify-start h-auto p-3 text-left w-full flex items-center border rounded-md transition-colors';
-                    return `
-                        <button data-interest-id="${interest.id}" class="${baseClass} ${isSelected ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-white border-gray-300 hover:bg-emerald-50'}">
-                            <i data-lucide="${interest.icon}" class="mr-2 h-4 w-4"></i>
-                            <span class="text-sm">${interest.label}</span>
-                        </button>
-                    `;
+                    return `<button data-interest-id="${interest.id}" class="interest-btn justify-start h-auto p-3 text-left w-full flex items-center rounded-md ${isSelected ? 'selected' : ''}"><i data-lucide="${interest.icon}" class="mr-2 h-4 w-4"></i><span class="text-sm">${interest.label}</span></button>`;
                 }).join('');
-                lucide.createIcons(); // Re-render icons after updating HTML
+                lucide.createIcons();
             }
 
             function renderGenerateButton() {
                 if (state.isGenerating) {
-                    generateBtn.innerHTML = `
-                        <div class="spinner mr-2"></div>
-                        Generating Your Perfect Trip...
-                    `;
+                    generateBtn.innerHTML = `<div class="spinner mr-2"></div>Generating Your Perfect Trip...`;
                     generateBtn.disabled = true;
                 } else {
-                    generateBtn.innerHTML = `
-                        <i data-lucide="sparkles" class="mr-2 h-4 w-4"></i>
-                        Generate AI Itinerary
-                    `;
+                    generateBtn.innerHTML = `<i data-lucide="sparkles" class="mr-2 h-5 w-5"></i>Generate AI Itinerary`;
                     generateBtn.disabled = !state.formData.duration;
                 }
                 lucide.createIcons();
@@ -202,137 +279,73 @@
                 if (state.generatedItinerary) {
                     const itinerary = state.generatedItinerary;
                     const daysHTML = itinerary.days.map(day => {
-                        const activitiesHTML = day.activities.map(activity => {
-                            const ecoFriendlyBadge = activity.ecoFriendly ? `
-                                <div class="flex items-center text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                                    <i data-lucide="leaf" class="mr-1 h-3 w-3"></i>
-                                    Eco-Friendly
-                                </div>
-                            ` : '';
-                            return `
-                                <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-emerald-50 transition-colors">
-                                    <div class="flex-shrink-0 mt-1">
-                                        <div class="bg-white p-2 rounded-lg shadow-sm">
-                                            <i data-lucide="${getActivityIconName(activity.type)}" class="h-4 w-4 text-emerald-600"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <h4 class="font-medium text-gray-900">${activity.title}</h4>
-                                            <div class="flex items-center text-sm text-gray-500">
-                                                <i data-lucide="clock" class="mr-1 h-3 w-3"></i>
-                                                ${activity.time}
-                                            </div>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-2">${activity.description}</p>
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center text-xs text-gray-500">
-                                                <i data-lucide="map-pin" class="mr-1 h-3 w-3"></i>
-                                                ${activity.location}
-                                            </div>
-                                            ${ecoFriendlyBadge}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-
-                        return `
-                            <div class="p-6 border-b border-gray-100 last:border-b-0">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">
-                                        ${day.day}
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold text-emerald-800">${day.title}</h3>
-                                        <p class="text-sm text-gray-600">Day ${day.day}</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-3">${activitiesHTML}</div>
-                            </div>
-                        `;
+                        const activitiesHTML = day.activities.map(activity => `<div class="flex items-start space-x-3 p-3 rounded-lg bg-dark-blue-bg hover:bg-opacity-50 transition-colors"><div class="flex-shrink-0 mt-1"><div class="bg-light-blue-bg p-2 rounded-lg shadow-sm border border-card-border"><i data-lucide="${getActivityIconName(activity.type)}" class="h-4 w-4 text-neon-cyan"></i></div></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-1"><h4 class="font-medium text-text-primary">${activity.title}</h4><div class="flex items-center text-sm text-text-secondary"><i data-lucide="clock" class="mr-1 h-3 w-3"></i>${activity.time}</div></div><p class="text-sm text-text-secondary mb-2">${activity.description}</p><div class="flex items-center justify-between"><div class="flex items-center text-xs text-text-secondary"><i data-lucide="map-pin" class="mr-1 h-3 w-3"></i>${activity.location}</div></div></div></div>`).join('');
+                        return `<div class="p-4"><div class="flex items-center mb-4"><div class="bg-neon-cyan text-dark-blue-bg rounded-full w-8 h-8 flex items-center justify-center mr-3 font-bold">${day.day}</div><div><h3 class="font-semibold">${day.title}</h3><p class="text-sm text-text-secondary">Day ${day.day}</p></div></div><div class="space-y-3">${activitiesHTML}</div></div>`;
                     }).join('');
-
-                    itineraryContainer.innerHTML = `
-                        <div class="bg-white shadow-xl border-0 rounded-lg">
-                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg p-6">
-                                <h2 class="flex items-center text-xl font-semibold">
-                                    <i data-lucide="check-circle" class="mr-2 h-5 w-5"></i>
-                                    ${itinerary.title}
-                                </h2>
-                                <p class="text-green-100 mt-1">Your personalized itinerary is ready!</p>
-                            </div>
-                            <div class="max-h-[600px] overflow-y-auto">
-                                ${daysHTML}
-                                <div class="p-6 bg-gray-50 rounded-b-lg">
-                                    <div class="flex flex-col sm:flex-row gap-3">
-                                        <button class="flex-1 justify-center p-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-md flex items-center">
-                                            <i data-lucide="calendar" class="mr-2 h-4 w-4"></i>
-                                            Save Itinerary
-                                        </button>
-                                        <button class="flex-1 justify-center p-3 border border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-md flex items-center">
-                                            Share with Friends
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    itineraryContainer.innerHTML = `<div class="control-block rounded-lg"><div class="p-6 border-b-2 border-neon-cyan"><h2 class="flex items-center text-xl font-semibold"><i data-lucide="check-circle" class="mr-2 h-5 w-5"></i>${itinerary.title}</h2><p class="text-text-secondary mt-1">Your personalized itinerary is ready!</p></div><div class="max-h-[80vh] overflow-y-auto">${daysHTML}</div></div>`;
                 } else {
-                    itineraryContainer.innerHTML = `
-                        <div class="bg-white shadow-xl border-0 border-dashed border-emerald-300 rounded-lg">
-                            <div class="p-12 text-center">
-                                <div class="bg-emerald-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                                    <i data-lucide="sparkles" class="h-8 w-8 text-emerald-600"></i>
-                                </div>
-                                <h3 class="text-lg font-medium text-emerald-800 mb-2">Your AI Itinerary</h3>
-                                <p class="text-gray-600">Fill out the form to generate your personalized travel plan for Jharkhand</p>
-                            </div>
-                        </div>
-                    `;
+                    itineraryContainer.innerHTML = `<div class="control-block border-dashed h-full"><div class="p-12 text-center flex flex-col justify-center items-center h-full"><div class="bg-light-blue-bg border border-card-border rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4"><i data-lucide="sparkles" class="h-10 w-10 text-neon-cyan"></i></div><h3 class="text-lg font-medium text-text-primary mb-2">Your AI Itinerary</h3><p class="text-text-secondary">Fill out the form to generate your travel plan.</p></div></div>`;
                 }
-                lucide.createIcons(); // Important: Render all new icons
+                lucide.createIcons();
+            }
+
+            // --- Custom Select Logic ---
+            function initializeCustomSelect(containerId, stateKey) {
+                const container = document.getElementById(containerId);
+                const trigger = container.querySelector('.custom-select-trigger span');
+                const options = container.querySelectorAll('.custom-option');
+                
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        trigger.innerHTML = option.innerHTML;
+                        trigger.style.color = 'var(--text-primary)';
+                        state.formData[stateKey] = option.getAttribute('data-value');
+                        if(stateKey === 'duration') { renderGenerateButton(); }
+                        document.activeElement.blur();
+                    });
+                });
             }
 
             // --- EVENT LISTENERS ---
-            durationSelect.addEventListener('change', (e) => {
-                state.formData.duration = e.target.value;
-                renderGenerateButton();
-            });
-            travelTypeSelect.addEventListener('change', (e) => { state.formData.travelType = e.target.value; });
-            budgetSelect.addEventListener('change', (e) => { state.formData.budget = e.target.value; });
-            
             interestContainer.addEventListener('click', (e) => {
-                const button = e.target.closest('button');
+                const button = e.target.closest('.interest-btn');
                 if (button && button.dataset.interestId) {
                     const interestId = button.dataset.interestId;
-                    const interests = state.formData.interests;
-                    if (interests.includes(interestId)) {
-                        state.formData.interests = interests.filter(id => id !== interestId);
+                    const interestsState = state.formData.interests;
+                    const index = interestsState.indexOf(interestId);
+
+                    if (index > -1) {
+                        interestsState.splice(index, 1);
+                        button.classList.remove('selected');
                     } else {
-                        interests.push(interestId);
+                        interestsState.push(interestId);
+                        button.classList.add('selected');
                     }
-                    renderInterestButtons(); // Re-render to show selection
                 }
             });
 
             generateBtn.addEventListener('click', () => {
                 state.isGenerating = true;
                 renderGenerateButton();
-
                 setTimeout(() => {
-                    const key = state.formData.duration;
-                    state.generatedItinerary = mockItineraries[key] || mockItineraries['2-3'];
+                    if(state.formData.interests.includes('beaches_islands')) { state.generatedItinerary = mockItineraries.beaches_islands; } 
+                    else if (state.formData.interests.includes('adventure_trekking')) { state.generatedItinerary = mockItineraries.adventure_trekking; } 
+                    else if (state.formData.interests.includes('heritage_culture')) { state.generatedItinerary = mockItineraries.heritage_culture; } 
+                    else { state.generatedItinerary = mockItineraries.default; }
                     state.isGenerating = false;
                     renderGenerateButton();
                     renderItinerary();
                 }, 2000);
             });
             
-            // --- INITIAL RENDER ---
+            // --- INITIALIZATION ---
             renderInterestButtons();
             renderGenerateButton();
             renderItinerary();
+            initializeCustomSelect('duration-select', 'duration');
+            initializeCustomSelect('travelType-select', 'travelType');
+            initializeCustomSelect('budget-select', 'budget');
         });
     </script>
 </body>
