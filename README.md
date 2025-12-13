@@ -99,7 +99,7 @@
 - Government Tourism Data Portals  
 - Research articles on AI-based travel recommender systems  
 
----=
+---
 
 ## 🏁 Conclusion
 This project demonstrates how **AI and Machine Learning** can transform tourism by enabling smarter planning, safer travel, and cultural exploration — all in one unified platform.
