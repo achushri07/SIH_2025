@@ -1,5 +1,5 @@
 # 🧠 Smart India Hackathon 2025  
-## AI-Powered Smart Tourism Planner 🌍✈️
+## AI-Powered Smart Tourism Planner ✈️
 
 ### 🏆 Team Name: **Binary Brains**  
 **Problem Statement ID:** SIH25137  
